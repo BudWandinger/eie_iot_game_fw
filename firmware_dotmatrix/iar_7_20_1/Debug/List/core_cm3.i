@@ -1,4 +1,4 @@
-#line 1 "\\\\Mac\\Home\\Documents\\GitHub\\Razor_Atmel\\firmware_common\\cmsis\\core_cm3.c"
+#line 1 "Z:\\Code\\eie_iot_game_fw\\firmware_common\\cmsis\\core_cm3.c"
 /******************************************************************************
  * @file:    core_cm3.c
  * @purpose: CMSIS Cortex-M3 Core Peripheral Access Layer Source File
@@ -1097,11 +1097,11 @@ typedef int __data_intptr_t; typedef unsigned int __data_uintptr_t;
  * Copyright (c) by P.J. Plauger. All rights reserved.
  * Consult your license regarding permissions and restrictions.
 V6.50:0576 */
-#line 25 "\\\\Mac\\Home\\Documents\\GitHub\\Razor_Atmel\\firmware_common\\cmsis\\core_cm3.c"
+#line 25 "Z:\\Code\\eie_iot_game_fw\\firmware_common\\cmsis\\core_cm3.c"
 
 
 /* define compiler specific symbols */
-#line 36 "\\\\Mac\\Home\\Documents\\GitHub\\Razor_Atmel\\firmware_common\\cmsis\\core_cm3.c"
+#line 36 "Z:\\Code\\eie_iot_game_fw\\firmware_common\\cmsis\\core_cm3.c"
 
 
 
@@ -1110,9 +1110,9 @@ V6.50:0576 */
 
 
 
-#line 266 "\\\\Mac\\Home\\Documents\\GitHub\\Razor_Atmel\\firmware_common\\cmsis\\core_cm3.c"
+#line 266 "Z:\\Code\\eie_iot_game_fw\\firmware_common\\cmsis\\core_cm3.c"
 /* obsolete */
-#line 611 "\\\\Mac\\Home\\Documents\\GitHub\\Razor_Atmel\\firmware_common\\cmsis\\core_cm3.c"
+#line 611 "Z:\\Code\\eie_iot_game_fw\\firmware_common\\cmsis\\core_cm3.c"
 
 
 

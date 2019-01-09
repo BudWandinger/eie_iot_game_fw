@@ -213,7 +213,7 @@ void LcdManualMode(void);
 /* LCD Private Driver Functions */
 static bool LcdSetStartAddressForDataTransfer(u8 u8Page_);         
 static void LcdLoadPageToBuffer(u8 u8LocalRamPage_); 
-static void LcdUpdateScreenRefreshArea(PixelBlockType* sPixelsToClear_);
+void LcdUpdateScreenRefreshArea(PixelBlockType* sPixelsToClear_);
 
 /* State machine declarations */
 static void LcdSM_Idle(void);

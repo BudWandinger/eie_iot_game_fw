@@ -68,7 +68,33 @@ Function Definitions
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+void drawDot(GameboardCoordinateType* coordinate_)
+{
+  u8 i, j;
+  for(i = 0; i < GAMEBOARD_DOT_WIDTH; i++)
+  {
+    for(j = 0; j < GAMEBOARD_DOT_WIDTH; j++)
+    {
+      PixelAddressType pixel =
+      {
+        .u16PixelRowAddress = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET) + i,
+        .u16PixelColumnAddress = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET) + j
+      };
+      
+      LcdSetPixel(&pixel);
+    }
+  }
+  
+  PixelBlockType updateArea =
+  {
+    .u16RowStart = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET),
+    .u16ColumnStart = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET),
+    .u16RowSize = GAMEBOARD_DOT_WIDTH,
+    .u16ColumnSize = GAMEBOARD_DOT_WIDTH
+  };
+  
+  LcdUpdateScreenRefreshArea(&updateArea);
+}
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -92,6 +118,9 @@ void UserApp1Initialize(void)
   if( 1 )
   {
     UserApp1_StateMachine = UserApp1SM_Idle;
+    
+    LcdClearScreen();
+    
   }
   else
   {
@@ -136,7 +165,25 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+    static uint32_t timer = 0;
+    static uint8_t i = 0;
+    static uint8_t j = 0;
+    
+    if((timer % 500 == 0) && (i < 8) && (j < 8))
+    {
+      GameboardCoordinateType dotCoord =
+      {
+        .u8RowCoordinate = i,
+        .u8ColumnCoordinate = j
+      };
+      
+      drawDot(&dotCoord);
+      
+      j++;
+      i++;
+    }
+    
+    timer++;
 } /* end UserApp1SM_Idle() */
     
 

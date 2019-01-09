@@ -1,56 +1,51 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         08/Jan/2019  18:36:20
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         08/Jan/2019  22:08:14
 # Copyright 1999-2018 IAR Systems AB.
 #
 #    Cpu mode     =  
 #    Endian       =  little
 #    Source file  =  
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\application\user_app1.c
+#        Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
 #    Command line =  
-#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWCEFD.tmp
-#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\application\user_app1.c
-#        -D MPGL2 -D MPG2 --preprocess=c
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
-#        -lC
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
-#        -o
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWDF5B.tmp
+#        (Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c -D
+#        MPGL2 -D MPG2 --preprocess=c
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List -lC
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List -o
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj
 #        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
 #        --no_clustering --no_scheduling --debug --endian=little
 #        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
 #        (x86)\IAR Systems\Embedded Workbench
 #        8.2\arm\inc\c\DLib_Config_Normal.h" -I
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\ -I
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\bsp\ -I
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\drivers\ -I
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\application\
 #        -I
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
 #        -I
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
 #        -I
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
 #        -I
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
 #        -I
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
-#        -I
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
-#        -I
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
-#        -I
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
 #        -On --use_c++_inline --require_prototypes -I "C:\Program Files
 #        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
 #        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
 #        8.2\arm\CMSIS\DSP\Include\")
 #    Locale       =  C
 #    List file    =  
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\user_app1.lst
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List\user_app1.lst
 #    Object file  =  
-#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\user_app1.o
+#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj\user_app1.o
 #
 ###############################################################################
 
-\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\application\user_app1.c
+Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
       1          /**********************************************************************************************************************
       2          File: user_app1.c                                                                
       3          
@@ -129,244 +124,327 @@
      68          /*--------------------------------------------------------------------------------------------------------------------*/
      69          /* Public functions                                                                                                   */
      70          /*--------------------------------------------------------------------------------------------------------------------*/
-     71          
-     72          /*--------------------------------------------------------------------------------------------------------------------*/
-     73          /* Protected functions                                                                                                */
-     74          /*--------------------------------------------------------------------------------------------------------------------*/
-     75          
-     76          /*--------------------------------------------------------------------------------------------------------------------
-     77          Function: UserApp1Initialize
-     78          
-     79          Description:
-     80          Initializes the State Machine and its variables.
-     81          
-     82          Requires:
-     83            -
-     84          
-     85          Promises:
-     86            - 
-     87          */
 
    \                                 In section .text, align 2, keep-with-next
-     88          void UserApp1Initialize(void)
-     89          { 
+     71          void drawDot(GameboardCoordinateType* coordinate_)
+     72          {
+   \                     drawDot: (+1)
+   \        0x0   0xB57F             PUSH     {R0-R6,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+     73            u8 i, j;
+     74            for(i = 0; i < GAMEBOARD_DOT_WIDTH; i++)
+   \        0x4   0x2600             MOVS     R6,#+0
+   \                     ??drawDot_0: (+1)
+   \        0x6   0x0030             MOVS     R0,R6
+   \        0x8   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \        0xA   0x2803             CMP      R0,#+3
+   \        0xC   0xDA1E             BGE.N    ??drawDot_1
+     75            {
+     76              for(j = 0; j < GAMEBOARD_DOT_WIDTH; j++)
+   \        0xE   0x2000             MOVS     R0,#+0
+   \       0x10   0x0005             MOVS     R5,R0
+   \                     ??drawDot_2: (+1)
+   \       0x12   0x0028             MOVS     R0,R5
+   \       0x14   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x16   0x2803             CMP      R0,#+3
+   \       0x18   0xDA16             BGE.N    ??drawDot_3
+     77              {
+     78                PixelAddressType pixel =
+     79                {
+     80                  .u16PixelRowAddress = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET) + i,
+     81                  .u16PixelColumnAddress = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET) + j
+     82                };
+   \       0x1A   0x7820             LDRB     R0,[R4, #+0]
+   \       0x1C   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+   \       0x1E   0x0031             MOVS     R1,R6
+   \       0x20   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x22   0xEB11 0x01C0      ADDS     R1,R1,R0, LSL #+3
+   \       0x26   0x1C89             ADDS     R1,R1,#+2
+   \       0x28   0xF8AD 0x1000      STRH     R1,[SP, #+0]
+   \       0x2C   0x7860             LDRB     R0,[R4, #+1]
+   \       0x2E   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+   \       0x30   0x0029             MOVS     R1,R5
+   \       0x32   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x34   0xEB11 0x01C0      ADDS     R1,R1,R0, LSL #+3
+   \       0x38   0x1C89             ADDS     R1,R1,#+2
+   \       0x3A   0xF8AD 0x1002      STRH     R1,[SP, #+2]
+     83                
+     84                LcdSetPixel(&pixel);
+   \       0x3E   0x4668             MOV      R0,SP
+   \       0x40   0x....'....        BL       LcdSetPixel
+     85              }
+   \       0x44   0x1C6D             ADDS     R5,R5,#+1
+   \       0x46   0xE7E4             B.N      ??drawDot_2
+     86            }
+   \                     ??drawDot_3: (+1)
+   \       0x48   0x1C76             ADDS     R6,R6,#+1
+   \       0x4A   0xE7DC             B.N      ??drawDot_0
+     87            
+     88            PixelBlockType updateArea =
+     89            {
+     90              .u16RowStart = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET),
+     91              .u16ColumnStart = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET),
+     92              .u16RowSize = GAMEBOARD_DOT_WIDTH,
+     93              .u16ColumnSize = GAMEBOARD_DOT_WIDTH
+     94            };
+   \                     ??drawDot_1: (+1)
+   \       0x4C   0x....             LDR.N    R0,??DataTable3
+   \       0x4E   0xE9D0 0x2300      LDRD     R2,R3,[R0, #+0]
+   \       0x52   0xE9CD 0x2301      STRD     R2,R3,[SP, #+4]
+   \       0x56   0x7820             LDRB     R0,[R4, #+0]
+   \       0x58   0x00C0             LSLS     R0,R0,#+3
+   \       0x5A   0x1C80             ADDS     R0,R0,#+2
+   \       0x5C   0xF8AD 0x0004      STRH     R0,[SP, #+4]
+   \       0x60   0x7860             LDRB     R0,[R4, #+1]
+   \       0x62   0x00C0             LSLS     R0,R0,#+3
+   \       0x64   0x1C80             ADDS     R0,R0,#+2
+   \       0x66   0xF8AD 0x0006      STRH     R0,[SP, #+6]
+     95            
+     96            LcdUpdateScreenRefreshArea(&updateArea);
+   \       0x6A   0xA801             ADD      R0,SP,#+4
+   \       0x6C   0x....'....        BL       LcdUpdateScreenRefreshArea
+     97          }
+   \       0x70   0xBD7F             POP      {R0-R6,PC}       ;; return
+
+   \                                 In section .rodata, align 4
+   \                     ?_0:
+   \        0x0   0x0000 0x0000      DC16 0, 0, 3, 3
+   \               0x0003 0x000
+   \              3            
+     98          /*--------------------------------------------------------------------------------------------------------------------*/
+     99          /* Protected functions                                                                                                */
+    100          /*--------------------------------------------------------------------------------------------------------------------*/
+    101          
+    102          /*--------------------------------------------------------------------------------------------------------------------
+    103          Function: UserApp1Initialize
+    104          
+    105          Description:
+    106          Initializes the State Machine and its variables.
+    107          
+    108          Requires:
+    109            -
+    110          
+    111          Promises:
+    112            - 
+    113          */
+
+   \                                 In section .text, align 2, keep-with-next
+    114          void UserApp1Initialize(void)
+    115          {
    \                     UserApp1Initialize: (+1)
-   \        0x0   0xB538             PUSH     {R3-R5,LR}
-     90            /* If good initialization, set state to Idle */
-     91            if( 1 )
-     92            {
-     93              UserApp1_StateMachine = UserApp1SM_Idle;
+   \        0x0   0xB580             PUSH     {R7,LR}
+    116           
+    117            /* If good initialization, set state to Idle */
+    118            if( 1 )
+    119            {
+    120              UserApp1_StateMachine = UserApp1SM_Idle;
    \        0x2   0x....'....        ADR.W    R0,UserApp1SM_Idle
-   \        0x6   0x....             LDR.N    R1,??DataTable1
+   \        0x6   0x....             LDR.N    R1,??DataTable3_1
    \        0x8   0x6008             STR      R0,[R1, #+0]
-     94              
-     95              LcdClearScreen();
+    121              
+    122              LcdClearScreen();
    \        0xA   0x....'....        BL       LcdClearScreen
-     96              
-     97              u8 bitmap[2][2];
-     98              int i;
-     99              int j;
-    100              for(i = 0; i < 2; i++)
-   \        0xE   0x2400             MOVS     R4,#+0
-   \                     ??UserApp1Initialize_0: (+1)
-   \       0x10   0x2C02             CMP      R4,#+2
-   \       0x12   0xDA0C             BGE.N    ??UserApp1Initialize_1
-    101              {
-    102                for(j = 0; j < 2; j++)
-   \       0x14   0x2000             MOVS     R0,#+0
-   \       0x16   0x0005             MOVS     R5,R0
-   \                     ??UserApp1Initialize_2: (+1)
-   \       0x18   0x2D02             CMP      R5,#+2
-   \       0x1A   0xDA06             BGE.N    ??UserApp1Initialize_3
-    103                {
-    104                  bitmap[i][j] = 0xFF;
-   \       0x1C   0x20FF             MOVS     R0,#+255
-   \       0x1E   0x4669             MOV      R1,SP
-   \       0x20   0xEB01 0x0144      ADD      R1,R1,R4, LSL #+1
-   \       0x24   0x5548             STRB     R0,[R1, R5]
-    105                }
-   \       0x26   0x1C6D             ADDS     R5,R5,#+1
-   \       0x28   0xE7F6             B.N      ??UserApp1Initialize_2
-    106              }
-   \                     ??UserApp1Initialize_3: (+1)
-   \       0x2A   0x1C64             ADDS     R4,R4,#+1
-   \       0x2C   0xE7F0             B.N      ??UserApp1Initialize_0
-    107              static PixelBlockType bitMapSize =
-    108              {
-    109                .u16RowStart = 0,
-    110                .u16ColumnStart = 0,
-    111                .u16RowSize = 16,
-    112                .u16ColumnSize = 16
-    113              };
-    114          
-    115              LcdLoadBitmap((u8 const*)bitmap, &bitMapSize);
-   \                     ??UserApp1Initialize_1: (+1)
-   \       0x2E   0x....             LDR.N    R1,??DataTable1_1
-   \       0x30   0x4668             MOV      R0,SP
-   \       0x32   0x....'....        BL       LcdLoadBitmap
-    116            }
-    117            else
-    118            {
-    119              /* The task isn't properly initialized, so shut it down and don't run */
-    120              UserApp1_StateMachine = UserApp1SM_Error;
-    121            }
-    122          
-    123          } /* end UserApp1Initialize() */
-   \       0x36   0xBD31             POP      {R0,R4,R5,PC}    ;; return
-
-   \                                 In section .data, align 4
-   \                     `UserApp1Initialize{1}{2}::bitMapSize`:
-   \        0x0   0x0000 0x0000      DC16 0, 0, 16, 16
-   \               0x0010 0x001
-   \              0            
-    124          
-    125            
-    126          /*----------------------------------------------------------------------------------------------------------------------
-    127          Function UserApp1RunActiveState()
-    128          
-    129          Description:
-    130          Selects and runs one iteration of the current state in the state machine.
-    131          All state machines have a TOTAL of 1ms to execute, so on average n state machines
-    132          may take 1ms / n to execute.
-    133          
-    134          Requires:
-    135            - State machine function pointer points at current state
+    123              
+    124            }
+    125            else
+    126            {
+    127              /* The task isn't properly initialized, so shut it down and don't run */
+    128              UserApp1_StateMachine = UserApp1SM_Error;
+    129            }
+    130          
+    131          } /* end UserApp1Initialize() */
+   \        0xE   0xBD01             POP      {R0,PC}          ;; return
+    132          
+    133            
+    134          /*----------------------------------------------------------------------------------------------------------------------
+    135          Function UserApp1RunActiveState()
     136          
-    137          Promises:
-    138            - Calls the function to pointed by the state machine function pointer
-    139          */
+    137          Description:
+    138          Selects and runs one iteration of the current state in the state machine.
+    139          All state machines have a TOTAL of 1ms to execute, so on average n state machines
+    140          may take 1ms / n to execute.
+    141          
+    142          Requires:
+    143            - State machine function pointer points at current state
+    144          
+    145          Promises:
+    146            - Calls the function to pointed by the state machine function pointer
+    147          */
 
    \                                 In section .text, align 2, keep-with-next
-    140          void UserApp1RunActiveState(void)
-    141          {
+    148          void UserApp1RunActiveState(void)
+    149          {
    \                     UserApp1RunActiveState: (+1)
    \        0x0   0xB580             PUSH     {R7,LR}
-    142            UserApp1_StateMachine();
-   \        0x2   0x....             LDR.N    R0,??DataTable1
+    150            UserApp1_StateMachine();
+   \        0x2   0x....             LDR.N    R0,??DataTable3_1
    \        0x4   0x6800             LDR      R0,[R0, #+0]
    \        0x6   0x4780             BLX      R0
-    143          
-    144          } /* end UserApp1RunActiveState */
-   \        0x8   0xBD01             POP      {R0,PC}          ;; return
-    145          
-    146          
-    147          /*--------------------------------------------------------------------------------------------------------------------*/
-    148          /* Private functions                                                                                                  */
-    149          /*--------------------------------------------------------------------------------------------------------------------*/
-    150          
     151          
-    152          /**********************************************************************************************************************
-    153          State Machine Function Definitions
-    154          **********************************************************************************************************************/
-    155          
-    156          /*-------------------------------------------------------------------------------------------------------------------*/
-    157          /* Wait for ??? */
+    152          } /* end UserApp1RunActiveState */
+   \        0x8   0xBD01             POP      {R0,PC}          ;; return
+    153          
+    154          
+    155          /*--------------------------------------------------------------------------------------------------------------------*/
+    156          /* Private functions                                                                                                  */
+    157          /*--------------------------------------------------------------------------------------------------------------------*/
+    158          
+    159          
+    160          /**********************************************************************************************************************
+    161          State Machine Function Definitions
+    162          **********************************************************************************************************************/
+    163          
+    164          /*-------------------------------------------------------------------------------------------------------------------*/
+    165          /* Wait for ??? */
 
    \                                 In section .text, align 4, keep-with-next
-    158          static void UserApp1SM_Idle(void)
-    159          {
-    160          /*  static uint32_t timer = 0;
-    161            static u8 bitmap[1][1] = {{0}};
-    162            static PixelBlockType bitMapSize =
-    163            {
-    164              .u16RowStart = 0,
-    165              .u16ColumnStart = 0,
-    166              .u16RowSize = 1,
-    167              .u16ColumnSize = 1
-    168            };
-    169            
-    170            if(timer % 1000 == 0)
-    171            {
-    172              if(bitmap[1][1] == 1)
-    173              {
-    174                bitmap[1][1] = 0;
-    175              }
-    176              else
-    177              {
-    178                bitmap[1][1] = 1;
-    179              }
-    180              
-    181              LcdLoadBitmap((u8 const*)bitmap, &bitMapSize);
-    182            }
-    183            
-    184            timer++;
-    185            */
-    186           /* static uint32_t timer = 0;
-    187          
-    188            if(timer % 1000 == 0)
-    189            {
-    190              PixelAddressType pixel;
-    191              pixel.u16PixelColumnAddress = 0;
-    192              pixel.u16PixelRowAddress = 0;
-    193              LcdClearPixel(&pixel);
-    194            }
-    195            else if(timer % 500 == 0)
-    196            {
-    197              PixelAddressType pixel;
-    198              pixel.u16PixelColumnAddress = 0;
-    199              pixel.u16PixelRowAddress = 0;
-    200              LcdSetPixel(&pixel);
-    201            }
-    202            timer++;
-    203          */
-    204          } /* end UserApp1SM_Idle() */
+    166          static void UserApp1SM_Idle(void)
+    167          {
    \                     UserApp1SM_Idle: (+1)
-   \        0x0   0x4770             BX       LR               ;; return
+   \        0x0   0xB57C             PUSH     {R2-R6,LR}
+    168              static uint32_t timer = 0;
+    169              static uint8_t i = 0;
+    170              static uint8_t j = 0;
+    171              
+    172              if((timer % 500 == 0) && (i < 8) && (j < 8))
+   \        0x2   0xF44F 0x70FA      MOV      R0,#+500
+   \        0x6   0x....             LDR.N    R4,??DataTable3_2
+   \        0x8   0x6821             LDR      R1,[R4, #+0]
+   \        0xA   0x6822             LDR      R2,[R4, #+0]
+   \        0xC   0xFBB2 0xF2F0      UDIV     R2,R2,R0
+   \       0x10   0xFB00 0x1012      MLS      R0,R0,R2,R1
+   \       0x14   0x2800             CMP      R0,#+0
+   \       0x16   0xD116             BNE.N    ??UserApp1SM_Idle_0
+   \       0x18   0x....             LDR.N    R5,??DataTable3_3
+   \       0x1A   0x7828             LDRB     R0,[R5, #+0]
+   \       0x1C   0x2808             CMP      R0,#+8
+   \       0x1E   0xDA12             BGE.N    ??UserApp1SM_Idle_0
+   \       0x20   0x....             LDR.N    R6,??DataTable3_4
+   \       0x22   0x7830             LDRB     R0,[R6, #+0]
+   \       0x24   0x2808             CMP      R0,#+8
+   \       0x26   0xDA0E             BGE.N    ??UserApp1SM_Idle_0
+    173              {
+    174                GameboardCoordinateType dotCoord =
+    175                {
+    176                  .u8RowCoordinate = i,
+    177                  .u8ColumnCoordinate = j
+    178                };
+   \       0x28   0x7828             LDRB     R0,[R5, #+0]
+   \       0x2A   0xF88D 0x0000      STRB     R0,[SP, #+0]
+   \       0x2E   0x7830             LDRB     R0,[R6, #+0]
+   \       0x30   0xF88D 0x0001      STRB     R0,[SP, #+1]
+    179                
+    180                drawDot(&dotCoord);
+   \       0x34   0x4668             MOV      R0,SP
+   \       0x36   0x....'....        BL       drawDot
+    181                
+    182                j++;
+   \       0x3A   0x7830             LDRB     R0,[R6, #+0]
+   \       0x3C   0x1C40             ADDS     R0,R0,#+1
+   \       0x3E   0x7030             STRB     R0,[R6, #+0]
+    183                i++;
+   \       0x40   0x7828             LDRB     R0,[R5, #+0]
+   \       0x42   0x1C40             ADDS     R0,R0,#+1
+   \       0x44   0x7028             STRB     R0,[R5, #+0]
+    184              }
+    185              
+    186              timer++;
+   \                     ??UserApp1SM_Idle_0: (+1)
+   \       0x46   0x6820             LDR      R0,[R4, #+0]
+   \       0x48   0x1C40             ADDS     R0,R0,#+1
+   \       0x4A   0x6020             STR      R0,[R4, #+0]
+    187          } /* end UserApp1SM_Idle() */
+   \       0x4C   0xBD73             POP      {R0,R1,R4-R6,PC}  ;; return
+
+   \                                 In section .bss, align 4
+   \                     `UserApp1SM_Idle::timer`:
+   \        0x0                      DS8 4
+
+   \                                 In section .bss, align 1
+   \                     `UserApp1SM_Idle::i`:
+   \        0x0                      DS8 1
+
+   \                                 In section .bss, align 1
+   \                     `UserApp1SM_Idle::j`:
+   \        0x0                      DS8 1
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable1:
+   \                     ??DataTable3:
+   \        0x0   0x....'....        DC32     ?_0
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_1:
    \        0x0   0x....'....        DC32     UserApp1_StateMachine
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable1_1:
-   \        0x0   0x....'....        DC32     `UserApp1Initialize{1}{2}::bitMapSize`
-    205              
-    206          
-    207          /*-------------------------------------------------------------------------------------------------------------------*/
-    208          /* Handle an error */
-    209          static void UserApp1SM_Error(void)          
-    210          {
-    211            
-    212          } /* end UserApp1SM_Error() */
-    213          
-    214          
-    215          
-    216          /*--------------------------------------------------------------------------------------------------------------------*/
-    217          /* End of File                                                                                                        */
-    218          /*--------------------------------------------------------------------------------------------------------------------*/
+   \                     ??DataTable3_2:
+   \        0x0   0x....'....        DC32     `UserApp1SM_Idle::timer`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_3:
+   \        0x0   0x....'....        DC32     `UserApp1SM_Idle::i`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable3_4:
+   \        0x0   0x....'....        DC32     `UserApp1SM_Idle::j`
+    188              
+    189          
+    190          /*-------------------------------------------------------------------------------------------------------------------*/
+    191          /* Handle an error */
+    192          static void UserApp1SM_Error(void)          
+    193          {
+    194            
+    195          } /* end UserApp1SM_Error() */
+    196          
+    197          
+    198          
+    199          /*--------------------------------------------------------------------------------------------------------------------*/
+    200          /* End of File                                                                                                        */
+    201          /*--------------------------------------------------------------------------------------------------------------------*/
 
    Maximum stack usage in bytes:
 
    .cstack Function
    ------- --------
-      16   UserApp1Initialize
-        16   -> LcdClearScreen
-        16   -> LcdLoadBitmap
+       8   UserApp1Initialize
+         8   -> LcdClearScreen
        8   UserApp1RunActiveState
          8   -- Indirect call
-       0   UserApp1SM_Idle
+      24   UserApp1SM_Idle
+        24   -> drawDot
+      32   drawDot
+        32   -> LcdSetPixel
+        32   -> LcdUpdateScreenRefreshArea
 
 
    Section sizes:
 
    Bytes  Function/Label
    -----  --------------
-       4  ??DataTable1
-       4  ??DataTable1_1
+       4  ??DataTable3
+       4  ??DataTable3_1
+       4  ??DataTable3_2
+       4  ??DataTable3_3
+       4  ??DataTable3_4
+       8  ?_0
        4  G_u32UserApp1Flags
-      56  UserApp1Initialize
+      16  UserApp1Initialize
       10  UserApp1RunActiveState
-       2  UserApp1SM_Idle
+      78  UserApp1SM_Idle
        4  UserApp1_StateMachine
-       8  bitMapSize
+     114  drawDot
+       1  i
+       1  j
+       4  timer
 
  
-  8 bytes in section .bss
-  8 bytes in section .data
- 76 bytes in section .text
+  14 bytes in section .bss
+   8 bytes in section .rodata
+ 238 bytes in section .text
  
- 76 bytes of CODE memory
- 16 bytes of DATA memory
+ 238 bytes of CODE  memory
+   8 bytes of CONST memory
+  14 bytes of DATA  memory
 
 Errors: none
 Warnings: none

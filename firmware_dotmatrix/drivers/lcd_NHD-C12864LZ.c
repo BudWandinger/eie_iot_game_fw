@@ -1027,7 +1027,7 @@ Promises:
    If sPixelsToUpdate_ is already fully included in the update area, then no changes are made.
    
 */
-static void LcdUpdateScreenRefreshArea(PixelBlockType* sPixelsToUpdate_)
+void LcdUpdateScreenRefreshArea(PixelBlockType* sPixelsToUpdate_)
 {
   s16 s16Temp;
   
