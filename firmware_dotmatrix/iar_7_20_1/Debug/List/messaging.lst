@@ -1,0 +1,1002 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         01/Jan/2019  11:19:54
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\messaging.c
+#    Command line =  
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWF30C.tmp
+#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\messaging.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\inc\c\DLib_Config_Normal.h" -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        -On --use_c++_inline --require_prototypes -I "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\messaging.lst
+#    Object file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\messaging.o
+#
+###############################################################################
+
+\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\messaging.c
+      1          /**********************************************************************************************************************
+      2          File: messaging.c                                                                
+      3          
+      4          Description:
+      5          This file contains utilities to create and monitor outgoing messages.  It essentially provides a 
+      6          smart queue system for outgoing data.
+      7          Any message being transferred by a peripheral is kept here.  As the peripheral sends the message,
+      8          it talks to messaging.c to get data and update the message status.  
+      9          All interaction between the peripheral and this task is through unique message tokens that are assigned
+     10          to every message queued to messaging.c
+     11          ------------------------------------------------------------------------------------------------------------------------
+     12          API:
+     13          
+     14          TYPES
+     15          MessageStateType: enum status of a message in the queue
+     16          EMPTY, WAITING, SENDING, RECEIVING, COMPLETE, TIMEOUT, ABANDONED, NOT_FOUND
+     17          
+     18          MessageType: linked-list style entry with token, size, data pointer and next MessageType pointer
+     19          
+     20          MessageSlot: member of the message queue holding the free/full status of a particular queue location and a pointer to its data
+     21          
+     22          MessageStatus: token, state and timestamp of a message in the queue
+     23          
+     24          FUNCTIONS
+     25          Public:
+     26          MessageStateType QueryMessageStatus(u32 u32Token_)
+     27          Queries the current status of the message with u32Token.  If the message has completed or timed out, the query will
+     28          cause the message status to be removed from the status queue.
+     29          
+     30          Protected:
+     31          void MessagingInitialize(void)
+     32          One-time call to start the messaging application.
+     33          
+     34          u32 QueueMessage(MessageType** ppeTargetTxBuffer_, u32 u32MessageSize_, u8* pu8MessageData_)
+     35          Adds a message to the correct data queue, assigns a token which is posted to the status queue and returned to the client.
+     36          This function is Protected because tasks that can queue messages should be managed carefully and not granted free reign
+     37          to queue messages.  The message queue is a finite resource with TX_QUEUE_SIZE slots available for messages.
+     38          We avoid dynamic allocation due to the inherent issues with fragmentation on resource-limited systems.
+     39          
+     40          void DeQueueMessage(MessageType** pTargetQueue_)
+     41          Removes a message from the message queue (typically since all the bytes have been submitted to the communication peripheral
+     42          which is sending the message.  The message status is updated in the status queue.
+     43          
+     44          void UpdateMessageStatus(u32 u32Token_, MessageStateType eNewState_)
+     45          Changes the status of a message in the statue queue.
+     46          
+     47          **********************************************************************************************************************/
+     48          
+     49          #include "configuration.h"
+     50          
+     51          /***********************************************************************************************************************
+     52          Global variable definitions with scope across entire project.
+     53          All Global variable names shall start with "G_xxMessaging"
+     54          ***********************************************************************************************************************/
+     55          /* New variables */
+
+   \                                 In section .bss, align 4
+     56          u32 G_u32MessagingFlags;                                 /* Global state flags */
+   \                     G_u32MessagingFlags:
+   \        0x0                      DS8 4
+     57          
+     58          /*--------------------------------------------------------------------------------------------------------------------*/
+     59          /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
+     60          extern volatile u32 G_u32SystemFlags;                    /* From main.c */
+     61          extern volatile u32 G_u32ApplicationFlags;               /* From main.c */
+     62          
+     63          extern volatile u32 G_u32SystemTime1ms;                  /* From board-specific source file */
+     64          extern volatile u32 G_u32SystemTime1s;                   /* From board-specific source file */
+     65          
+     66          
+     67          /***********************************************************************************************************************
+     68          Global variable definitions with scope limited to this local application.
+     69          Variable names shall start with "Msg_" and be declared as static.
+     70          ***********************************************************************************************************************/
+
+   \                                 In section .bss, align 4
+     71          static fnCode_type Messaging_pfnStateMachine;            /* The state machine function pointer */
+   \                     Messaging_pfnStateMachine:
+   \        0x0                      DS8 4
+
+   \                                 In section .bss, align 4
+     72          static u32 Msg_u32Token;                                 /* Incrementing message token used for all external communications */
+   \                     Msg_u32Token:
+   \        0x0                      DS8 4
+     73          
+
+   \                                 In section .bss, align 4
+     74          static MessageSlot Msg_Pool[TX_QUEUE_SIZE];              /* Array of MessageSlot used for the transmit queue */
+   \                     Msg_Pool:
+   \        0x0                      DS8 2304
+
+   \                                 In section .bss, align 1
+     75          static u8 Msg_u8QueuedMessageCount;                      /* Number of messages slots currently occupied */
+   \                     Msg_u8QueuedMessageCount:
+   \        0x0                      DS8 1
+     76          
+     77          /* A separate status queue needs to be maintained since the message information in Msg_Pool will be lost when the message
+     78          has been dequeued.  Applications must be able to query to determine the status of their message, particularly if
+     79          it has been sent. */
+
+   \                                 In section .bss, align 4
+     80          static MessageStatus Msg_StatusQueue[STATUS_QUEUE_SIZE]; /* Array of MessageStatus used to monitor message status */
+   \                     Msg_StatusQueue:
+   \        0x0                      DS8 768
+
+   \                                 In section .bss, align 4
+     81          static MessageStatus* Msg_pNextStatus;                   /* Pointer to next available message status */
+   \                     Msg_pNextStatus:
+   \        0x0                      DS8 4
+     82          
+     83          
+     84          /**********************************************************************************************************************
+     85          Function Definitions
+     86          **********************************************************************************************************************/
+     87          
+     88          /*--------------------------------------------------------------------------------------------------------------------*/
+     89          /* Public Functions */
+     90          /*--------------------------------------------------------------------------------------------------------------------*/
+     91          
+     92          /*----------------------------------------------------------------------------------------------------------------------
+     93          Function: QueryMessageStatus()
+     94          
+     95          Description:
+     96          Checks the state of a message.  If the state is COMPLETE or TIMEOUT, the status is deleted from the message queue.
+     97          Since the queue is quite short, most of the time it will hold very little entires.  New entries are always filled at the front,
+     98          using a simple linear search starting at index 0.
+     99          
+    100          Requires:
+    101            - u32Token_ is the token of the message of interest
+    102          
+    103          Promises:
+    104            - Returns MessageStateType indicating the status of the message
+    105            - if the message is found in COMPLETE or TIMEOUT state, the status is removed from the queue
+    106          */
+
+   \                                 In section .text, align 2, keep-with-next
+    107          MessageStateType QueryMessageStatus(u32 u32Token_)
+    108          {
+   \                     QueryMessageStatus: (+1)
+   \        0x0   0xB410             PUSH     {R4}
+   \        0x2   0x0001             MOVS     R1,R0
+    109            MessageStateType eStatus   = NOT_FOUND;
+   \        0x4   0x20FF             MOVS     R0,#+255
+    110            MessageStatus* pListParser = &Msg_StatusQueue[0];
+   \        0x6   0x....             LDR.N    R3,??DataTable8
+   \        0x8   0x001A             MOVS     R2,R3
+    111            
+    112            /* Brute force search for the token - the queue will never be large enough on this system to require a more
+    113            intelligent search algorithm */
+    114            while( (pListParser->u32Token != u32Token_) && (pListParser != &Msg_StatusQueue[STATUS_QUEUE_SIZE]) )
+   \                     ??QueryMessageStatus_0: (+1)
+   \        0xA   0x6814             LDR      R4,[R2, #+0]
+   \        0xC   0x428C             CMP      R4,R1
+   \        0xE   0xD005             BEQ.N    ??QueryMessageStatus_1
+   \       0x10   0xF513 0x7440      ADDS     R4,R3,#+768
+   \       0x14   0x42A2             CMP      R2,R4
+   \       0x16   0xD001             BEQ.N    ??QueryMessageStatus_1
+    115            {
+    116              pListParser++;
+   \       0x18   0x320C             ADDS     R2,R2,#+12
+   \       0x1A   0xE7F6             B.N      ??QueryMessageStatus_0
+    117            }
+    118          
+    119            /* If the token was found pListParser is pointing at it, take appropriate action */
+    120            if(pListParser != &Msg_StatusQueue[STATUS_QUEUE_SIZE])
+   \                     ??QueryMessageStatus_1: (+1)
+   \       0x1C   0xF513 0x7340      ADDS     R3,R3,#+768
+   \       0x20   0x429A             CMP      R2,R3
+   \       0x22   0xD00D             BEQ.N    ??QueryMessageStatus_2
+    121            {
+    122              /* Save the status */
+    123              eStatus = pListParser->eState;
+   \       0x24   0x7913             LDRB     R3,[R2, #+4]
+   \       0x26   0x0018             MOVS     R0,R3
+    124          
+    125              /* Release the slot if the message state is final (the client must deal with it now) */
+    126              if( (eStatus == COMPLETE) || (eStatus == TIMEOUT) )
+   \       0x28   0x0003             MOVS     R3,R0
+   \       0x2A   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x2C   0x2B04             CMP      R3,#+4
+   \       0x2E   0xD003             BEQ.N    ??QueryMessageStatus_3
+   \       0x30   0x0003             MOVS     R3,R0
+   \       0x32   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x34   0x2B05             CMP      R3,#+5
+   \       0x36   0xD103             BNE.N    ??QueryMessageStatus_2
+    127              {
+    128                pListParser->u32Token = 0;
+   \                     ??QueryMessageStatus_3: (+1)
+   \       0x38   0x2300             MOVS     R3,#+0
+   \       0x3A   0x6013             STR      R3,[R2, #+0]
+    129                pListParser->eState = EMPTY;
+   \       0x3C   0x2300             MOVS     R3,#+0
+   \       0x3E   0x7113             STRB     R3,[R2, #+4]
+    130              }
+    131            }
+    132          
+    133            return(eStatus);
+   \                     ??QueryMessageStatus_2: (+1)
+   \       0x40   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x42   0xBC10             POP      {R4}
+   \       0x44   0x4770             BX       LR               ;; return
+    134            
+    135          } /* end QueryMessageStatus() */
+    136          
+    137          
+    138          /*--------------------------------------------------------------------------------------------------------------------*/
+    139          /* Protected Functions */
+    140          /*--------------------------------------------------------------------------------------------------------------------*/
+    141          
+    142          /*----------------------------------------------------------------------------------------------------------------------
+    143          Function: QueueMessage
+    144          
+    145          Description:
+    146          Allocates one of the positions in the message queue to the calling function's send queue.
+    147          
+    148          Requires:
+    149            - ppeTargetTxBuffer_ is the peripheral transmit buffer where the message will be queued
+    150            - u32MessageSize_ is the size of the message data array in bytes
+    151            - pu8MessageData_ points to the message data array
+    152            - Msg_Pool should not be full 
+    153          
+    154          Promises:
+    155            - The message is inserted into the target list and assigned a token
+    156            - If the message is created successfully, the message token is returned; otherwise, NULL is returned
+    157          */
+
+   \                                 In section .text, align 2, keep-with-next
+    158          u32 QueueMessage(MessageType** ppeTargetTxBuffer_, u32 u32MessageSize_, u8* pu8MessageData_)
+    159          {
+   \                     QueueMessage: (+1)
+   \        0x0   0xE92D 0x4FF3      PUSH     {R0,R1,R4-R11,LR}
+   \        0x4   0xB081             SUB      SP,SP,#+4
+   \        0x6   0x4693             MOV      R11,R2
+    160            MessageSlot *psSlotParser;
+    161            MessageType *psNewMessage;
+    162            MessageType *psListParser;
+    163            u32 u32BytesRemaining = u32MessageSize_;
+   \        0x8   0x9C02             LDR      R4,[SP, #+8]
+    164            u32 u32CurrentMessageSize = 0;
+   \        0xA   0x2700             MOVS     R7,#+0
+    165            
+    166            /* Check for available space in the message pool */
+    167            if(Msg_u8QueuedMessageCount == TX_QUEUE_SIZE)
+   \        0xC   0x....'....        LDR.W    R8,??DataTable8_1
+   \       0x10   0xF898 0x0000      LDRB     R0,[R8, #+0]
+   \       0x14   0x2810             CMP      R0,#+16
+   \       0x16   0xD106             BNE.N    ??QueueMessage_0
+    168            {
+    169              G_u32MessagingFlags |= _MESSAGING_TX_QUEUE_FULL;
+   \       0x18   0x....             LDR.N    R0,??DataTable8_2
+   \       0x1A   0x6801             LDR      R1,[R0, #+0]
+   \       0x1C   0xF051 0x0101      ORRS     R1,R1,#0x1
+   \       0x20   0x6001             STR      R1,[R0, #+0]
+    170              return(0);
+   \       0x22   0x2000             MOVS     R0,#+0
+   \       0x24   0xE068             B.N      ??QueueMessage_1
+    171            }
+    172          
+    173            /* Space available, so proceed with allocation.  Though only one message is queued at a time, we
+    174            use a while loop to handle messages that are too big and must be split into different slots.  The slots
+    175            are always sequential and the message processor will send the bytes continuously across slots */
+    176            while(u32BytesRemaining)
+   \                     ??QueueMessage_0: (+1)
+   \       0x26   0x2C00             CMP      R4,#+0
+   \       0x28   0xD065             BEQ.N    ??QueueMessage_2
+    177            {
+    178              Msg_u8QueuedMessageCount++;
+   \       0x2A   0xF898 0x0000      LDRB     R0,[R8, #+0]
+   \       0x2E   0x1C40             ADDS     R0,R0,#+1
+   \       0x30   0xF888 0x0000      STRB     R0,[R8, #+0]
+    179              
+    180              /* Flag if we're above the high watermark */
+    181              if(Msg_u8QueuedMessageCount >= TX_QUEUE_WATERMARK)
+   \       0x34   0xF898 0x0000      LDRB     R0,[R8, #+0]
+   \       0x38   0x280E             CMP      R0,#+14
+   \       0x3A   0xDB05             BLT.N    ??QueueMessage_3
+    182              {
+    183                G_u32MessagingFlags |= _MESSAGING_TX_QUEUE_ALMOST_FULL;
+   \       0x3C   0x....             LDR.N    R0,??DataTable8_2
+   \       0x3E   0x6801             LDR      R1,[R0, #+0]
+   \       0x40   0xF051 0x0102      ORRS     R1,R1,#0x2
+   \       0x44   0x6001             STR      R1,[R0, #+0]
+   \       0x46   0xE004             B.N      ??QueueMessage_4
+    184              }
+    185              else
+    186              {
+    187                G_u32MessagingFlags &= ~_MESSAGING_TX_QUEUE_ALMOST_FULL;
+   \                     ??QueueMessage_3: (+1)
+   \       0x48   0x....             LDR.N    R0,??DataTable8_2
+   \       0x4A   0x6801             LDR      R1,[R0, #+0]
+   \       0x4C   0xF031 0x0102      BICS     R1,R1,#0x2
+   \       0x50   0x6001             STR      R1,[R0, #+0]
+    188              }
+    189              
+    190              /* Find an empty slot: this is non-circular and there must be at least one free slot if we're here */
+    191              psSlotParser = &Msg_Pool[0];
+   \                     ??QueueMessage_4: (+1)
+   \       0x52   0x....             LDR.N    R0,??DataTable8_3
+   \       0x54   0x4681             MOV      R9,R0
+    192              while(!psSlotParser->bFree)
+   \                     ??QueueMessage_5: (+1)
+   \       0x56   0xF899 0x0000      LDRB     R0,[R9, #+0]
+   \       0x5A   0x2800             CMP      R0,#+0
+   \       0x5C   0xD102             BNE.N    ??QueueMessage_6
+    193              {
+    194                psSlotParser++;
+   \       0x5E   0xF119 0x0990      ADDS     R9,R9,#+144
+   \       0x62   0xE7F8             B.N      ??QueueMessage_5
+    195              }
+    196              
+    197              /* Allocate the slot and set the message pointer */
+    198              psSlotParser->bFree = FALSE;
+   \                     ??QueueMessage_6: (+1)
+   \       0x64   0x2000             MOVS     R0,#+0
+   \       0x66   0xF889 0x0000      STRB     R0,[R9, #+0]
+    199              psNewMessage = &(psSlotParser->Message);
+   \       0x6A   0xF119 0x0004      ADDS     R0,R9,#+4
+   \       0x6E   0x0005             MOVS     R5,R0
+    200            
+    201              /* Check the message size and split the message up if necessary */
+    202              if(u32BytesRemaining > MAX_TX_MESSAGE_LENGTH)
+   \       0x70   0x2C81             CMP      R4,#+129
+   \       0x72   0xD303             BCC.N    ??QueueMessage_7
+    203              {
+    204                u32CurrentMessageSize = MAX_TX_MESSAGE_LENGTH;
+   \       0x74   0x2080             MOVS     R0,#+128
+   \       0x76   0x0007             MOVS     R7,R0
+    205                u32BytesRemaining -= MAX_TX_MESSAGE_LENGTH;
+   \       0x78   0x3C80             SUBS     R4,R4,#+128
+   \       0x7A   0xE002             B.N      ??QueueMessage_8
+    206              }
+    207              else
+    208              {
+    209                u32CurrentMessageSize = u32BytesRemaining;
+   \                     ??QueueMessage_7: (+1)
+   \       0x7C   0x0027             MOVS     R7,R4
+    210                u32BytesRemaining = 0;
+   \       0x7E   0x2000             MOVS     R0,#+0
+   \       0x80   0x0004             MOVS     R4,R0
+    211              }
+    212              
+    213              /* Copy all the data to the allocated message structure */
+    214              psNewMessage->u32Token      = Msg_u32Token;
+   \                     ??QueueMessage_8: (+1)
+   \       0x82   0x....'....        LDR.W    R10,??DataTable8_4
+   \       0x86   0xF8DA 0x0000      LDR      R0,[R10, #+0]
+   \       0x8A   0x6028             STR      R0,[R5, #+0]
+    215              psNewMessage->u32Size       = u32CurrentMessageSize;
+   \       0x8C   0x606F             STR      R7,[R5, #+4]
+    216              psNewMessage->psNextMessage = NULL;
+   \       0x8E   0x2000             MOVS     R0,#+0
+   \       0x90   0xF8C5 0x0088      STR      R0,[R5, #+136]
+    217              
+    218              /* Add the data into the payload */
+    219              for(u32 i = 0; i < psNewMessage->u32Size; i++)
+   \       0x94   0x2000             MOVS     R0,#+0
+   \                     ??QueueMessage_9: (+1)
+   \       0x96   0x6869             LDR      R1,[R5, #+4]
+   \       0x98   0x4288             CMP      R0,R1
+   \       0x9A   0xD208             BCS.N    ??QueueMessage_10
+    220              {
+    221                *(psNewMessage->pu8Message + i) = *pu8MessageData_++;
+   \       0x9C   0xF89B 0x1000      LDRB     R1,[R11, #+0]
+   \       0xA0   0xEB05 0x0200      ADD      R2,R5,R0
+   \       0xA4   0x7211             STRB     R1,[R2, #+8]
+   \       0xA6   0xF11B 0x0B01      ADDS     R11,R11,#+1
+    222              }
+   \       0xAA   0x1C40             ADDS     R0,R0,#+1
+   \       0xAC   0xE7F3             B.N      ??QueueMessage_9
+    223            
+    224              /* Link the new message into the client's transmit buffer */
+    225              /* Handle an empty list */
+    226              if(*ppeTargetTxBuffer_ == NULL)
+   \                     ??QueueMessage_10: (+1)
+   \       0xAE   0x9801             LDR      R0,[SP, #+4]
+   \       0xB0   0x6800             LDR      R0,[R0, #+0]
+   \       0xB2   0x2800             CMP      R0,#+0
+   \       0xB4   0xD102             BNE.N    ??QueueMessage_11
+    227              {
+    228                *ppeTargetTxBuffer_ = psNewMessage;
+   \       0xB6   0x9801             LDR      R0,[SP, #+4]
+   \       0xB8   0x6005             STR      R5,[R0, #+0]
+   \       0xBA   0xE00B             B.N      ??QueueMessage_12
+    229              }
+    230          
+    231              /* Add the message to the end of the list */
+    232              else
+    233              {
+    234                /* Find the last node */
+    235                psListParser =  *ppeTargetTxBuffer_;
+   \                     ??QueueMessage_11: (+1)
+   \       0xBC   0x9801             LDR      R0,[SP, #+4]
+   \       0xBE   0x6800             LDR      R0,[R0, #+0]
+   \       0xC0   0x0006             MOVS     R6,R0
+    236                while(psListParser->psNextMessage != NULL)
+   \                     ??QueueMessage_13: (+1)
+   \       0xC2   0xF8D6 0x0088      LDR      R0,[R6, #+136]
+   \       0xC6   0x2800             CMP      R0,#+0
+   \       0xC8   0xD002             BEQ.N    ??QueueMessage_14
+    237                {
+    238                  psListParser = psListParser->psNextMessage;
+   \       0xCA   0xF8D6 0x6088      LDR      R6,[R6, #+136]
+   \       0xCE   0xE7F8             B.N      ??QueueMessage_13
+    239                }
+    240               
+    241                /* Found the end: add the new node */
+    242                psListParser->psNextMessage = psNewMessage;
+   \                     ??QueueMessage_14: (+1)
+   \       0xD0   0xF8C6 0x5088      STR      R5,[R6, #+136]
+    243              }
+    244            
+    245              /* Update the Public status of the message in the status queue */
+    246              AddNewMessageStatus(Msg_u32Token);
+   \                     ??QueueMessage_12: (+1)
+   \       0xD4   0xF8DA 0x0000      LDR      R0,[R10, #+0]
+   \       0xD8   0x....'....        BL       AddNewMessageStatus
+    247            
+    248              /* Increment message token and catch the rollover every 4 billion messages... Token 0 is not allowed. */
+    249              if(++Msg_u32Token == 0)
+   \       0xDC   0xF8DA 0x0000      LDR      R0,[R10, #+0]
+   \       0xE0   0x1C40             ADDS     R0,R0,#+1
+   \       0xE2   0xF8CA 0x0000      STR      R0,[R10, #+0]
+   \       0xE6   0xF8DA 0x0000      LDR      R0,[R10, #+0]
+   \       0xEA   0x2800             CMP      R0,#+0
+   \       0xEC   0xD19B             BNE.N    ??QueueMessage_0
+    250              {
+    251                Msg_u32Token = 1;
+   \       0xEE   0x2001             MOVS     R0,#+1
+   \       0xF0   0xF8CA 0x0000      STR      R0,[R10, #+0]
+   \       0xF4   0xE797             B.N      ??QueueMessage_0
+    252              }
+    253            
+    254            } /* end while */
+    255          
+    256            /* Return only the current (and highest) message token, as it will be the last portion to be sent if the message was split up */
+    257            return(psNewMessage->u32Token);
+   \                     ??QueueMessage_2: (+1)
+   \       0xF6   0x6828             LDR      R0,[R5, #+0]
+   \                     ??QueueMessage_1: (+1)
+   \       0xF8   0xE8BD 0x8FFE      POP      {R1-R11,PC}      ;; return
+    258            
+    259          } /* end QueueMessage() */
+    260          
+    261          
+    262          /*----------------------------------------------------------------------------------------------------------------------
+    263          Function: DeQueueMessage
+    264          
+    265          Description:
+    266          Removes a message from a message queue and adds it back to the pool.
+    267          
+    268          Requires:
+    269            - pTargetQueue_ points to the list queue where the message to be deleted is located
+    270            - pTargetQueue_ is a FIFO linked-list where the message that needs to be killed is at the front of the list
+    271            - The message to be removed has been completely sent and is no longer in use
+    272            - New message cannot be added into the list during this function (via interrupts)
+    273          
+    274          Promises:
+    275            - The first message in the list is deleted; the list is hooked back up
+    276            - The message space is added back to the available message queue
+    277          */
+
+   \                                 In section .text, align 2, keep-with-next
+    278          void DeQueueMessage(MessageType** pTargetQueue_)
+    279          {
+   \                     DeQueueMessage: (+1)
+   \        0x0   0xB410             PUSH     {R4}
+    280            MessageSlot *psSlotParser;
+    281                
+    282            /* Make sure there is a message to kill */
+    283            if(*pTargetQueue_ == NULL)
+   \        0x2   0x6801             LDR      R1,[R0, #+0]
+   \        0x4   0x2900             CMP      R1,#+0
+   \        0x6   0xD105             BNE.N    ??DeQueueMessage_0
+    284            {
+    285              G_u32MessagingFlags |= _DEQUEUE_GOT_NULL;
+   \        0x8   0x....             LDR.N    R1,??DataTable8_2
+   \        0xA   0x680A             LDR      R2,[R1, #+0]
+   \        0xC   0xF052 0x0204      ORRS     R2,R2,#0x4
+   \       0x10   0x600A             STR      R2,[R1, #+0]
+    286              return;
+   \       0x12   0xE01F             B.N      ??DeQueueMessage_1
+    287            }
+    288            
+    289            /* Find the message's slot: this message pool is non-circular and the message must be one of the slots */
+    290            psSlotParser = &Msg_Pool[0];
+   \                     ??DeQueueMessage_0: (+1)
+   \       0x14   0x....             LDR.N    R2,??DataTable8_3
+   \       0x16   0x0011             MOVS     R1,R2
+    291            while( (&psSlotParser->Message != *pTargetQueue_) && (psSlotParser != &Msg_Pool[TX_QUEUE_SIZE]) )
+   \                     ??DeQueueMessage_2: (+1)
+   \       0x18   0x1D0B             ADDS     R3,R1,#+4
+   \       0x1A   0x6804             LDR      R4,[R0, #+0]
+   \       0x1C   0x42A3             CMP      R3,R4
+   \       0x1E   0xD005             BEQ.N    ??DeQueueMessage_3
+   \       0x20   0xF512 0x6310      ADDS     R3,R2,#+2304
+   \       0x24   0x4299             CMP      R1,R3
+   \       0x26   0xD001             BEQ.N    ??DeQueueMessage_3
+    292            {
+    293              psSlotParser++;
+   \       0x28   0x3190             ADDS     R1,R1,#+144
+   \       0x2A   0xE7F5             B.N      ??DeQueueMessage_2
+    294            }
+    295          
+    296            /* Make sure the message has been found */
+    297            if(psSlotParser == &Msg_Pool[TX_QUEUE_SIZE])
+   \                     ??DeQueueMessage_3: (+1)
+   \       0x2C   0xF512 0x6210      ADDS     R2,R2,#+2304
+   \       0x30   0x4291             CMP      R1,R2
+   \       0x32   0xD105             BNE.N    ??DeQueueMessage_4
+    298            {
+    299              G_u32MessagingFlags |= _DEQUEUE_MSG_NOT_FOUND;
+   \       0x34   0x....             LDR.N    R2,??DataTable8_2
+   \       0x36   0x6813             LDR      R3,[R2, #+0]
+   \       0x38   0xF053 0x0308      ORRS     R3,R3,#0x8
+   \       0x3C   0x6013             STR      R3,[R2, #+0]
+    300              return;
+   \       0x3E   0xE009             B.N      ??DeQueueMessage_1
+    301            }
+    302          
+    303            /* Unhook the message from the current owner's queue and put it back in the pool */
+    304            *pTargetQueue_ = (*pTargetQueue_)->psNextMessage;
+   \                     ??DeQueueMessage_4: (+1)
+   \       0x40   0x6802             LDR      R2,[R0, #+0]
+   \       0x42   0xF8D2 0x2088      LDR      R2,[R2, #+136]
+   \       0x46   0x6002             STR      R2,[R0, #+0]
+    305            psSlotParser->bFree = TRUE;
+   \       0x48   0x2201             MOVS     R2,#+1
+   \       0x4A   0x700A             STRB     R2,[R1, #+0]
+    306            Msg_u8QueuedMessageCount--;
+   \       0x4C   0x....             LDR.N    R2,??DataTable8_1
+   \       0x4E   0x7813             LDRB     R3,[R2, #+0]
+   \       0x50   0x1E5B             SUBS     R3,R3,#+1
+   \       0x52   0x7013             STRB     R3,[R2, #+0]
+    307            
+    308          } /* end DeQueueMessage() */
+   \                     ??DeQueueMessage_1: (+1)
+   \       0x54   0xBC10             POP      {R4}
+   \       0x56   0x4770             BX       LR               ;; return
+    309          
+    310          
+    311          /*--------------------------------------------------------------------------------------------------------------------
+    312          Function: MessagingInitialize
+    313          
+    314          Description:
+    315          Initializes the State Machine and its variables.
+    316          
+    317          Requires:
+    318            - No messaging in progress
+    319          
+    320          Promises:
+    321            - Message queues are zeroed
+    322            - Flags and state machine are initialized
+    323          */
+
+   \                                 In section .text, align 2, keep-with-next
+    324          void MessagingInitialize(void)
+    325          {
+   \                     MessagingInitialize: (+1)
+   \        0x0   0xB410             PUSH     {R4}
+    326            /* Inititalize variables */
+    327            Msg_u8QueuedMessageCount = 0;
+   \        0x2   0x2000             MOVS     R0,#+0
+   \        0x4   0x....             LDR.N    R1,??DataTable8_1
+   \        0x6   0x7008             STRB     R0,[R1, #+0]
+    328            Msg_u32Token = 1;
+   \        0x8   0x2001             MOVS     R0,#+1
+   \        0xA   0x....             LDR.N    R1,??DataTable8_4
+   \        0xC   0x6008             STR      R0,[R1, #+0]
+    329          
+    330            /* Ensure all message slots are deallocated and the message status queue is empty */
+    331            for(u16 i = 0; i < TX_QUEUE_SIZE; i++)
+   \        0xE   0x2100             MOVS     R1,#+0
+   \                     ??MessagingInitialize_0: (+1)
+   \       0x10   0x0008             MOVS     R0,R1
+   \       0x12   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+   \       0x14   0x2810             CMP      R0,#+16
+   \       0x16   0xDA08             BGE.N    ??MessagingInitialize_1
+    332            {
+    333              Msg_Pool[i].bFree = TRUE;
+   \       0x18   0x2201             MOVS     R2,#+1
+   \       0x1A   0x....             LDR.N    R3,??DataTable8_3
+   \       0x1C   0x000C             MOVS     R4,R1
+   \       0x1E   0xB2A4             UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
+   \       0x20   0x2090             MOVS     R0,#+144
+   \       0x22   0x4344             MULS     R4,R0,R4
+   \       0x24   0x551A             STRB     R2,[R3, R4]
+    334            }
+   \       0x26   0x1C49             ADDS     R1,R1,#+1
+   \       0x28   0xE7F2             B.N      ??MessagingInitialize_0
+    335          
+    336            for(u16 i = 0; i < STATUS_QUEUE_SIZE; i++)
+   \                     ??MessagingInitialize_1: (+1)
+   \       0x2A   0x2000             MOVS     R0,#+0
+   \                     ??MessagingInitialize_2: (+1)
+   \       0x2C   0x0001             MOVS     R1,R0
+   \       0x2E   0xB289             UXTH     R1,R1            ;; ZeroExt  R1,R1,#+16,#+16
+   \       0x30   0x2940             CMP      R1,#+64
+   \       0x32   0xDA15             BGE.N    ??MessagingInitialize_3
+    337            {
+    338              Msg_StatusQueue[i].u32Token = 0;
+   \       0x34   0x210C             MOVS     R1,#+12
+   \       0x36   0x....             LDR.N    R2,??DataTable8
+   \       0x38   0x2300             MOVS     R3,#+0
+   \       0x3A   0x0004             MOVS     R4,R0
+   \       0x3C   0xB2A4             UXTH     R4,R4            ;; ZeroExt  R4,R4,#+16,#+16
+   \       0x3E   0x434C             MULS     R4,R1,R4
+   \       0x40   0x5113             STR      R3,[R2, R4]
+    339              Msg_StatusQueue[i].eState = EMPTY;
+   \       0x42   0x0003             MOVS     R3,R0
+   \       0x44   0xB29B             UXTH     R3,R3            ;; ZeroExt  R3,R3,#+16,#+16
+   \       0x46   0x434B             MULS     R3,R1,R3
+   \       0x48   0x4413             ADD      R3,R2,R3
+   \       0x4A   0x2400             MOVS     R4,#+0
+   \       0x4C   0x711C             STRB     R4,[R3, #+4]
+    340              Msg_StatusQueue[i].u32Timestamp = 0;
+   \       0x4E   0x0003             MOVS     R3,R0
+   \       0x50   0xB29B             UXTH     R3,R3            ;; ZeroExt  R3,R3,#+16,#+16
+   \       0x52   0xFB01 0xF103      MUL      R1,R1,R3
+   \       0x56   0x4411             ADD      R1,R2,R1
+   \       0x58   0x2200             MOVS     R2,#+0
+   \       0x5A   0x608A             STR      R2,[R1, #+8]
+    341            }
+   \       0x5C   0x1C40             ADDS     R0,R0,#+1
+   \       0x5E   0xE7E5             B.N      ??MessagingInitialize_2
+    342          
+    343            Msg_pNextStatus = &Msg_StatusQueue[0];
+   \                     ??MessagingInitialize_3: (+1)
+   \       0x60   0x....             LDR.N    R0,??DataTable8
+   \       0x62   0x....             LDR.N    R1,??DataTable8_5
+   \       0x64   0x6008             STR      R0,[R1, #+0]
+    344          
+    345            G_u32MessagingFlags = 0;
+   \       0x66   0x2000             MOVS     R0,#+0
+   \       0x68   0x....             LDR.N    R1,??DataTable8_2
+   \       0x6A   0x6008             STR      R0,[R1, #+0]
+    346            Messaging_pfnStateMachine = MessagingIdle;
+   \       0x6C   0x....'....        ADR.W    R0,MessagingIdle
+   \       0x70   0x....             LDR.N    R1,??DataTable8_6
+   \       0x72   0x6008             STR      R0,[R1, #+0]
+    347          
+    348          } /* end MessagingInitialize() */
+   \       0x74   0xBC10             POP      {R4}
+   \       0x76   0x4770             BX       LR               ;; return
+    349          
+    350          
+    351          /*----------------------------------------------------------------------------------------------------------------------
+    352          Function MessagingRunActiveState()
+    353          
+    354          Description:
+    355          Selects and runs one iteration of the current state in the state machine.
+    356          All state machines have a TOTAL of 1ms to execute, so on average n state machines
+    357          may take 1ms / n to execute.
+    358          
+    359          Requires:
+    360            - State machine function pointer points at current state
+    361          
+    362          Promises:
+    363            - Calls the function to pointed by the state machine function pointer
+    364          */
+
+   \                                 In section .text, align 2, keep-with-next
+    365          void MessagingRunActiveState(void)
+    366          {
+   \                     MessagingRunActiveState: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    367            Messaging_pfnStateMachine();
+   \        0x2   0x....             LDR.N    R0,??DataTable8_6
+   \        0x4   0x6800             LDR      R0,[R0, #+0]
+   \        0x6   0x4780             BLX      R0
+    368          
+    369          } /* end MessagingRunActiveState */
+   \        0x8   0xBD01             POP      {R0,PC}          ;; return
+    370          
+    371          
+    372          /*----------------------------------------------------------------------------------------------------------------------
+    373          Function: UpdateMessageStatus()
+    374          
+    375          Description:
+    376          Changes the status of a message in the statue queue.
+    377          
+    378          Requires:
+    379            - u32Token_ is message that should be in the status queue
+    380            - eNewState_ is the desired status setting for the message
+    381          
+    382          Promises:
+    383            - eState of the message is set to eNewState_
+    384          */
+
+   \                                 In section .text, align 2, keep-with-next
+    385          void UpdateMessageStatus(u32 u32Token_, MessageStateType eNewState_)
+    386          {
+   \                     UpdateMessageStatus: (+1)
+   \        0x0   0xB410             PUSH     {R4}
+    387            MessageStatus* pListParser = &Msg_StatusQueue[0];
+   \        0x2   0x....             LDR.N    R3,??DataTable8
+   \        0x4   0x001A             MOVS     R2,R3
+    388            
+    389            /* Search for the token */
+    390            while( (pListParser->u32Token != u32Token_) && (pListParser != &Msg_StatusQueue[STATUS_QUEUE_SIZE]) )
+   \                     ??UpdateMessageStatus_0: (+1)
+   \        0x6   0x6814             LDR      R4,[R2, #+0]
+   \        0x8   0x4284             CMP      R4,R0
+   \        0xA   0xD005             BEQ.N    ??UpdateMessageStatus_1
+   \        0xC   0xF513 0x7440      ADDS     R4,R3,#+768
+   \       0x10   0x42A2             CMP      R2,R4
+   \       0x12   0xD001             BEQ.N    ??UpdateMessageStatus_1
+    391            {
+    392              pListParser++;
+   \       0x14   0x320C             ADDS     R2,R2,#+12
+   \       0x16   0xE7F6             B.N      ??UpdateMessageStatus_0
+    393            }
+    394          
+    395            /* If the token was found, change the status */
+    396            if(pListParser != &Msg_StatusQueue[STATUS_QUEUE_SIZE])
+   \                     ??UpdateMessageStatus_1: (+1)
+   \       0x18   0xF513 0x7340      ADDS     R3,R3,#+768
+   \       0x1C   0x429A             CMP      R2,R3
+   \       0x1E   0xD000             BEQ.N    ??UpdateMessageStatus_2
+    397            {
+    398              pListParser->eState = eNewState_;
+   \       0x20   0x7111             STRB     R1,[R2, #+4]
+    399            }
+    400            
+    401          } /* end UpdateMessageStatus() */
+   \                     ??UpdateMessageStatus_2: (+1)
+   \       0x22   0xBC10             POP      {R4}
+   \       0x24   0x4770             BX       LR               ;; return
+    402          
+    403          
+    404          /*--------------------------------------------------------------------------------------------------------------------*/
+    405          /* Private functions */
+    406          /*--------------------------------------------------------------------------------------------------------------------*/
+    407          
+    408          /*----------------------------------------------------------------------------------------------------------------------
+    409          Function: AddNewMessageStatus()
+    410          
+    411          Description:
+    412          Adds a new mesage into the status queue.  Due to the tendancy of applications to forget that they wrote
+    413          a message here, this buffer is circular and will overwite the oldest message if it needs space for a 
+    414          new message.
+    415          
+    416          Requires:
+    417            - u32Token_ is the message of interest
+    418          
+    419          Promises:
+    420            - A new status is created indexed by u32Token_
+    421          */
+
+   \                                 In section .text, align 2, keep-with-next
+    422          static void AddNewMessageStatus(u32 u32Token_)
+    423          {
+   \                     AddNewMessageStatus: (+1)
+   \        0x0   0xB410             PUSH     {R4}
+    424            /* Install the new message message */
+    425            Msg_pNextStatus->u32Token = u32Token_;
+   \        0x2   0x....             LDR.N    R1,??DataTable8_5
+   \        0x4   0x680A             LDR      R2,[R1, #+0]
+   \        0x6   0x6010             STR      R0,[R2, #+0]
+    426            Msg_pNextStatus->eState = WAITING;
+   \        0x8   0x2201             MOVS     R2,#+1
+   \        0xA   0x680B             LDR      R3,[R1, #+0]
+   \        0xC   0x711A             STRB     R2,[R3, #+4]
+    427            Msg_pNextStatus->u32Timestamp = G_u32SystemTime1ms;
+   \        0xE   0x....             LDR.N    R2,??DataTable8_7
+   \       0x10   0x6812             LDR      R2,[R2, #+0]
+   \       0x12   0x680B             LDR      R3,[R1, #+0]
+   \       0x14   0x609A             STR      R2,[R3, #+8]
+    428            
+    429            /* Safely advance the pointer */
+    430            Msg_pNextStatus++;
+   \       0x16   0x680A             LDR      R2,[R1, #+0]
+   \       0x18   0x320C             ADDS     R2,R2,#+12
+   \       0x1A   0x600A             STR      R2,[R1, #+0]
+    431            if(Msg_pNextStatus == &Msg_StatusQueue[STATUS_QUEUE_SIZE])
+   \       0x1C   0x....             LDR.N    R2,??DataTable8
+   \       0x1E   0x680B             LDR      R3,[R1, #+0]
+   \       0x20   0xF512 0x7440      ADDS     R4,R2,#+768
+   \       0x24   0x42A3             CMP      R3,R4
+   \       0x26   0xD100             BNE.N    ??AddNewMessageStatus_0
+    432            {
+    433              Msg_pNextStatus = &Msg_StatusQueue[0];
+   \       0x28   0x600A             STR      R2,[R1, #+0]
+    434            }
+    435            
+    436          } /* end AddNewMessageStatus() */
+   \                     ??AddNewMessageStatus_0: (+1)
+   \       0x2A   0xBC10             POP      {R4}
+   \       0x2C   0x4770             BX       LR               ;; return
+    437          
+    438          
+    439          /**********************************************************************************************************************
+    440          State Machine Function Definitions
+    441          **********************************************************************************************************************/
+    442          
+    443          /*-------------------------------------------------------------------------------------------------------------------*/
+    444          /* Do nothing for now */
+
+   \                                 In section .text, align 4, keep-with-next
+    445          void MessagingIdle(void)
+    446          {
+    447            static u32 u32CleaningTime = MSG_STATUS_CLEANING_TIME;
+    448            
+    449            /* Periodically check for stale messages */
+    450            if(--u32CleaningTime == 0)
+   \                     MessagingIdle: (+1)
+   \        0x0   0x....             LDR.N    R1,??DataTable8_8
+   \        0x2   0x6808             LDR      R0,[R1, #+0]
+   \        0x4   0x1E40             SUBS     R0,R0,#+1
+   \        0x6   0x6008             STR      R0,[R1, #+0]
+   \        0x8   0x6808             LDR      R0,[R1, #+0]
+   \        0xA   0x2800             CMP      R0,#+0
+   \        0xC   0xD102             BNE.N    ??MessagingIdle_0
+    451            {
+    452              u32CleaningTime = MSG_STATUS_CLEANING_TIME;
+   \        0xE   0xF44F 0x707A      MOV      R0,#+1000
+   \       0x12   0x6008             STR      R0,[R1, #+0]
+    453              
+    454              /* ??? Probably should add clean of the main message queue to detect any messages that have become stuck */
+    455            }
+    456              
+    457          } /* end MessagingIdle() */
+   \                     ??MessagingIdle_0: (+1)
+   \       0x14   0x4770             BX       LR               ;; return
+
+   \                                 In section .data, align 4
+   \                     `MessagingIdle::u32CleaningTime`:
+   \        0x0   0x0000'03E8        DC32 1000
+    458          
+    459          
+    460          /*-------------------------------------------------------------------------------------------------------------------*/
+    461          /* Handle an error */
+
+   \                                 In section .text, align 2, keep-with-next
+    462          void MessagingError(void)          
+    463          {
+    464            Messaging_pfnStateMachine = MessagingIdle;
+   \                     MessagingError: (+1)
+   \        0x0   0x....             LDR.N    R0,??DataTable8_9
+   \        0x2   0x....             LDR.N    R1,??DataTable8_6
+   \        0x4   0x6008             STR      R0,[R1, #+0]
+    465            
+    466          } /* end MessagingError() */
+   \        0x6   0x4770             BX       LR               ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8:
+   \        0x0   0x....'....        DC32     Msg_StatusQueue
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_1:
+   \        0x0   0x....'....        DC32     Msg_u8QueuedMessageCount
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_2:
+   \        0x0   0x....'....        DC32     G_u32MessagingFlags
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_3:
+   \        0x0   0x....'....        DC32     Msg_Pool
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_4:
+   \        0x0   0x....'....        DC32     Msg_u32Token
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_5:
+   \        0x0   0x....'....        DC32     Msg_pNextStatus
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_6:
+   \        0x0   0x....'....        DC32     Messaging_pfnStateMachine
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_7:
+   \        0x0   0x....'....        DC32     G_u32SystemTime1ms
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_8:
+   \        0x0   0x....'....        DC32     `MessagingIdle::u32CleaningTime`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_9:
+   \        0x0   0x....'....        DC32     MessagingIdle
+    467          
+    468          
+    469          
+    470          /*--------------------------------------------------------------------------------------------------------------------*/
+    471          /* End of File */
+    472          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       4   AddNewMessageStatus
+       4   DeQueueMessage
+       0   MessagingError
+       0   MessagingIdle
+       4   MessagingInitialize
+       8   MessagingRunActiveState
+         8   -- Indirect call
+       4   QueryMessageStatus
+      48   QueueMessage
+        48   -> AddNewMessageStatus
+       4   UpdateMessageStatus
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable8
+       4  ??DataTable8_1
+       4  ??DataTable8_2
+       4  ??DataTable8_3
+       4  ??DataTable8_4
+       4  ??DataTable8_5
+       4  ??DataTable8_6
+       4  ??DataTable8_7
+       4  ??DataTable8_8
+       4  ??DataTable8_9
+      46  AddNewMessageStatus
+      88  DeQueueMessage
+       4  G_u32MessagingFlags
+       8  MessagingError
+      22  MessagingIdle
+     120  MessagingInitialize
+      10  MessagingRunActiveState
+       4  Messaging_pfnStateMachine
+    2304  Msg_Pool
+     768  Msg_StatusQueue
+       4  Msg_pNextStatus
+       4  Msg_u32Token
+       1  Msg_u8QueuedMessageCount
+      70  QueryMessageStatus
+     252  QueueMessage
+      38  UpdateMessageStatus
+       4  u32CleaningTime
+
+ 
+ 3 089 bytes in section .bss
+     4 bytes in section .data
+   694 bytes in section .text
+ 
+   694 bytes of CODE memory
+ 3 093 bytes of DATA memory
+
+Errors: none
+Warnings: none

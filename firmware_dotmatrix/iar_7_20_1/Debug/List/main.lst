@@ -1,0 +1,293 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         01/Jan/2019  21:30:38
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\application\main.c
+#    Command line =  
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWB42D.tmp
+#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\application\main.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\inc\c\DLib_Config_Normal.h" -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        -On --use_c++_inline --require_prototypes -I "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\main.lst
+#    Object file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\main.o
+#
+###############################################################################
+
+\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\application\main.c
+      1          /***********************************************************************************************************************
+      2          File: main.c                                                                
+      3          
+      4          Description:
+      5          Container for the MPG firmware.  
+      6          ***********************************************************************************************************************/
+      7          
+      8          #include "configuration.h"
+      9          
+     10          /***********************************************************************************************************************
+     11          Global variable definitions with scope across entire project.
+     12          All Global variable names shall start with "G_"
+     13          ***********************************************************************************************************************/
+     14          /* New variables */
+
+   \                                 In section .bss, align 4
+     15          volatile u32 G_u32SystemFlags = 0;                     /* Global system flags */
+   \                     G_u32SystemFlags:
+   \        0x0                      DS8 4
+
+   \                                 In section .bss, align 4
+     16          volatile u32 G_u32ApplicationFlags = 0;                /* Global applications flags: set when application is successfully initialized. Bit defs in configuration.h */
+   \                     G_u32ApplicationFlags:
+   \        0x0                      DS8 4
+     17          
+     18          
+     19          /*--------------------------------------------------------------------------------------------------------------------*/
+     20          /* External global variables defined in other files (must indicate which file they are defined in) */
+     21          extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
+     22          extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
+     23          
+     24          
+     25          /***********************************************************************************************************************
+     26          Global variable definitions with scope limited to this local application.
+     27          Variable names shall start with "Main_" and be declared as static.
+     28          ***********************************************************************************************************************/
+     29          
+     30          
+     31          /***********************************************************************************************************************
+     32          Main Program
+     33          Main has two sections:
+     34          
+     35          1. Initialization which is run once on power-up or reset.  All drivers and applications are setup here without timing
+     36          contraints but must complete execution regardless of success or failure of starting the application. 
+     37          
+     38          2. Super loop which runs infinitely giving processor time to each application.  The total loop time should not exceed
+     39          1ms of execution time counting all application execution.  SystemSleep() will execute to complete the remaining time in
+     40          the 1ms period.
+     41          ***********************************************************************************************************************/
+     42          
+
+   \                                 In section .text, align 4, keep-with-next
+     43          void main(void)
+     44          {
+   \                     main: (+1)
+   \        0x0   0xB510             PUSH     {R4,LR}
+     45            G_u32SystemFlags |= _SYSTEM_INITIALIZING;
+   \        0x2   0x4C2A             LDR.N    R4,??main_0
+   \        0x4   0x6820             LDR      R0,[R4, #+0]
+   \        0x6   0xF050 0x4000      ORRS     R0,R0,#0x80000000
+   \        0xA   0x6020             STR      R0,[R4, #+0]
+     46          
+     47            /* Low level initialization */
+     48            WatchDogSetup(); /* During development, set to not reset processor if timeout */
+   \        0xC   0x....'....        BL       WatchDogSetup
+     49            ClockSetup();
+   \       0x10   0x....'....        BL       ClockSetup
+     50            GpioSetup();
+   \       0x14   0x....'....        BL       GpioSetup
+     51            InterruptSetup();
+   \       0x18   0x....'....        BL       InterruptSetup
+     52            SysTickSetup();
+   \       0x1C   0x....'....        BL       SysTickSetup
+     53          
+     54            /* Driver initialization */
+     55            MessagingInitialize();
+   \       0x20   0x....'....        BL       MessagingInitialize
+     56            UartInitialize();
+   \       0x24   0x....'....        BL       UartInitialize
+     57            DebugInitialize();
+   \       0x28   0x....'....        BL       DebugInitialize
+     58          
+     59            /* Debug messages through DebugPrintf() are available from here */
+     60          
+     61            SspInitialize();
+   \       0x2C   0x....'....        BL       SspInitialize
+     62            TWIInitialize();
+   \       0x30   0x....'....        BL       TWIInitialize
+     63            
+     64            LcdInitialize();
+   \       0x34   0x....'....        BL       LcdInitialize
+     65            LedInitialize();
+   \       0x38   0x....'....        BL       LedInitialize
+     66            ButtonInitialize();
+   \       0x3C   0x....'....        BL       ButtonInitialize
+     67             
+     68            CapTouchInitialize();
+   \       0x40   0x....'....        BL       CapTouchInitialize
+     69            AntInitialize();
+   \       0x44   0x....'....        BL       AntInitialize
+     70            
+     71            /* Application initialization */
+     72            UserApp1Initialize();
+   \       0x48   0x....'....        BL       UserApp1Initialize
+     73            UserApp2Initialize();
+   \       0x4C   0x....'....        BL       UserApp2Initialize
+     74            UserApp3Initialize();
+   \       0x50   0x....'....        BL       UserApp3Initialize
+     75            
+     76            /* Exit initialization */
+     77            SystemStatusReport();
+   \       0x54   0x....'....        BL       SystemStatusReport
+     78            G_u32SystemFlags &= ~_SYSTEM_INITIALIZING;
+   \       0x58   0x6820             LDR      R0,[R4, #+0]
+   \       0x5A   0xF020 0x4000      BIC      R0,R0,#0x80000000
+   \       0x5E   0x6020             STR      R0,[R4, #+0]
+     79             
+     80            /* Super loop */  
+     81            while(1)
+     82            {
+     83              WATCHDOG_BONE();
+   \                     ??main_1: (+1)
+   \       0x60   0x4813             LDR.N    R0,??main_0+0x4  ;; 0xa5000001
+   \       0x62   0x4914             LDR.N    R1,??main_0+0x8  ;; 0x400e1250
+   \       0x64   0x6008             STR      R0,[R1, #+0]
+     84              
+     85              /* Drivers */
+     86              LedUpdate();
+   \       0x66   0x....'....        BL       LedUpdate
+     87              ButtonRunActiveState();
+   \       0x6A   0x....'....        BL       ButtonRunActiveState
+     88              UartRunActiveState();
+   \       0x6E   0x....'....        BL       UartRunActiveState
+     89              SspRunActiveState();
+   \       0x72   0x....'....        BL       SspRunActiveState
+     90              TWIRunActiveState();
+   \       0x76   0x....'....        BL       TWIRunActiveState
+     91              CapTouchRunActiveState(); /* This function violates 1ms loop timing every 25ms */ 
+   \       0x7A   0x....'....        BL       CapTouchRunActiveState
+     92              MessagingRunActiveState();
+   \       0x7E   0x....'....        BL       MessagingRunActiveState
+     93              DebugRunActiveState();
+   \       0x82   0x....'....        BL       DebugRunActiveState
+     94              LcdRunActiveState();
+   \       0x86   0x....'....        BL       LcdRunActiveState
+     95              AntRunActiveState();
+   \       0x8A   0x....'....        BL       AntRunActiveState
+     96          
+     97              /* Applications */
+     98              UserApp1RunActiveState();
+   \       0x8E   0x....'....        BL       UserApp1RunActiveState
+     99              UserApp2RunActiveState();
+   \       0x92   0x....'....        BL       UserApp2RunActiveState
+    100              UserApp3RunActiveState();
+   \       0x96   0x....'....        BL       UserApp3RunActiveState
+    101                  
+    102              /* System sleep*/
+    103              HEARTBEAT_OFF();
+   \       0x9A   0xF05F 0x4400      MOVS     R4,#-2147483648
+   \       0x9E   0x4806             LDR.N    R0,??main_0+0xC  ;; 0x400e0c30
+   \       0xA0   0x6004             STR      R4,[R0, #+0]
+    104              SystemSleep();
+   \       0xA2   0x....'....        BL       SystemSleep
+    105              HEARTBEAT_ON();
+   \       0xA6   0x4805             LDR.N    R0,??main_0+0x10  ;; 0x400e0c34
+   \       0xA8   0x6004             STR      R4,[R0, #+0]
+   \       0xAA   0xE7D9             B.N      ??main_1
+   \                     ??main_0:
+   \       0xAC   0x....'....        DC32     G_u32SystemFlags
+   \       0xB0   0xA500'0001        DC32     0xa5000001
+   \       0xB4   0x400E'1250        DC32     0x400e1250
+   \       0xB8   0x400E'0C30        DC32     0x400e0c30
+   \       0xBC   0x400E'0C34        DC32     0x400e0c34
+    106              
+    107            } /* end while(1) main super loop */
+    108            
+    109          } /* end main() */
+    110          
+    111          
+    112          /*--------------------------------------------------------------------------------------------------------------------*/
+    113          /* End of File */
+    114          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   main
+         8   -> AntInitialize
+         8   -> AntRunActiveState
+         8   -> ButtonInitialize
+         8   -> ButtonRunActiveState
+         8   -> CapTouchInitialize
+         8   -> CapTouchRunActiveState
+         8   -> ClockSetup
+         8   -> DebugInitialize
+         8   -> DebugRunActiveState
+         8   -> GpioSetup
+         8   -> InterruptSetup
+         8   -> LcdInitialize
+         8   -> LcdRunActiveState
+         8   -> LedInitialize
+         8   -> LedUpdate
+         8   -> MessagingInitialize
+         8   -> MessagingRunActiveState
+         8   -> SspInitialize
+         8   -> SspRunActiveState
+         8   -> SysTickSetup
+         8   -> SystemSleep
+         8   -> SystemStatusReport
+         8   -> TWIInitialize
+         8   -> TWIRunActiveState
+         8   -> UartInitialize
+         8   -> UartRunActiveState
+         8   -> UserApp1Initialize
+         8   -> UserApp1RunActiveState
+         8   -> UserApp2Initialize
+         8   -> UserApp2RunActiveState
+         8   -> UserApp3Initialize
+         8   -> UserApp3RunActiveState
+         8   -> WatchDogSetup
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  G_u32ApplicationFlags
+       4  G_u32SystemFlags
+     192  main
+
+ 
+   8 bytes in section .bss
+ 192 bytes in section .text
+ 
+ 192 bytes of CODE memory
+   8 bytes of DATA memory
+
+Errors: none
+Warnings: none

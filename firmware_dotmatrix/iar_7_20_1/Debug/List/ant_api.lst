@@ -1,0 +1,1779 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         01/Jan/2019  11:19:36
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\ant_api.c
+#    Command line =  
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWAE56.tmp
+#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\ant_api.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\inc\c\DLib_Config_Normal.h" -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        -On --use_c++_inline --require_prototypes -I "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\ant_api.lst
+#    Object file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\ant_api.o
+#
+###############################################################################
+
+\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\ant_api.c
+      1          /***********************************************************************************************************************
+      2          File: ant_api.c                                                               
+      3          
+      4          Description:
+      5          ANT user interface.  No initialization or state machine required.  This file exposes the source code
+      6          for all public functions that work with ant.c.  Seperating it keep sit a little more manageable.
+      7          
+      8          Once the ANT radio has been configured, all messaging from the ANT device is handled through 
+      9          the incoming queue G_sAntApplicationMsgList.  The application is responsible for checking this
+     10          queue for messages that belong to it and must manage timing and handle appropriate updates per 
+     11          the ANT messaging protocol.  This should be no problem on the regular 1ms loop timing of the main 
+     12          system (assuming ANT message rate is less than 1kHz).  Faster systems or burst messaging will need 
+     13          to be handled seperately as an add-on to this API.
+     14          
+     15          
+     16          ------------------------------------------------------------------------------------------------------------------------
+     17          API:
+     18          
+     19          GLOBALS
+     20          Three global variables give access to the latest ANT message data.
+     21          Copy the following definitions to your client task:
+     22          
+     23          // Globals for passing data from the ANT application to the API 
+     24          extern u32 G_u32AntApiCurrentMessageTimeStamp;                            // From ant_api.c
+     25          extern AntApplicationMessageType G_eAntApiCurrentMessageClass;            // From ant_api.c
+     26          extern u8 G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES];  // From ant_api.c
+     27          extern AntExtendedDataType G_sAntApiCurrentMessageExtData;                // From ant_api.c
+     28          
+     29          TYPES
+     30          Defined in ant.h but used throughout ant_api.c
+     31          
+     32          AntChannelNumberType (allowed to be indexed and type cast to sequentially access channels)
+     33          {ANT_CHANNEL_0 = 0, ANT_CHANNEL_1, ANT_CHANNEL_2, ANT_CHANNEL_3,
+     34          ANT_CHANNEL_4, ANT_CHANNEL_5, ANT_CHANNEL_6, ANT_CHANNEL_7,
+     35          ANT_CHANNEL_SCANNING = 0}
+     36          
+     37          AntChannelStatusType
+     38          {ANT_UNCONFIGURED, ANT_CONFIGURED, ANT_OPENING, ANT_OPEN, ANT_CLOSING, ANT_CLOSED}
+     39          
+     40          AntApplicationMessageType
+     41          {ANT_EMPTY, ANT_DATA, ANT_TICK}
+     42          
+     43          AntApplicationGenericMsgStatus
+     44          {ANT_GENERIC_MSG_READY, ANT_GENERIC_MSG_BUSY, ANT_GENERIC_MSG_OK, ANT_GENERIC_MSG_FAIL}
+     45          
+     46          Structs
+     47          AntExtendedDataType
+     48          AntApplicationMsgListType
+     49          AntAssignChannelInfoType
+     50          
+     51          *** ANT CONFIGURATION / STATUS FUNCTIONS ***
+     52          
+     53          AntChannelStatusType AntRadioStatusChannel(AntChannelNumberType eChannel_)
+     54          Query the status of the specified channel.  
+     55          Returns ANT_UNCONFIGURED, ANT_CONFIGURED, ANT_OPENING, ANT_OPEN, ANT_CLOSING, ANT_CLOSED
+     56          ANT_CONFIGURED and ANT_CLOSED are actually the same state.
+     57          e.g.
+     58          AntChannelStatus eAntCurrentStatus;
+     59          
+     60          // Get the status of Channel 1
+     61          eAntCurrentStatus = AntRadioStatusChannel(ANT_CHANNEL_1);
+     62          
+     63          
+     64          bool AntAssignChannel(AntAssignChannelInfoType* psAntSetupInfo_)
+     65          Updates all configuration messages to completely configure an ANT channel with an application's 
+     66          required parameters for communication.  The application should monitor AntRadioStatusChannel()
+     67          to see if all of the configuration messages are sent and the channel is configured properly.
+     68          e.g.
+     69            AntAssignChannelInfoType sChannelInfo;
+     70          
+     71            if(AntRadioStatusChannel(ANT_CHANNEL_0) == ANT_UNCONFIGURED)
+     72            {
+     73              sChannelInfo.AntChannel = ANT_CHANNEL_0;
+     74              sChannelInfo.AntChannelType = CHANNEL_TYPE_MASTER;
+     75              sChannelInfo.AntChannelPeriodHi = ANT_CHANNEL_PERIOD_HI_DEFAULT;
+     76              sChannelInfo.AntChannelPeriodLo = ANT_CHANNEL_PERIOD_LO_DEFAULT;
+     77              
+     78              sChannelInfo.AntDeviceIdHi = 0x00;
+     79              sChannelInfo.AntDeviceIdLo = 0x01;
+     80              sChannelInfo.AntDeviceType = ANT_DEVICE_TYPE_DEFAULT;
+     81              sChannelInfo.AntTransmissionType = ANT_TRANSMISSION_TYPE_DEFAULT;
+     82              
+     83              sChannelInfo.AntFrequency = ANT_FREQUENCY_DEFAULT;
+     84              sChannelInfo.AntTxPower = ANT_TX_POWER_DEFAULT;
+     85              
+     86              sChannelInfo.AntNetwork = ANT_NETWORK_DEFAULT;
+     87              for(u8 i = 0; i < ANT_NETWORK_NUMBER_BYTES; i++)
+     88              {
+     89                sChannelInfo.AntNetworkKey[i] = ANT_DEFAULT_NETWORK_KEY;
+     90              }
+     91              
+     92              AntAssignChannel(&sChannelInfo);
+     93            }
+     94          
+     95            // Go to a wait state that exits when AntRadioStatusChannel(ANT_CHANNEL_0) no longer returns ANT_UNCONFIGURED)
+     96          
+     97          
+     98          bool AntUnassignChannelNumber(AntChannelNumberType eChannel_)
+     99          Queues message to unassign the specified ANT channel so it can be reconfigured.
+    100          e.g.
+    101          AntUnassignChannelNumber(ANT_CHANNEL_1)
+    102          // Go to wait state that exists when AntRadioStatusChannel(ANT_CHANNEL_1) returns ANT_UNCONFIGURED
+    103          
+    104          
+    105          bool AntOpenChannelNumber(AntChannelNumberType eAntChannelToOpen)
+    106          Queues a request to open the specified channel.
+    107          Returns TRUE if the channel is configured and the message is successfully queued - this can be ignored or checked.  
+    108          Application should monitor AntRadioStatusChannel() for actual channel status.
+    109          e.g.
+    110          AntChannelStatusType eAntCurrentState;
+    111          
+    112          // Request to open channel only on an already closed channel.
+    113          eAntCurrentState = AntChannelStatus(ANT_CHANNEL_1);
+    114          
+    115          if(eAntCurrentState == ANT_CLOSED )
+    116          {
+    117             AntOpenChannelNumber(ANT_CHANNEL_1);
+    118          }
+    119          
+    120          
+    121          bool AntCloseChannelNumber(AntChannelNumberType eAntChannelToOpen)
+    122          Queues a request to close the specified channel.
+    123          Returns TRUE if the message is successfully queued - this can be ignored or checked.  
+    124          Application should monitor AntRadioStatusChannel() for actual channel status.
+    125          e.g.
+    126          AntChannelStatusType eAntCurrentState;
+    127          
+    128          // Request to close channel only on an open channel.
+    129          if(AntRadioStatusChannel(ANT_CHANNEL_1) == ANT_OPEN )
+    130          {
+    131             AntCloseChannelNumber(ANT_CHANNEL_1);
+    132          }
+    133          
+    134          bool AntOpenScanningChannel(void)
+    135          Queues a request to open a scanning channel. Channel 0 setup parameters are used,
+    136          but note that all channel resources are used by a scanning channel.  Trying to
+    137          open a scanning channel if any other channel is open will fail.
+    138          
+    139          Returns TRUE if message is successfully queued - this can be ignored or checked.  
+    140          Application should monitor AntRadioStatusChannel() for actual channel status.
+    141          e.g.
+    142          AntChannelStatusType eAntCurrentState;
+    143          
+    144          // Request to open channel only on an already closed channel.
+    145          if(AntRadioStatusChannel(ANT_CHANNEL_SCANNING) == ANT_CLOSED )
+    146          {
+    147             AntOpenScanningChannel();
+    148          }
+    149          
+    150          
+    151          bool AntSendGenericMessage()
+    152          Queues a generic message to be sent to ANT.  Any of the ANT message codes can be sent.
+    153          The entire message string except the checksum must be provided.
+    154          Returns TRUE if a message can be sent to ANT.
+    155          Returns FALSE if the system is not available to send to ANT (i.e. a message is currently being sent)
+    156          Application must then monitor AntCheckGenericMessageStatus() to determine when 
+    157          
+    158          e.g.
+    159          AntChannelStatusType eAntCurrentState;
+    160          
+    161          
+    162          ***ANT DATA FUNCTIONS***
+    163          bool AntQueueBroadcastMessage(AntChannelNumberType eChannel_, u8 *pu8Data_)
+    164          Queue a broadcast data message.
+    165          e.g.
+    166          u8 u8DataToSend[ANT_DATA_BYTES] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+    167          AntQueueBroadcastMessage(ANT_CHANNEL_1, &u8DataToSend[0]);
+    168          
+    169          
+    170          bool AntQueueAcknowledgedMessage(AntChannelNumberType eChannel_, u8 *pu8Data_)
+    171          Queue an acknowledged data message.
+    172          e.g.
+    173          u8 u8DataToSend[ANT_DATA_BYTES] = {0x07, 0x06, 0x05, 0x04, 0x03, 0xdd, 0xee, 0xff};
+    174          AntQueueAcknowledgedMessage(ANT_CHANNEL_1, u8DataToSend);
+    175          
+    176          
+    177          bool AntReadAppMessageBuffer(void)
+    178          Check the incoming message buffer for any message from the ANT system (either ANT_TICK or ANT_DATA).  
+    179          If no messages are present, returns FALSE.  If a message is there, returns TRUE and application can read:
+    180          - G_u32AntApiCurrentMessageTimeStamp to see the system time stamp when the message arrived
+    181          - G_eAntApiCurrentMessageClass to see what kind of message is present
+    182          - G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES] to see the message bytes.
+    183          - G_sAntApiCurrentMessageExtData to see an available extended data (on incoming messages)
+    184          
+    185          e.g.
+    186          u32 u32CurrentMessageTimeStamp;
+    187          u8 u8CurrentTickEventCode;
+    188          u8 u8CurrentMessageContents[ANT_APPLICATION_MESSAGE_BYTES];
+    189          
+    190          if(AntReadAppMessageBuffer())
+    191          {
+    192            // Report the time a message was received
+    193            DebugPrintNumber(u32CurrentMessageTimeStamp);
+    194            DebugPrintf(": message received\n\t");
+    195          
+    196            // Check the message class to determine how to process the message
+    197            if(G_eAntApiCurrentMessageClass == ANT_TICK)
+    198            {
+    199              // Get the EVENT code from the ANT_TICK message 
+    200              u8CurrentTickEventCode = G_au8AntApiCurrentMessageBytes[ANT_TICK_MSG_EVENT_CODE_INDEX];
+    201            }
+    202          
+    203            if(G_eAntApiCurrentMessageClass == ANT_DATA)
+    204            {
+    205              // Copy the message data locally
+    206              for(u8 i = 0; i < ANT_APPLICATION_MESSAGE_BYTES; i++)
+    207              {
+    208                u8CurrentMessageContents[i] = G_au8AntApiCurrentMessageBytes[i];
+    209              }
+    210            }
+    211          }
+    212          
+    213          
+    214          ***********************************************************************************************************************/
+    215          
+    216          #include "configuration.h"
+    217          
+    218          
+    219          /***********************************************************************************************************************
+    220          Global variable definitions with scope across entire project.
+    221          All Global variable names shall start with "G_<type>AntApi"
+    222          ***********************************************************************************************************************/
+
+   \                                 In section .bss, align 4
+    223          volatile u32 G_u32AntApiFlags;                                          /* Global state flags */
+   \                     G_u32AntApiFlags:
+   \        0x0                      DS8 4
+    224          
+
+   \                                 In section .bss, align 4
+    225          u32 G_u32AntApiCurrentMessageTimeStamp = 0;                             /* Current read message's G_u32SystemTime1ms */
+   \                     G_u32AntApiCurrentMessageTimeStamp:
+   \        0x0                      DS8 4
+
+   \                                 In section .bss, align 1
+    226          AntApplicationMessageType G_eAntApiCurrentMessageClass = ANT_EMPTY;     /* Type of data */
+   \                     G_eAntApiCurrentMessageClass:
+   \        0x0                      DS8 1
+
+   \                                 In section .bss, align 4
+    227          u8 G_au8AntApiCurrentMessageBytes[ANT_APPLICATION_MESSAGE_BYTES];       /* Array for message payload data */
+   \                     G_au8AntApiCurrentMessageBytes:
+   \        0x0                      DS8 8
+
+   \                                 In section .bss, align 4
+    228          AntExtendedDataType G_sAntApiCurrentMessageExtData;                     /* Extended data struct for the current message */
+   \                     G_sAntApiCurrentMessageExtData:
+   \        0x0                      DS8 8
+    229          
+    230          
+    231          /*----------------------------------------------------------------------------*/
+    232          /* Existing variables (defined in other files -- should all contain the "extern" keyword) 
+    233          and indicate what file the variable is defined in. */
+    234          extern u32 G_u32SystemFlags;                                  /* From main.c */
+    235          extern u32 G_u32ApplicationFlags;                             /* From main.c */
+    236          
+    237          extern volatile u32 G_u32SystemTime1ms;                       /* From board-specific source file */
+    238          extern volatile u32 G_u32SystemTime1s;                        /* From board-specific source file */
+    239          
+    240          extern u32 G_u32AntFlags;                                     /* From ant.c */
+    241          extern AntApplicationMsgListType *G_sAntApplicationMsgList;   /* From ant.c */
+    242          extern AntAssignChannelInfoType G_asAntChannelConfiguration[ANT_NUM_CHANNELS]; /* From ant.c */
+    243          extern AntMessageResponseType G_stMessageResponse;            /* From ant.c */
+    244          
+    245          extern u8 G_au8AntMessageOk[];                                /* From ant.c */
+    246          extern u8 G_au8AntMessageFail[];                              /* From ant.c */
+    247          extern u8 G_au8AntMessageAssign[];                            /* From ant.c */
+    248          extern u8 G_au8AntMessageUnassign[];                          /* From ant.c */
+    249          extern u8 G_au8AntMessageUnhandled[];                         /* From ant.c */
+    250          extern u8 G_au8AntMessageSetup[];                             /* From ant.c */
+    251          extern u8 G_au8AntMessageClose[];                             /* From ant.c */
+    252          extern u8 G_au8AntMessageOpen[];                              /* From ant.c */
+    253          extern u8 G_au8AntMessageInit[];                              /* From ant.c */
+    254          extern u8 G_au8AntMessageInitFail[];                          /* From ant.c */
+    255          extern u8 G_au8AntMessageNoAnt[];                             /* From ant.c */
+    256          
+    257          extern u8 G_au8AntSetNetworkKey[];                            /* From ant.c */
+    258          extern u8 G_au8AntAssignChannel[];                            /* From ant.c */
+    259          extern u8 G_au8AntSetChannelID[];                             /* From ant.c */
+    260          extern u8 G_au8AntSetChannelPeriod[];                         /* From ant.c */
+    261          extern u8 G_au8AntSetChannelRFFreq[];                         /* From ant.c */
+    262          extern u8 G_au8AntSetChannelPower[];                          /* From ant.c */
+    263          extern u8 G_au8AntLibConfig[];                                /* From ant.c */
+    264          
+    265          extern u8 G_au8AntBroadcastDataMessage[];                     /* From ant.c */
+    266          extern u8 G_au8AntAckDataMessage[];                           /* From ant.c */
+    267          
+    268          
+    269          /***********************************************************************************************************************
+    270          Global variable definitions with scope limited to this local application.
+    271          Variable names shall start with "AntApi_<type>Name" and be declared as static.
+    272          ***********************************************************************************************************************/
+
+   \                                 In section .bss, align 4
+    273          static fnCode_type AntApi_StateMachine;             /* The state machine function pointer */
+   \                     AntApi_StateMachine:
+   \        0x0                      DS8 4
+
+   \                                 In section .bss, align 4
+    274          static u32 AntApi_u32Timeout;                       /* Timeout counter used across states */
+   \                     AntApi_u32Timeout:
+   \        0x0                      DS8 4
+    275          
+    276          /* Message for channel assignment.  Set ANT_ASSIGN_MESSAGES for number of messages. */
+
+   \                                 In section .data, align 4
+    277          static u8* AntApi_apu8AntAssignChannel[] = {G_au8AntSetNetworkKey, G_au8AntLibConfig, G_au8AntAssignChannel, G_au8AntSetChannelID, 
+   \                     AntApi_apu8AntAssignChannel:
+   \        0x0   0x....'....        DC32 G_au8AntSetNetworkKey, G_au8AntLibConfig, G_au8AntAssignChannel
+   \              0x....'....  
+   \              0x....'....  
+   \        0xC   0x....'....        DC32 G_au8AntSetChannelID, G_au8AntSetChannelPeriod
+   \              0x....'....  
+   \       0x14   0x....'....        DC32 G_au8AntSetChannelRFFreq, G_au8AntSetChannelPower
+   \              0x....'....  
+    278                                                      G_au8AntSetChannelPeriod, G_au8AntSetChannelRFFreq, G_au8AntSetChannelPower 
+    279                                                     }; 
+    280          
+    281          /***********************************************************************************************************************
+    282          Function Definitions
+    283          ***********************************************************************************************************************/
+    284          
+    285          /*--------------------------------------------------------------------------------------------------------------------*/
+    286          /* Public functions                                                                                                   */
+    287          /*--------------------------------------------------------------------------------------------------------------------*/
+    288          
+    289          /*------------------------------------------------------------------------------
+    290          Function: AntAssignChannel
+    291          Description:
+    292          Updates all configuration messages to completely configure an ANT channel with an application's 
+    293          required parameters for communication.  The ANT API state machine then sends and monitors the commands
+    294          to ensure the requested channel is setup properly.  The application should monitor AntRadioStatusChannel()
+    295          to see if the channel is configured properly.
+    296          
+    297          Requires:
+    298            - psAntSetupInfo_ points to a complete AntAssignChannelInfoType with all the required channel information.
+    299            - The ANT channel should not be currently assigned.
+    300          
+    301          Promises:
+    302            - Channel, Channel ID, message period, radio frequency and radio power are configured.
+    303            - Returns TRUE if the channel is ready to be set up; all global setup messages are updated with the values
+    304              from psAntSetupInfo; 
+    305            - Returns FALSE if the channel is already configured
+    306          */
+
+   \                                 In section .text, align 2, keep-with-next
+    307          bool AntAssignChannel(AntAssignChannelInfoType* psAntSetupInfo_)
+    308          {
+   \                     AntAssignChannel: (+1)
+   \        0x0   0xB5F8             PUSH     {R3-R7,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+    309            /* Check to ensure the selected channel is available */
+    310            if(AntRadioStatusChannel(psAntSetupInfo_->AntChannel) != ANT_UNCONFIGURED)
+   \        0x4   0x7820             LDRB     R0,[R4, #+0]
+   \        0x6   0x....'....        BL       AntRadioStatusChannel
+   \        0xA   0x2800             CMP      R0,#+0
+   \        0xC   0xD005             BEQ.N    ??AntAssignChannel_0
+    311            {
+    312              DebugPrintf("AntAssignChannel error: channel is not unconfigured\n\r");
+   \        0xE   0x....'....        LDR.W    R0,??DataTable11
+   \       0x12   0x....'....        BL       DebugPrintf
+    313              return FALSE;
+   \       0x16   0x2000             MOVS     R0,#+0
+   \       0x18   0xE0A5             B.N      ??AntAssignChannel_1
+    314            }
+    315            
+    316            /* Setup the library config message (for extended data) - use defaults for now */
+    317            G_au8AntLibConfig[4] = AntCalculateTxChecksum(G_au8AntLibConfig);
+   \                     ??AntAssignChannel_0: (+1)
+   \       0x1A   0x....'....        LDR.W    R5,??DataTable11_1
+   \       0x1E   0x0028             MOVS     R0,R5
+   \       0x20   0x....'....        BL       AntCalculateTxChecksum
+   \       0x24   0x7128             STRB     R0,[R5, #+4]
+    318          
+    319            /* Set Network key message */
+    320            G_au8AntSetNetworkKey[2] = psAntSetupInfo_->AntNetwork;
+   \       0x26   0x....'....        LDR.W    R5,??DataTable11_2
+   \       0x2A   0x78A0             LDRB     R0,[R4, #+2]
+   \       0x2C   0x70A8             STRB     R0,[R5, #+2]
+    321            for(u8 i = 0; i < ANT_NETWORK_NUMBER_BYTES; i++)
+   \       0x2E   0x2100             MOVS     R1,#+0
+   \                     ??AntAssignChannel_2: (+1)
+   \       0x30   0x0008             MOVS     R0,R1
+   \       0x32   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x34   0x2808             CMP      R0,#+8
+   \       0x36   0xDA18             BGE.N    ??AntAssignChannel_3
+    322            {
+    323              G_au8AntSetNetworkKey[i + 3] = psAntSetupInfo_->AntNetworkKey[i];
+   \       0x38   0x0008             MOVS     R0,R1
+   \       0x3A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x3C   0x4420             ADD      R0,R4,R0
+   \       0x3E   0x78C0             LDRB     R0,[R0, #+3]
+   \       0x40   0x000A             MOVS     R2,R1
+   \       0x42   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x44   0x442A             ADD      R2,R5,R2
+   \       0x46   0x70D0             STRB     R0,[R2, #+3]
+    324              G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntNetworkKey[i] = psAntSetupInfo_->AntNetworkKey[i];
+   \       0x48   0x....'....        LDR.W    R2,??DataTable11_3
+   \       0x4C   0x7823             LDRB     R3,[R4, #+0]
+   \       0x4E   0x2014             MOVS     R0,#+20
+   \       0x50   0x4343             MULS     R3,R0,R3
+   \       0x52   0xEB02 0x0003      ADD      R0,R2,R3
+   \       0x56   0x000A             MOVS     R2,R1
+   \       0x58   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x5A   0x4410             ADD      R0,R0,R2
+   \       0x5C   0x000A             MOVS     R2,R1
+   \       0x5E   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x60   0x4422             ADD      R2,R4,R2
+   \       0x62   0x78D2             LDRB     R2,[R2, #+3]
+   \       0x64   0x70C2             STRB     R2,[R0, #+3]
+    325            }
+   \       0x66   0x1C49             ADDS     R1,R1,#+1
+   \       0x68   0xE7E2             B.N      ??AntAssignChannel_2
+    326            G_au8AntSetNetworkKey[11] = AntCalculateTxChecksum(G_au8AntSetNetworkKey);
+   \                     ??AntAssignChannel_3: (+1)
+   \       0x6A   0x0028             MOVS     R0,R5
+   \       0x6C   0x....'....        BL       AntCalculateTxChecksum
+   \       0x70   0x72E8             STRB     R0,[R5, #+11]
+    327              
+    328            /* Setup the channel message */
+    329            G_au8AntAssignChannel[2] = psAntSetupInfo_->AntChannel;
+   \       0x72   0x....'....        LDR.W    R7,??DataTable11_4
+   \       0x76   0x7820             LDRB     R0,[R4, #+0]
+   \       0x78   0x70B8             STRB     R0,[R7, #+2]
+    330            G_au8AntAssignChannel[3] = psAntSetupInfo_->AntChannelType;
+   \       0x7A   0x7860             LDRB     R0,[R4, #+1]
+   \       0x7C   0x70F8             STRB     R0,[R7, #+3]
+    331            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntChannelType = psAntSetupInfo_->AntChannelType;
+   \       0x7E   0x2514             MOVS     R5,#+20
+   \       0x80   0x....'....        LDR.W    R6,??DataTable11_3
+   \       0x84   0x7820             LDRB     R0,[R4, #+0]
+   \       0x86   0x4368             MULS     R0,R5,R0
+   \       0x88   0x4430             ADD      R0,R6,R0
+   \       0x8A   0x7861             LDRB     R1,[R4, #+1]
+   \       0x8C   0x7041             STRB     R1,[R0, #+1]
+    332          
+    333            G_au8AntAssignChannel[4] = psAntSetupInfo_->AntNetwork;
+   \       0x8E   0x78A0             LDRB     R0,[R4, #+2]
+   \       0x90   0x7138             STRB     R0,[R7, #+4]
+    334            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntNetwork = psAntSetupInfo_->AntNetwork;
+   \       0x92   0x7820             LDRB     R0,[R4, #+0]
+   \       0x94   0x4368             MULS     R0,R5,R0
+   \       0x96   0x4430             ADD      R0,R6,R0
+   \       0x98   0x78A1             LDRB     R1,[R4, #+2]
+   \       0x9A   0x7081             STRB     R1,[R0, #+2]
+    335          
+    336            G_au8AntAssignChannel[5] = AntCalculateTxChecksum(G_au8AntAssignChannel);
+   \       0x9C   0x0038             MOVS     R0,R7
+   \       0x9E   0x....'....        BL       AntCalculateTxChecksum
+   \       0xA2   0x7178             STRB     R0,[R7, #+5]
+    337          
+    338            /* Setup the channel ID message */
+    339            G_au8AntSetChannelID[2] = psAntSetupInfo_->AntChannel;
+   \       0xA4   0x....'....        LDR.W    R7,??DataTable11_5
+   \       0xA8   0x7820             LDRB     R0,[R4, #+0]
+   \       0xAA   0x70B8             STRB     R0,[R7, #+2]
+    340            G_au8AntSetChannelID[3] = psAntSetupInfo_->AntDeviceIdLo;
+   \       0xAC   0x7AE0             LDRB     R0,[R4, #+11]
+   \       0xAE   0x70F8             STRB     R0,[R7, #+3]
+    341            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntDeviceIdLo = psAntSetupInfo_->AntDeviceIdLo;
+   \       0xB0   0x7820             LDRB     R0,[R4, #+0]
+   \       0xB2   0x4368             MULS     R0,R5,R0
+   \       0xB4   0x4430             ADD      R0,R6,R0
+   \       0xB6   0x7AE1             LDRB     R1,[R4, #+11]
+   \       0xB8   0x72C1             STRB     R1,[R0, #+11]
+    342          
+    343            G_au8AntSetChannelID[4] = psAntSetupInfo_->AntDeviceIdHi;
+   \       0xBA   0x7B20             LDRB     R0,[R4, #+12]
+   \       0xBC   0x7138             STRB     R0,[R7, #+4]
+    344            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntDeviceIdHi = psAntSetupInfo_->AntDeviceIdHi;
+   \       0xBE   0x7820             LDRB     R0,[R4, #+0]
+   \       0xC0   0x4368             MULS     R0,R5,R0
+   \       0xC2   0x4430             ADD      R0,R6,R0
+   \       0xC4   0x7B21             LDRB     R1,[R4, #+12]
+   \       0xC6   0x7301             STRB     R1,[R0, #+12]
+    345          
+    346            G_au8AntSetChannelID[5] = psAntSetupInfo_->AntDeviceType;
+   \       0xC8   0x7B60             LDRB     R0,[R4, #+13]
+   \       0xCA   0x7178             STRB     R0,[R7, #+5]
+    347            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntDeviceType = psAntSetupInfo_->AntDeviceType;
+   \       0xCC   0x7820             LDRB     R0,[R4, #+0]
+   \       0xCE   0x4368             MULS     R0,R5,R0
+   \       0xD0   0x4430             ADD      R0,R6,R0
+   \       0xD2   0x7B61             LDRB     R1,[R4, #+13]
+   \       0xD4   0x7341             STRB     R1,[R0, #+13]
+    348          
+    349            G_au8AntSetChannelID[6] = psAntSetupInfo_->AntTransmissionType;
+   \       0xD6   0x7BA0             LDRB     R0,[R4, #+14]
+   \       0xD8   0x71B8             STRB     R0,[R7, #+6]
+    350            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntTransmissionType = psAntSetupInfo_->AntTransmissionType;
+   \       0xDA   0x7820             LDRB     R0,[R4, #+0]
+   \       0xDC   0x4368             MULS     R0,R5,R0
+   \       0xDE   0x4430             ADD      R0,R6,R0
+   \       0xE0   0x7BA1             LDRB     R1,[R4, #+14]
+   \       0xE2   0x7381             STRB     R1,[R0, #+14]
+    351          
+    352            G_au8AntSetChannelID[7] = AntCalculateTxChecksum(G_au8AntSetChannelID);
+   \       0xE4   0x0038             MOVS     R0,R7
+   \       0xE6   0x....'....        BL       AntCalculateTxChecksum
+   \       0xEA   0x71F8             STRB     R0,[R7, #+7]
+    353              
+    354            /* Setup the channel period message */
+    355            G_au8AntSetChannelPeriod[2] = psAntSetupInfo_->AntChannel;
+   \       0xEC   0x....'....        LDR.W    R7,??DataTable11_6
+   \       0xF0   0x7820             LDRB     R0,[R4, #+0]
+   \       0xF2   0x70B8             STRB     R0,[R7, #+2]
+    356            G_au8AntSetChannelPeriod[3] = psAntSetupInfo_->AntChannelPeriodLo;
+   \       0xF4   0x7BE0             LDRB     R0,[R4, #+15]
+   \       0xF6   0x70F8             STRB     R0,[R7, #+3]
+    357            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntChannelPeriodLo = psAntSetupInfo_->AntChannelPeriodLo;
+   \       0xF8   0x7820             LDRB     R0,[R4, #+0]
+   \       0xFA   0x4368             MULS     R0,R5,R0
+   \       0xFC   0x4430             ADD      R0,R6,R0
+   \       0xFE   0x7BE1             LDRB     R1,[R4, #+15]
+   \      0x100   0x73C1             STRB     R1,[R0, #+15]
+    358          
+    359            G_au8AntSetChannelPeriod[4] = psAntSetupInfo_->AntChannelPeriodHi;
+   \      0x102   0x7C20             LDRB     R0,[R4, #+16]
+   \      0x104   0x7138             STRB     R0,[R7, #+4]
+    360            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntChannelPeriodHi = psAntSetupInfo_->AntChannelPeriodHi;
+   \      0x106   0x7820             LDRB     R0,[R4, #+0]
+   \      0x108   0x4368             MULS     R0,R5,R0
+   \      0x10A   0x4430             ADD      R0,R6,R0
+   \      0x10C   0x7C21             LDRB     R1,[R4, #+16]
+   \      0x10E   0x7401             STRB     R1,[R0, #+16]
+    361          
+    362            G_au8AntSetChannelPeriod[5] = AntCalculateTxChecksum(G_au8AntSetChannelPeriod);
+   \      0x110   0x0038             MOVS     R0,R7
+   \      0x112   0x....'....        BL       AntCalculateTxChecksum
+   \      0x116   0x7178             STRB     R0,[R7, #+5]
+    363              
+    364            /* Setup the channel frequency message */
+    365            G_au8AntSetChannelRFFreq[2] = psAntSetupInfo_->AntChannel;
+   \      0x118   0x....             LDR.N    R7,??DataTable11_7
+   \      0x11A   0x7820             LDRB     R0,[R4, #+0]
+   \      0x11C   0x70B8             STRB     R0,[R7, #+2]
+    366            G_au8AntSetChannelRFFreq[3] = psAntSetupInfo_->AntFrequency;
+   \      0x11E   0x7C60             LDRB     R0,[R4, #+17]
+   \      0x120   0x70F8             STRB     R0,[R7, #+3]
+    367            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntFrequency = psAntSetupInfo_->AntFrequency;
+   \      0x122   0x7820             LDRB     R0,[R4, #+0]
+   \      0x124   0x4368             MULS     R0,R5,R0
+   \      0x126   0x4430             ADD      R0,R6,R0
+   \      0x128   0x7C61             LDRB     R1,[R4, #+17]
+   \      0x12A   0x7441             STRB     R1,[R0, #+17]
+    368          
+    369            G_au8AntSetChannelRFFreq[4] = AntCalculateTxChecksum(G_au8AntSetChannelRFFreq);
+   \      0x12C   0x0038             MOVS     R0,R7
+   \      0x12E   0x....'....        BL       AntCalculateTxChecksum
+   \      0x132   0x7138             STRB     R0,[R7, #+4]
+    370          
+    371            /* Setup the channel power message */
+    372            G_au8AntSetChannelPower[2] = psAntSetupInfo_->AntChannel;
+   \      0x134   0x....             LDR.N    R7,??DataTable11_8
+   \      0x136   0x7820             LDRB     R0,[R4, #+0]
+   \      0x138   0x70B8             STRB     R0,[R7, #+2]
+    373            G_au8AntSetChannelPower[3] = psAntSetupInfo_->AntTxPower;
+   \      0x13A   0x7CA0             LDRB     R0,[R4, #+18]
+   \      0x13C   0x70F8             STRB     R0,[R7, #+3]
+    374            G_asAntChannelConfiguration[psAntSetupInfo_->AntChannel].AntTxPower = psAntSetupInfo_->AntTxPower;
+   \      0x13E   0x7820             LDRB     R0,[R4, #+0]
+   \      0x140   0xFB05 0xF500      MUL      R5,R5,R0
+   \      0x144   0xEB06 0x0005      ADD      R0,R6,R5
+   \      0x148   0x7CA1             LDRB     R1,[R4, #+18]
+   \      0x14A   0x7481             STRB     R1,[R0, #+18]
+    375          
+    376            G_au8AntSetChannelPower[4] = AntCalculateTxChecksum(G_au8AntSetChannelPower);
+   \      0x14C   0x0038             MOVS     R0,R7
+   \      0x14E   0x....'....        BL       AntCalculateTxChecksum
+   \      0x152   0x7138             STRB     R0,[R7, #+4]
+    377               
+    378            /* Set the next state to begin transferring */
+    379            AntApi_u32Timeout = G_u32SystemTime1ms;
+   \      0x154   0x....             LDR.N    R0,??DataTable11_9
+   \      0x156   0x6800             LDR      R0,[R0, #+0]
+   \      0x158   0x....             LDR.N    R1,??DataTable11_10
+   \      0x15A   0x6008             STR      R0,[R1, #+0]
+    380            AntApi_StateMachine = AntApiSM_AssignChannel;
+   \      0x15C   0x....'....        ADR.W    R0,AntApiSM_AssignChannel
+   \      0x160   0x....             LDR.N    R1,??DataTable11_11
+   \      0x162   0x6008             STR      R0,[R1, #+0]
+    381            return TRUE;
+   \      0x164   0x2001             MOVS     R0,#+1
+   \                     ??AntAssignChannel_1: (+1)
+   \      0x166   0xBDF2             POP      {R1,R4-R7,PC}    ;; return
+    382          
+    383          } /* end AntAssignChannel() */
+    384          
+    385          
+    386          /*------------------------------------------------------------------------------
+    387          Function: AntUnassignChannelNumber
+    388          
+    389          Description:
+    390          Queues message to unassigns the specified ANT channel so it can be reconfigured.
+    391            
+    392          Requires:
+    393            - ANT channel is closed
+    394          
+    395          Promises:
+    396            - ANT channel unassign message is queued; application should monitor AntRadioStatus()
+    397          */
+
+   \                                 In section .text, align 2, keep-with-next
+    398          bool AntUnassignChannelNumber(AntChannelNumberType eChannel_)
+    399          {
+   \                     AntUnassignChannelNumber: (+1)
+   \        0x0   0xB51C             PUSH     {R2-R4,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+    400            u8 au8AntUnassignChannel[] = {MESG_UNASSIGN_CHANNEL_SIZE, MESG_UNASSIGN_CHANNEL_ID, 0, CS};
+   \        0x4   0x4668             MOV      R0,SP
+   \        0x6   0x....             LDR.N    R1,??DataTable11_12
+   \        0x8   0x680A             LDR      R2,[R1, #+0]
+   \        0xA   0x6002             STR      R2,[R0, #+0]
+    401          
+    402            /* Update the channel number */
+    403             au8AntUnassignChannel[2] = eChannel_;
+   \        0xC   0xF88D 0x4002      STRB     R4,[SP, #+2]
+    404          
+    405            /* Update checksum and queue the unassign channel message */
+    406            au8AntUnassignChannel[3] = AntCalculateTxChecksum(au8AntUnassignChannel);
+   \       0x10   0x4668             MOV      R0,SP
+   \       0x12   0x....'....        BL       AntCalculateTxChecksum
+   \       0x16   0xF88D 0x0003      STRB     R0,[SP, #+3]
+    407            G_asAntChannelConfiguration[eChannel_].AntFlags &= ~_ANT_FLAGS_CHANNEL_CONFIGURED;
+   \       0x1A   0x2014             MOVS     R0,#+20
+   \       0x1C   0x....             LDR.N    R1,??DataTable11_3
+   \       0x1E   0x0022             MOVS     R2,R4
+   \       0x20   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x22   0x4342             MULS     R2,R0,R2
+   \       0x24   0x440A             ADD      R2,R1,R2
+   \       0x26   0x0023             MOVS     R3,R4
+   \       0x28   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x2A   0xFB00 0xF003      MUL      R0,R0,R3
+   \       0x2E   0x4408             ADD      R0,R1,R0
+   \       0x30   0x7CC0             LDRB     R0,[R0, #+19]
+   \       0x32   0xF010 0x00FE      ANDS     R0,R0,#0xFE
+   \       0x36   0x74D0             STRB     R0,[R2, #+19]
+    408            return( AntQueueOutgoingMessage(au8AntUnassignChannel) );
+   \       0x38   0x4668             MOV      R0,SP
+   \       0x3A   0x....'....        BL       AntQueueOutgoingMessage
+   \       0x3E   0xBD16             POP      {R1,R2,R4,PC}    ;; return
+    409          
+    410          } /* end AntUnassignChannelNumber() */
+    411          
+    412          
+    413          /*------------------------------------------------------------------------------
+    414          Function: AntOpenChannelNumber
+    415          
+    416          Description:
+    417          Queues the Open Channel message on the configured ANT channel.  This does not actually indicate
+    418          that the channel has been opened successfully -- the calling task must monitor _ANT_FLAGS_CHANNEL_OPEN
+    419          to determine if channel opens successfully.
+    420            
+    421          Requires:
+    422            - eChannel_ is ANT_CHANNEL_0, ..., ANT_CHANNEL_7, ANT_CHANNEL_SCANNING
+    423            - ANT channel to open should be correctly configured.
+    424          
+    425          Promises:
+    426            - If channel open message is queued, returns TRUE (Ant_u32CurrentTxMessageToken will be non-zero)
+    427            - Otherwise returns FALSE
+    428           
+    429          */
+
+   \                                 In section .text, align 2, keep-with-next
+    430          bool AntOpenChannelNumber(AntChannelNumberType eChannel_)
+    431          {
+   \                     AntOpenChannelNumber: (+1)
+   \        0x0   0xB51C             PUSH     {R2-R4,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+    432            u8 au8AntOpenChannel[] = {MESG_OPEN_CHANNEL_SIZE, MESG_OPEN_CHANNEL_ID, 0, CS};
+   \        0x4   0x4668             MOV      R0,SP
+   \        0x6   0x....             LDR.N    R1,??DataTable11_13
+   \        0x8   0x680A             LDR      R2,[R1, #+0]
+   \        0xA   0x6002             STR      R2,[R0, #+0]
+    433            
+    434            /* Update the channel number in the message for a regular channel */
+    435            if(eChannel_ != ANT_CHANNEL_SCANNING)
+   \        0xC   0x0020             MOVS     R0,R4
+   \        0xE   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x10   0x2800             CMP      R0,#+0
+   \       0x12   0xD001             BEQ.N    ??AntOpenChannelNumber_0
+    436            {
+    437              au8AntOpenChannel[2] = eChannel_;
+   \       0x14   0xF88D 0x4002      STRB     R4,[SP, #+2]
+    438            }
+    439          
+    440            /* Update the checksum value and queue the open channel message */
+    441            au8AntOpenChannel[3] = AntCalculateTxChecksum(au8AntOpenChannel);
+   \                     ??AntOpenChannelNumber_0: (+1)
+   \       0x18   0x4668             MOV      R0,SP
+   \       0x1A   0x....'....        BL       AntCalculateTxChecksum
+   \       0x1E   0xF88D 0x0003      STRB     R0,[SP, #+3]
+    442            G_asAntChannelConfiguration[eChannel_].AntFlags |= _ANT_FLAGS_CHANNEL_OPEN_PENDING;
+   \       0x22   0x2014             MOVS     R0,#+20
+   \       0x24   0x....             LDR.N    R1,??DataTable11_3
+   \       0x26   0x0022             MOVS     R2,R4
+   \       0x28   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x2A   0x4342             MULS     R2,R0,R2
+   \       0x2C   0x440A             ADD      R2,R1,R2
+   \       0x2E   0x0023             MOVS     R3,R4
+   \       0x30   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x32   0xFB00 0xF003      MUL      R0,R0,R3
+   \       0x36   0x4408             ADD      R0,R1,R0
+   \       0x38   0x7CC0             LDRB     R0,[R0, #+19]
+   \       0x3A   0xF050 0x0002      ORRS     R0,R0,#0x2
+   \       0x3E   0x74D0             STRB     R0,[R2, #+19]
+    443           
+    444            return( AntQueueOutgoingMessage(au8AntOpenChannel) );
+   \       0x40   0x4668             MOV      R0,SP
+   \       0x42   0x....'....        BL       AntQueueOutgoingMessage
+   \       0x46   0xBD16             POP      {R1,R2,R4,PC}    ;; return
+    445            
+    446          } /* end AntOpenChannelNumber() */
+    447          
+    448          
+    449          /*------------------------------------------------------------------------------
+    450          Function: AntOpenChannelNumber
+    451          
+    452          Description:
+    453          Queues the Open Scan Channel message.  Scanning channels must use Channel 0
+    454          and actually take all channel resources.  It is up to the user to ensure
+    455          that the device is configured properly.  Attempting to open a scanning channel
+    456          when other channels are already open will result in a failure.
+    457          
+    458          The return value does not actually indicate that the channel has been 
+    459          opened successfully -- the calling task must monitor _ANT_FLAGS_CHANNEL_OPEN
+    460          to determine if channel opens successfully.
+    461            
+    462          Requires:
+    463            - ANT channel 0 should be correctly configured as a SLAVE.
+    464          
+    465          Promises:
+    466            - If channel open message is queued, returns TRUE (Ant_u32CurrentTxMessageToken will be non-zero)
+    467            - Otherwise returns FALSE
+    468           
+    469          */
+
+   \                                 In section .text, align 2, keep-with-next
+    470          bool AntOpenScanningChannel(void)
+    471          {
+   \                     AntOpenScanningChannel: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    472            u8 au8AntOpenScanChannel[] = {MESG_OPEN_CHANNEL_SIZE, MESG_OPEN_SCAN_CHANNEL_ID, 0, CS};
+   \        0x2   0x4668             MOV      R0,SP
+   \        0x4   0x....             LDR.N    R1,??DataTable11_14
+   \        0x6   0x680A             LDR      R2,[R1, #+0]
+   \        0x8   0x6002             STR      R2,[R0, #+0]
+    473            
+    474            /* Update the checksum value and queue the open channel message */
+    475            au8AntOpenScanChannel[3] = AntCalculateTxChecksum(au8AntOpenScanChannel);
+   \        0xA   0x4668             MOV      R0,SP
+   \        0xC   0x....'....        BL       AntCalculateTxChecksum
+   \       0x10   0xF88D 0x0003      STRB     R0,[SP, #+3]
+    476            G_asAntChannelConfiguration[0].AntFlags |= _ANT_FLAGS_CHANNEL_OPEN_PENDING;
+   \       0x14   0x....             LDR.N    R0,??DataTable11_3
+   \       0x16   0x7CC1             LDRB     R1,[R0, #+19]
+   \       0x18   0xF051 0x0102      ORRS     R1,R1,#0x2
+   \       0x1C   0x74C1             STRB     R1,[R0, #+19]
+    477           
+    478            return( AntQueueOutgoingMessage(au8AntOpenScanChannel) );
+   \       0x1E   0x4668             MOV      R0,SP
+   \       0x20   0x....'....        BL       AntQueueOutgoingMessage
+   \       0x24   0xBD02             POP      {R1,PC}          ;; return
+    479            
+    480          } /* end AntOpenScanningChannelNumber() */
+    481          
+    482          
+    483          
+    484          /*------------------------------------------------------------------------------
+    485          Function: AntCloseChannelNumber
+    486          
+    487          Description:
+    488          Requests that an ANT channel is closed.  Issuing MESG_CLOSE_CHANNEL_ID does not
+    489          guarantee that the channel closes, and ANT response to this message does not
+    490          indicate that the channel is closed (a seperate message will be sent when the 
+    491          channel actually closes which usually happens on the next ANT message period).
+    492            
+    493          Requires:
+    494            - eChannel_ is ANT_CHANNEL_0, ..., ANT_CHANNEL_7, ANT_CHANNEL_SCANNING
+    495            - ANT channel is correctly configured and should be open.
+    496          
+    497          Promises:
+    498            - If channel close message is queued, returns TRUE (Ant_u32CurrentTxMessageToken will be non-zero)
+    499            - Otherwise returns FALSE
+    500          */
+
+   \                                 In section .text, align 2, keep-with-next
+    501          bool AntCloseChannelNumber(AntChannelNumberType eChannel_)
+    502          {
+   \                     AntCloseChannelNumber: (+1)
+   \        0x0   0xB51C             PUSH     {R2-R4,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+    503            u8 au8AntCloseChannel[] = {MESG_CLOSE_CHANNEL_SIZE, MESG_CLOSE_CHANNEL_ID, 0, CS};
+   \        0x4   0x4668             MOV      R0,SP
+   \        0x6   0x....             LDR.N    R1,??DataTable11_15
+   \        0x8   0x680A             LDR      R2,[R1, #+0]
+   \        0xA   0x6002             STR      R2,[R0, #+0]
+    504            
+    505            /* Update the channel number */
+    506            au8AntCloseChannel[2] = eChannel_;
+   \        0xC   0xF88D 0x4002      STRB     R4,[SP, #+2]
+    507          
+    508            /* Update the checksum value and queue the close channel message*/
+    509            au8AntCloseChannel[3] = AntCalculateTxChecksum(au8AntCloseChannel);
+   \       0x10   0x4668             MOV      R0,SP
+   \       0x12   0x....'....        BL       AntCalculateTxChecksum
+   \       0x16   0xF88D 0x0003      STRB     R0,[SP, #+3]
+    510            
+    511            return( AntQueueOutgoingMessage(au8AntCloseChannel) );
+   \       0x1A   0x4668             MOV      R0,SP
+   \       0x1C   0x....'....        BL       AntQueueOutgoingMessage
+   \       0x20   0xBD16             POP      {R1,R2,R4,PC}    ;; return
+    512          
+    513          } /* end AntCloseChannelNumber() */
+    514          
+    515          
+    516          
+    517          
+    518          /*------------------------------------------------------------------------------
+    519          Function: AntRadioStatusChannel
+    520          
+    521          Description:
+    522          Returns the current radio status of the specified channel to the application.
+    523            
+    524          Requires:
+    525            - G_u32AntFlags are up to date
+    526          
+    527          Promises:
+    528            - Returns one of {ANT_UNCONFIGURED, ANT_CONFIGURED (ANT_CLOSED), ANT_CLOSING, ANT_OPEN, ANT_CLOSED}
+    529          
+    530          */
+
+   \                                 In section .text, align 2, keep-with-next
+    531          AntChannelStatusType AntRadioStatusChannel(AntChannelNumberType eChannel_)
+    532          {
+   \                     AntRadioStatusChannel: (+1)
+   \        0x0   0x0001             MOVS     R1,R0
+    533            if(G_asAntChannelConfiguration[eChannel_].AntFlags & _ANT_FLAGS_CHANNEL_CONFIGURED)
+   \        0x2   0x2014             MOVS     R0,#+20
+   \        0x4   0x....             LDR.N    R2,??DataTable11_3
+   \        0x6   0x000B             MOVS     R3,R1
+   \        0x8   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \        0xA   0x4343             MULS     R3,R0,R3
+   \        0xC   0x4413             ADD      R3,R2,R3
+   \        0xE   0x7CDB             LDRB     R3,[R3, #+19]
+   \       0x10   0x07DB             LSLS     R3,R3,#+31
+   \       0x12   0xD514             BPL.N    ??AntRadioStatusChannel_0
+    534            {
+    535              if(G_asAntChannelConfiguration[eChannel_].AntFlags & _ANT_FLAGS_CHANNEL_CLOSE_PENDING)
+   \       0x14   0x000B             MOVS     R3,R1
+   \       0x16   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x18   0x4343             MULS     R3,R0,R3
+   \       0x1A   0x4413             ADD      R3,R2,R3
+   \       0x1C   0x7CDB             LDRB     R3,[R3, #+19]
+   \       0x1E   0x071B             LSLS     R3,R3,#+28
+   \       0x20   0xD501             BPL.N    ??AntRadioStatusChannel_1
+    536              {
+    537                return ANT_CLOSING;
+   \       0x22   0x2004             MOVS     R0,#+4
+   \       0x24   0xE00C             B.N      ??AntRadioStatusChannel_2
+    538              }
+    539              else if(G_asAntChannelConfiguration[eChannel_].AntFlags & _ANT_FLAGS_CHANNEL_OPEN)
+   \                     ??AntRadioStatusChannel_1: (+1)
+   \       0x26   0x000B             MOVS     R3,R1
+   \       0x28   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x2A   0xFB00 0xF003      MUL      R0,R0,R3
+   \       0x2E   0x4410             ADD      R0,R2,R0
+   \       0x30   0x7CC0             LDRB     R0,[R0, #+19]
+   \       0x32   0x0740             LSLS     R0,R0,#+29
+   \       0x34   0xD501             BPL.N    ??AntRadioStatusChannel_3
+    540              {
+    541                return ANT_OPEN;
+   \       0x36   0x2003             MOVS     R0,#+3
+   \       0x38   0xE002             B.N      ??AntRadioStatusChannel_2
+    542              }
+    543              else
+    544              {
+    545                return ANT_CLOSED;
+   \                     ??AntRadioStatusChannel_3: (+1)
+   \       0x3A   0x2001             MOVS     R0,#+1
+   \       0x3C   0xE000             B.N      ??AntRadioStatusChannel_2
+    546              }
+    547            }
+    548            else
+    549            {
+    550              return ANT_UNCONFIGURED;
+   \                     ??AntRadioStatusChannel_0: (+1)
+   \       0x3E   0x2000             MOVS     R0,#+0
+   \                     ??AntRadioStatusChannel_2: (+1)
+   \       0x40   0x4770             BX       LR               ;; return
+    551            }
+    552             
+    553          } /* end AntRadioStatusChannel () */
+    554          
+    555          
+    556          /***ANT DATA FUNCTIONS***/
+    557          
+    558          /*-----------------------------------------------------------------------------/
+    559          Function: AntQueueBroadcastMessage
+    560          
+    561          Description:
+    562          Adds an ANT broadcast message to the outgoing messages list.  
+    563          
+    564          Requires:
+    565            - eChannel_ is the channel number on which to broadcast
+    566            - pu8Data_ is a pointer to the first element of an array of 8 data bytes
+    567          
+    568          Promises:
+    569            - Returns TRUE if the entry is added successfully.
+    570          */
+
+   \                                 In section .text, align 2, keep-with-next
+    571          bool AntQueueBroadcastMessage(AntChannelNumberType eChannel_, u8 *pu8Data_)
+    572          {
+   \                     AntQueueBroadcastMessage: (+1)
+   \        0x0   0xB570             PUSH     {R4-R6,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+   \        0x4   0x000D             MOVS     R5,R1
+    573            /* Update the dynamic message data */
+    574            G_au8AntBroadcastDataMessage[2] = eChannel_;
+   \        0x6   0x....             LDR.N    R6,??DataTable11_16
+   \        0x8   0x70B4             STRB     R4,[R6, #+2]
+    575            for(u8 i = 0; i < ANT_DATA_BYTES; i++)
+   \        0xA   0x2000             MOVS     R0,#+0
+   \                     ??AntQueueBroadcastMessage_0: (+1)
+   \        0xC   0x0001             MOVS     R1,R0
+   \        0xE   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x10   0x2908             CMP      R1,#+8
+   \       0x12   0xDA08             BGE.N    ??AntQueueBroadcastMessage_1
+    576            {
+    577              G_au8AntBroadcastDataMessage[3 + i] = *(pu8Data_ + i);
+   \       0x14   0x0001             MOVS     R1,R0
+   \       0x16   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x18   0x5C69             LDRB     R1,[R5, R1]
+   \       0x1A   0x0002             MOVS     R2,R0
+   \       0x1C   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x1E   0x4432             ADD      R2,R6,R2
+   \       0x20   0x70D1             STRB     R1,[R2, #+3]
+    578            }
+   \       0x22   0x1C40             ADDS     R0,R0,#+1
+   \       0x24   0xE7F2             B.N      ??AntQueueBroadcastMessage_0
+    579           
+    580            G_au8AntBroadcastDataMessage[11] = AntCalculateTxChecksum(G_au8AntBroadcastDataMessage);
+   \                     ??AntQueueBroadcastMessage_1: (+1)
+   \       0x26   0x0030             MOVS     R0,R6
+   \       0x28   0x....'....        BL       AntCalculateTxChecksum
+   \       0x2C   0x72F0             STRB     R0,[R6, #+11]
+    581            
+    582            return( AntQueueOutgoingMessage(G_au8AntBroadcastDataMessage) );
+   \       0x2E   0x0030             MOVS     R0,R6
+   \       0x30   0x....'....        BL       AntQueueOutgoingMessage
+   \       0x34   0xBD70             POP      {R4-R6,PC}       ;; return
+    583          
+    584          } /* end AntQueueBroadcastMessage */
+    585          
+    586          
+    587          /*-----------------------------------------------------------------------------/
+    588          Function: AntQueueAcknowledgedMessage
+    589          
+    590          Description:
+    591          Adds an ANT Acknowledged message to the outgoing messages list.  
+    592          
+    593          Requires:
+    594            - eChannel_ is the channel number on which to broadcast
+    595            - pu8Data_ is a pointer to the first element of an array of 8 data bytes
+    596          
+    597          Promises:
+    598            - Returns TRUE if the entry is added successfully.
+    599          */
+
+   \                                 In section .text, align 2, keep-with-next
+    600          bool AntQueueAcknowledgedMessage(AntChannelNumberType eChannel_, u8 *pu8Data_)
+    601          {
+   \                     AntQueueAcknowledgedMessage: (+1)
+   \        0x0   0xB570             PUSH     {R4-R6,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+   \        0x4   0x000D             MOVS     R5,R1
+    602            /* Update the dynamic message data */
+    603            G_au8AntAckDataMessage[2] = eChannel_;
+   \        0x6   0x....             LDR.N    R6,??DataTable11_17
+   \        0x8   0x70B4             STRB     R4,[R6, #+2]
+    604            for(u8 i = 0; i < ANT_DATA_BYTES; i++)
+   \        0xA   0x2000             MOVS     R0,#+0
+   \                     ??AntQueueAcknowledgedMessage_0: (+1)
+   \        0xC   0x0001             MOVS     R1,R0
+   \        0xE   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x10   0x2908             CMP      R1,#+8
+   \       0x12   0xDA08             BGE.N    ??AntQueueAcknowledgedMessage_1
+    605            {
+    606              G_au8AntAckDataMessage[3 + i] = *(pu8Data_ + i);
+   \       0x14   0x0001             MOVS     R1,R0
+   \       0x16   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x18   0x5C69             LDRB     R1,[R5, R1]
+   \       0x1A   0x0002             MOVS     R2,R0
+   \       0x1C   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x1E   0x4432             ADD      R2,R6,R2
+   \       0x20   0x70D1             STRB     R1,[R2, #+3]
+    607            }
+   \       0x22   0x1C40             ADDS     R0,R0,#+1
+   \       0x24   0xE7F2             B.N      ??AntQueueAcknowledgedMessage_0
+    608           
+    609            G_au8AntAckDataMessage[11] = AntCalculateTxChecksum(G_au8AntAckDataMessage);
+   \                     ??AntQueueAcknowledgedMessage_1: (+1)
+   \       0x26   0x0030             MOVS     R0,R6
+   \       0x28   0x....'....        BL       AntCalculateTxChecksum
+   \       0x2C   0x72F0             STRB     R0,[R6, #+11]
+    610            return( AntQueueOutgoingMessage(G_au8AntAckDataMessage) );
+   \       0x2E   0x0030             MOVS     R0,R6
+   \       0x30   0x....'....        BL       AntQueueOutgoingMessage
+   \       0x34   0xBD70             POP      {R4-R6,PC}       ;; return
+    611           
+    612          } /* end AntQueueAcknowledgedMessage */
+    613          
+    614          
+    615          /*-----------------------------------------------------------------------------/
+    616          Function: AntReadAppMessageBuffer
+    617          
+    618          Description:
+    619          Checks for any new messages from ANT.  New messages are buffered by ant.c and 
+    620          made available to the application on a FIFO basis.  Whenever this function
+    621          is called, the global parameters are updated:
+    622          G_u32AntApiCurrentMessageTimeStamp
+    623          G_eAntApiCurrentMessageClass
+    624          G_au8AntApiCurrentMessageBytes
+    625          G_sAntApiCurrentMessageExtData
+    626          
+    627          The application should check G_eAntApiCurrentMessageClass to determine if the message
+    628          is ANT_DATA or ANT_TICK and then use G_au8AntApiCurrentMessageBytes and
+    629          G_sAntApiCurrentMessageExtData accordingly.
+    630          
+    631          Requires:
+    632            - 
+    633          
+    634          Promises:
+    635            - Returns TRUE if there is new data; 
+    636              G_u32AntApiCurrentMessageTimeStamp
+    637              G_eAntApiCurrentMessageClass
+    638              G_au8AntApiCurrentMessageBytes
+    639              G_sAntApiCurrentMessageExtData
+    640              are all updated with the oldest data from G_sAntApplicationMsgList and the message
+    641              is removed from the buffer.
+    642            - Returns FALSE if no new data is present (all variables unchanged)
+    643          */
+
+   \                                 In section .text, align 2, keep-with-next
+    644          bool AntReadAppMessageBuffer(void)
+    645          {
+   \                     AntReadAppMessageBuffer: (+1)
+   \        0x0   0xB538             PUSH     {R3-R5,LR}
+    646            u8 *pu8Parser;
+    647            
+    648            if(G_sAntApplicationMsgList != NULL)
+   \        0x2   0x....             LDR.N    R1,??DataTable11_18
+   \        0x4   0x6808             LDR      R0,[R1, #+0]
+   \        0x6   0x2800             CMP      R0,#+0
+   \        0x8   0xD02E             BEQ.N    ??AntReadAppMessageBuffer_0
+    649            {
+    650              /* Grab the single bytes */
+    651              G_u32AntApiCurrentMessageTimeStamp = G_sAntApplicationMsgList->u32TimeStamp;
+   \        0xA   0x6808             LDR      R0,[R1, #+0]
+   \        0xC   0x6800             LDR      R0,[R0, #+0]
+   \        0xE   0x....             LDR.N    R2,??DataTable11_19
+   \       0x10   0x6010             STR      R0,[R2, #+0]
+    652              G_eAntApiCurrentMessageClass = G_sAntApplicationMsgList->eMessageType;
+   \       0x12   0x6808             LDR      R0,[R1, #+0]
+   \       0x14   0x7900             LDRB     R0,[R0, #+4]
+   \       0x16   0x....             LDR.N    R2,??DataTable11_20
+   \       0x18   0x7010             STRB     R0,[R2, #+0]
+    653              
+    654              /* Copy over all the payload data */
+    655              pu8Parser = &(G_sAntApplicationMsgList->au8MessageData[0]);
+   \       0x1A   0x6808             LDR      R0,[R1, #+0]
+   \       0x1C   0x1D84             ADDS     R4,R0,#+6
+    656              for(u8 i = 0; i < ANT_APPLICATION_MESSAGE_BYTES; i++)
+   \       0x1E   0x2000             MOVS     R0,#+0
+   \                     ??AntReadAppMessageBuffer_1: (+1)
+   \       0x20   0x0002             MOVS     R2,R0
+   \       0x22   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x24   0x2A08             CMP      R2,#+8
+   \       0x26   0xDA08             BGE.N    ??AntReadAppMessageBuffer_2
+    657              {
+    658                G_au8AntApiCurrentMessageBytes[i] = *(pu8Parser + i);
+   \       0x28   0x0002             MOVS     R2,R0
+   \       0x2A   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x2C   0x5CA2             LDRB     R2,[R4, R2]
+   \       0x2E   0x....             LDR.N    R3,??DataTable11_21
+   \       0x30   0x0005             MOVS     R5,R0
+   \       0x32   0xB2ED             UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+   \       0x34   0x555A             STRB     R2,[R3, R5]
+    659              }
+   \       0x36   0x1C40             ADDS     R0,R0,#+1
+   \       0x38   0xE7F2             B.N      ??AntReadAppMessageBuffer_1
+    660              
+    661              /* Copy over the extended data */
+    662              G_sAntApiCurrentMessageExtData.u8Channel    = G_sAntApplicationMsgList->sExtendedData.u8Channel;
+   \                     ??AntReadAppMessageBuffer_2: (+1)
+   \       0x3A   0x....             LDR.N    R0,??DataTable11_22
+   \       0x3C   0x680A             LDR      R2,[R1, #+0]
+   \       0x3E   0x7B92             LDRB     R2,[R2, #+14]
+   \       0x40   0x7002             STRB     R2,[R0, #+0]
+    663              G_sAntApiCurrentMessageExtData.u8Flags      = G_sAntApplicationMsgList->sExtendedData.u8Flags;
+   \       0x42   0x680A             LDR      R2,[R1, #+0]
+   \       0x44   0x7BD2             LDRB     R2,[R2, #+15]
+   \       0x46   0x7042             STRB     R2,[R0, #+1]
+    664              G_sAntApiCurrentMessageExtData.u16DeviceID  = G_sAntApplicationMsgList->sExtendedData.u16DeviceID;
+   \       0x48   0x680A             LDR      R2,[R1, #+0]
+   \       0x4A   0x8A12             LDRH     R2,[R2, #+16]
+   \       0x4C   0x8042             STRH     R2,[R0, #+2]
+    665              G_sAntApiCurrentMessageExtData.u8DeviceType = G_sAntApplicationMsgList->sExtendedData.u8DeviceType;
+   \       0x4E   0x680A             LDR      R2,[R1, #+0]
+   \       0x50   0x7C92             LDRB     R2,[R2, #+18]
+   \       0x52   0x7102             STRB     R2,[R0, #+4]
+    666              G_sAntApiCurrentMessageExtData.u8TransType  = G_sAntApplicationMsgList->sExtendedData.u8TransType;
+   \       0x54   0x680A             LDR      R2,[R1, #+0]
+   \       0x56   0x7CD2             LDRB     R2,[R2, #+19]
+   \       0x58   0x7142             STRB     R2,[R0, #+5]
+    667              G_sAntApiCurrentMessageExtData.s8RSSI       = G_sAntApplicationMsgList->sExtendedData.s8RSSI;
+   \       0x5A   0x6809             LDR      R1,[R1, #+0]
+   \       0x5C   0x7D09             LDRB     R1,[R1, #+20]
+   \       0x5E   0x7181             STRB     R1,[R0, #+6]
+    668              
+    669              /* Done, so message can be removed from the buffer */
+    670              AntDeQueueApplicationMessage();    
+   \       0x60   0x....'....        BL       AntDeQueueApplicationMessage
+    671              return TRUE;
+   \       0x64   0x2001             MOVS     R0,#+1
+   \       0x66   0xE000             B.N      ??AntReadAppMessageBuffer_3
+    672            }
+    673            
+    674            /* Otherwise return FALSE and do not touch the current data array */
+    675            return FALSE;
+   \                     ??AntReadAppMessageBuffer_0: (+1)
+   \       0x68   0x2000             MOVS     R0,#+0
+   \                     ??AntReadAppMessageBuffer_3: (+1)
+   \       0x6A   0xBD32             POP      {R1,R4,R5,PC}    ;; return
+    676            
+    677          } /* end AntReadAppMessageBuffer() */
+    678          
+    679          
+    680          /*--------------------------------------------------------------------------------------------------------------------*/
+    681          /* Protected functions                                                                                                */
+    682          /*--------------------------------------------------------------------------------------------------------------------*/
+    683          
+    684          /*-----------------------------------------------------------------------------/
+    685          Function: AntApiInitialize
+    686          
+    687          Description:
+    688          Configures the Ant API task.
+    689          
+    690          Requires:
+    691            - 
+    692          
+    693          Promises:
+    694            - 
+    695          */
+
+   \                                 In section .text, align 2, keep-with-next
+    696          void AntApiInitialize(void)
+    697          {
+   \                     AntApiInitialize: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    698            /* If good initialization, set state to Idle */
+    699            if( 1 )
+    700            {
+    701              DebugPrintf("ANT API ready\n\r");
+   \        0x2   0x....             LDR.N    R0,??DataTable11_23
+   \        0x4   0x....'....        BL       DebugPrintf
+    702              AntApi_StateMachine = AntApiSM_Idle;
+   \        0x8   0x....'....        ADR.W    R0,AntApiSM_Idle
+   \        0xC   0x....             LDR.N    R1,??DataTable11_11
+   \        0xE   0x6008             STR      R0,[R1, #+0]
+    703            }
+    704            else
+    705            {
+    706              /* The task isn't properly initialized, so shut it down and don't run */
+    707              AntApi_StateMachine = AntApiSM_FailedInit;
+    708            }
+    709          
+    710          } /* end AntApiInitialize() */
+   \       0x10   0xBD01             POP      {R0,PC}          ;; return
+    711          
+    712          
+    713          /*----------------------------------------------------------------------------------------------------------------------
+    714          Function UserAppRunActiveState()
+    715          
+    716          Description:
+    717          Selects and runs one iteration of the current state in the state machine.
+    718          All state machines have a TOTAL of 1ms to execute, so on average n state machines
+    719          may take 1ms / n to execute.
+    720          
+    721          Requires:
+    722            - State machine function pointer points at current state
+    723          
+    724          Promises:
+    725            - Calls the function to pointed by the state machine function pointer
+    726          */
+
+   \                                 In section .text, align 2, keep-with-next
+    727          void AntApiRunActiveState(void)
+    728          {
+   \                     AntApiRunActiveState: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    729            AntApi_StateMachine();
+   \        0x2   0x....             LDR.N    R0,??DataTable11_11
+   \        0x4   0x6800             LDR      R0,[R0, #+0]
+   \        0x6   0x4780             BLX      R0
+    730          
+    731          } /* end AntApiRunActiveState */
+   \        0x8   0xBD01             POP      {R0,PC}          ;; return
+    732          
+    733          
+    734          /**********************************************************************************************************************
+    735          State Machine Function Definitions
+    736          **********************************************************************************************************************/
+    737          
+    738          /*-------------------------------------------------------------------------------------------------------------------*/
+    739          /* Wait for a message to be queued */
+
+   \                                 In section .text, align 4, keep-with-next
+    740          static void AntApiSM_Idle(void)
+    741          {
+    742            /* Monitor requests to send generic ANT messages */
+    743            
+    744          } /* end AntApiSM_Idle() */
+   \                     AntApiSM_Idle: (+1)
+   \        0x0   0x4770             BX       LR               ;; return
+    745               
+    746          
+    747          /*-------------------------------------------------------------------------------------------------------------------*/
+    748          /* Send all configuration messages to ANT to fully assign the channel.
+    749          The selected channel has already been verified unconfigured, and all required setup
+    750          messages are ready to go.  */
+
+   \                                 In section .text, align 4, keep-with-next
+    751          static void  AntApiSM_AssignChannel(void)          
+    752          {
+   \                     AntApiSM_AssignChannel: (+1)
+   \        0x0   0xB570             PUSH     {R4-R6,LR}
+    753            static u8 u8CurrentMessageToSend = 0;
+    754            static u8 u8CurrentMesssageId = 0;
+    755            static bool bMessageInProgress = FALSE;
+    756            
+    757            /* Queue the next message if it's time */
+    758            if(bMessageInProgress == FALSE)
+   \        0x2   0x....             LDR.N    R4,??DataTable11_24
+   \        0x4   0x7820             LDRB     R0,[R4, #+0]
+   \        0x6   0x2800             CMP      R0,#+0
+   \        0x8   0xD10E             BNE.N    ??AntApiSM_AssignChannel_0
+    759            {
+    760              u8CurrentMesssageId = *(AntApi_apu8AntAssignChannel[u8CurrentMessageToSend] + BUFFER_INDEX_MESG_ID); 
+   \        0xA   0x....             LDR.N    R0,??DataTable11_25
+   \        0xC   0x....             LDR.N    R1,??DataTable11_26
+   \        0xE   0x7802             LDRB     R2,[R0, #+0]
+   \       0x10   0xF851 0x2022      LDR      R2,[R1, R2, LSL #+2]
+   \       0x14   0x7852             LDRB     R2,[R2, #+1]
+   \       0x16   0x....             LDR.N    R3,??DataTable11_27
+   \       0x18   0x701A             STRB     R2,[R3, #+0]
+    761              AntQueueOutgoingMessage(AntApi_apu8AntAssignChannel[u8CurrentMessageToSend]);
+   \       0x1A   0x7800             LDRB     R0,[R0, #+0]
+   \       0x1C   0xF851 0x0020      LDR      R0,[R1, R0, LSL #+2]
+   \       0x20   0x....'....        BL       AntQueueOutgoingMessage
+    762              bMessageInProgress = TRUE;
+   \       0x24   0x2001             MOVS     R0,#+1
+   \       0x26   0x7020             STRB     R0,[R4, #+0]
+    763            }
+    764            
+    765            /* Check message status */
+    766            if( u8CurrentMesssageId == G_stMessageResponse.u8MessageNumber )
+   \                     ??AntApiSM_AssignChannel_0: (+1)
+   \       0x28   0x....             LDR.N    R5,??DataTable11_28
+   \       0x2A   0x....             LDR.N    R0,??DataTable11_27
+   \       0x2C   0x7800             LDRB     R0,[R0, #+0]
+   \       0x2E   0x7869             LDRB     R1,[R5, #+1]
+   \       0x30   0x4288             CMP      R0,R1
+   \       0x32   0xD12F             BNE.N    ??AntApiSM_AssignChannel_1
+    767            { 
+    768              if(G_stMessageResponse.u8ResponseCode == RESPONSE_NO_ERROR)
+   \       0x34   0x78A8             LDRB     R0,[R5, #+2]
+   \       0x36   0x2800             CMP      R0,#+0
+   \       0x38   0xD121             BNE.N    ??AntApiSM_AssignChannel_2
+    769              {
+    770                /* Increment message pointer and check if complete */
+    771                u8CurrentMessageToSend++;
+   \       0x3A   0x....             LDR.N    R6,??DataTable11_25
+   \       0x3C   0x7830             LDRB     R0,[R6, #+0]
+   \       0x3E   0x1C40             ADDS     R0,R0,#+1
+   \       0x40   0x7030             STRB     R0,[R6, #+0]
+    772                if(u8CurrentMessageToSend == ANT_ASSIGN_MESSAGES)
+   \       0x42   0x7830             LDRB     R0,[R6, #+0]
+   \       0x44   0x2807             CMP      R0,#+7
+   \       0x46   0xD123             BNE.N    ??AntApiSM_AssignChannel_3
+    773                {
+    774                  /* Print OK message and update the channel flags */
+    775                  G_au8AntMessageAssign[12] = G_stMessageResponse.u8Channel;
+   \       0x48   0x....             LDR.N    R0,??DataTable11_29
+   \       0x4A   0x7829             LDRB     R1,[R5, #+0]
+   \       0x4C   0x7301             STRB     R1,[R0, #+12]
+    776                  DebugPrintf(G_au8AntMessageAssign);
+   \       0x4E   0x....'....        BL       DebugPrintf
+    777                  DebugPrintf(G_au8AntMessageOk);
+   \       0x52   0x....             LDR.N    R0,??DataTable11_30
+   \       0x54   0x....'....        BL       DebugPrintf
+    778                  G_asAntChannelConfiguration[G_stMessageResponse.u8Channel].AntFlags |= _ANT_FLAGS_CHANNEL_CONFIGURED;
+   \       0x58   0x2014             MOVS     R0,#+20
+   \       0x5A   0x....             LDR.N    R1,??DataTable11_3
+   \       0x5C   0x782A             LDRB     R2,[R5, #+0]
+   \       0x5E   0x4342             MULS     R2,R0,R2
+   \       0x60   0x440A             ADD      R2,R1,R2
+   \       0x62   0x782B             LDRB     R3,[R5, #+0]
+   \       0x64   0xFB00 0xF003      MUL      R0,R0,R3
+   \       0x68   0x4408             ADD      R0,R1,R0
+   \       0x6A   0x7CC0             LDRB     R0,[R0, #+19]
+   \       0x6C   0xF050 0x0001      ORRS     R0,R0,#0x1
+   \       0x70   0x74D0             STRB     R0,[R2, #+19]
+    779          
+    780                  /* Clean up and exit this state */
+    781                  u8CurrentMessageToSend = 0;
+   \       0x72   0x2000             MOVS     R0,#+0
+   \       0x74   0x7030             STRB     R0,[R6, #+0]
+    782                  AntApi_StateMachine = AntApiSM_Idle;
+   \       0x76   0x....             LDR.N    R0,??DataTable11_31
+   \       0x78   0x....             LDR.N    R1,??DataTable11_11
+   \       0x7A   0x6008             STR      R0,[R1, #+0]
+   \       0x7C   0xE008             B.N      ??AntApiSM_AssignChannel_3
+    783                }
+    784              } 
+    785              else
+    786              {
+    787                /* Report the error and return.  Channel flags will remain clear for application to check. */
+    788                DebugPrintf(G_au8AntMessageAssign);
+   \                     ??AntApiSM_AssignChannel_2: (+1)
+   \       0x7E   0x....             LDR.N    R0,??DataTable11_29
+   \       0x80   0x....'....        BL       DebugPrintf
+    789                DebugPrintf(G_au8AntMessageFail);
+   \       0x84   0x....             LDR.N    R0,??DataTable11_32
+   \       0x86   0x....'....        BL       DebugPrintf
+    790                AntApi_StateMachine = AntApiSM_Idle;
+   \       0x8A   0x....             LDR.N    R0,??DataTable11_31
+   \       0x8C   0x....             LDR.N    R1,??DataTable11_11
+   \       0x8E   0x6008             STR      R0,[R1, #+0]
+    791              }
+    792          
+    793              /* In either case, clean up the following: */
+    794              bMessageInProgress = FALSE;
+   \                     ??AntApiSM_AssignChannel_3: (+1)
+   \       0x90   0x2000             MOVS     R0,#+0
+   \       0x92   0x7020             STRB     R0,[R4, #+0]
+    795          
+    796            } /* end if( u8CurrentMesssageId == G_stMessageResponse.u8MessageNumber ) */
+    797            
+    798            /* Check for timeout */
+    799            if(IsTimeUp(&AntApi_u32Timeout, ANT_ACTIVITY_TIME_COUNT) )
+   \                     ??AntApiSM_AssignChannel_1: (+1)
+   \       0x94   0xF242 0x7110      MOVW     R1,#+10000
+   \       0x98   0x....             LDR.N    R0,??DataTable11_10
+   \       0x9A   0x....'....        BL       IsTimeUp
+   \       0x9E   0x2800             CMP      R0,#+0
+   \       0xA0   0xD008             BEQ.N    ??AntApiSM_AssignChannel_4
+    800            {
+    801              /* Report the error and return.  Channel flags will remain clear for application to check. */
+    802              DebugPrintf(G_au8AntMessageAssign);
+   \       0xA2   0x....             LDR.N    R0,??DataTable11_29
+   \       0xA4   0x....'....        BL       DebugPrintf
+    803              DebugPrintf(G_au8AntMessageFail);
+   \       0xA8   0x....             LDR.N    R0,??DataTable11_32
+   \       0xAA   0x....'....        BL       DebugPrintf
+    804              AntApi_StateMachine = AntApiSM_Idle;
+   \       0xAE   0x....             LDR.N    R0,??DataTable11_31
+   \       0xB0   0x....             LDR.N    R1,??DataTable11_11
+   \       0xB2   0x6008             STR      R0,[R1, #+0]
+    805            }
+    806            
+    807          } /* end AntApiSM_AssignChannel() */
+   \                     ??AntApiSM_AssignChannel_4: (+1)
+   \       0xB4   0xBD70             POP      {R4-R6,PC}       ;; return
+
+   \                                 In section .bss, align 1
+   \                     `AntApiSM_AssignChannel::u8CurrentMessageToSend`:
+   \        0x0                      DS8 1
+
+   \                                 In section .bss, align 1
+   \                     `AntApiSM_AssignChannel::u8CurrentMesssageId`:
+   \        0x0                      DS8 1
+
+   \                                 In section .bss, align 1
+   \                     `AntApiSM_AssignChannel::bMessageInProgress`:
+   \        0x0                      DS8 1
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11:
+   \        0x0   0x....'....        DC32     ?_0
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_1:
+   \        0x0   0x....'....        DC32     G_au8AntLibConfig
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_2:
+   \        0x0   0x....'....        DC32     G_au8AntSetNetworkKey
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_3:
+   \        0x0   0x....'....        DC32     G_asAntChannelConfiguration
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_4:
+   \        0x0   0x....'....        DC32     G_au8AntAssignChannel
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_5:
+   \        0x0   0x....'....        DC32     G_au8AntSetChannelID
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_6:
+   \        0x0   0x....'....        DC32     G_au8AntSetChannelPeriod
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_7:
+   \        0x0   0x....'....        DC32     G_au8AntSetChannelRFFreq
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_8:
+   \        0x0   0x....'....        DC32     G_au8AntSetChannelPower
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_9:
+   \        0x0   0x....'....        DC32     G_u32SystemTime1ms
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_10:
+   \        0x0   0x....'....        DC32     AntApi_u32Timeout
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_11:
+   \        0x0   0x....'....        DC32     AntApi_StateMachine
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_12:
+   \        0x0   0x....'....        DC32     ?_1
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_13:
+   \        0x0   0x....'....        DC32     ?_2
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_14:
+   \        0x0   0x....'....        DC32     ?_3
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_15:
+   \        0x0   0x....'....        DC32     ?_4
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_16:
+   \        0x0   0x....'....        DC32     G_au8AntBroadcastDataMessage
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_17:
+   \        0x0   0x....'....        DC32     G_au8AntAckDataMessage
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_18:
+   \        0x0   0x....'....        DC32     G_sAntApplicationMsgList
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_19:
+   \        0x0   0x....'....        DC32     G_u32AntApiCurrentMessageTimeStamp
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_20:
+   \        0x0   0x....'....        DC32     G_eAntApiCurrentMessageClass
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_21:
+   \        0x0   0x....'....        DC32     G_au8AntApiCurrentMessageBytes
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_22:
+   \        0x0   0x....'....        DC32     G_sAntApiCurrentMessageExtData
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_23:
+   \        0x0   0x....'....        DC32     ?_5
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_24:
+   \        0x0   0x....'....        DC32     `AntApiSM_AssignChannel::bMessageInProgress`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_25:
+   \        0x0   0x....'....        DC32     `AntApiSM_AssignChannel::u8CurrentMessageToSend`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_26:
+   \        0x0   0x....'....        DC32     AntApi_apu8AntAssignChannel
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_27:
+   \        0x0   0x....'....        DC32     `AntApiSM_AssignChannel::u8CurrentMesssageId`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_28:
+   \        0x0   0x....'....        DC32     G_stMessageResponse
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_29:
+   \        0x0   0x....'....        DC32     G_au8AntMessageAssign
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_30:
+   \        0x0   0x....'....        DC32     G_au8AntMessageOk
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_31:
+   \        0x0   0x....'....        DC32     AntApiSM_Idle
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable11_32:
+   \        0x0   0x....'....        DC32     G_au8AntMessageFail
+
+   \                                 In section .rodata, align 4
+   \                     ?_0:
+   \        0x0   0x41 0x6E          DC8 41H, 6EH, 74H, 41H, 73H, 73H, 69H, 67H
+   \              0x74 0x41    
+   \              0x73 0x73    
+   \              0x69 0x67    
+   \        0x8   0x6E 0x43          DC8 6EH, 43H, 68H, 61H, 6EH, 6EH, 65H, 6CH
+   \              0x68 0x61    
+   \              0x6E 0x6E    
+   \              0x65 0x6C    
+   \       0x10   0x20 0x65          DC8 20H, 65H, 72H, 72H, 6FH, 72H, 3AH, 20H
+   \              0x72 0x72    
+   \              0x6F 0x72    
+   \              0x3A 0x20    
+   \       0x18   0x63 0x68          DC8 63H, 68H, 61H, 6EH, 6EH, 65H, 6CH, 20H
+   \              0x61 0x6E    
+   \              0x6E 0x65    
+   \              0x6C 0x20    
+   \       0x20   0x69 0x73          DC8 69H, 73H, 20H, 6EH, 6FH, 74H, 20H, 75H
+   \              0x20 0x6E    
+   \              0x6F 0x74    
+   \              0x20 0x75    
+   \       0x28   0x6E 0x63          DC8 6EH, 63H, 6FH, 6EH, 66H, 69H, 67H, 75H
+   \              0x6F 0x6E    
+   \              0x66 0x69    
+   \              0x67 0x75    
+   \       0x30   0x72 0x65          DC8 72H, 65H, 64H, 0AH, 0DH, 0
+   \              0x64 0x0A    
+   \              0x0D 0x00    
+   \       0x36   0x00 0x00          DC8 0, 0
+
+   \                                 In section .rodata, align 4
+   \                     ?_1:
+   \        0x0   0x01 0x41          DC8 1, 65, 0, 0
+   \              0x00 0x00    
+
+   \                                 In section .rodata, align 4
+   \                     ?_2:
+   \        0x0   0x01 0x4B          DC8 1, 75, 0, 0
+   \              0x00 0x00    
+
+   \                                 In section .rodata, align 4
+   \                     ?_3:
+   \        0x0   0x01 0x5B          DC8 1, 91, 0, 0
+   \              0x00 0x00    
+
+   \                                 In section .rodata, align 4
+   \                     ?_4:
+   \        0x0   0x01 0x4C          DC8 1, 76, 0, 0
+   \              0x00 0x00    
+
+   \                                 In section .rodata, align 4
+   \                     ?_5:
+   \        0x0   0x41 0x4E          DC8 "ANT API ready\012\015"
+   \              0x54 0x20    
+   \              0x41 0x50    
+   \              0x49 0x20    
+   \              0x72 0x65    
+   \              0x61 0x64    
+   \              0x79 0x0A    
+   \              0x0D 0x00    
+    808          
+    809          
+    810          #if 0
+    811          /*-------------------------------------------------------------------------------------------------------------------*/
+    812          /* Handle an error */
+    813          static void  AntApiSM_Error(void)          
+    814          {
+    815            
+    816          } /* end AntApiSM_Error() */
+    817          #endif
+    818          
+    819          
+    820          /*-------------------------------------------------------------------------------------------------------------------*/
+    821          /* State to sit in if init failed */
+    822          static void  AntApiSM_FailedInit(void)          
+    823          {
+    824              
+    825          } /* end AntApiSM_FailedInit() */
+    826          
+    827          
+    828          /*--------------------------------------------------------------------------------------------------------------------*/
+    829          /* End of File                                                                                                        */
+    830          /*--------------------------------------------------------------------------------------------------------------------*/
+    831          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   AntApiInitialize
+         8   -> DebugPrintf
+       8   AntApiRunActiveState
+         8   -- Indirect call
+      16   AntApiSM_AssignChannel
+        16   -> AntQueueOutgoingMessage
+        16   -> DebugPrintf
+        16   -> IsTimeUp
+       0   AntApiSM_Idle
+      24   AntAssignChannel
+        24   -> AntCalculateTxChecksum
+        24   -> AntRadioStatusChannel
+        24   -> DebugPrintf
+      16   AntCloseChannelNumber
+        16   -> AntCalculateTxChecksum
+        16   -> AntQueueOutgoingMessage
+      16   AntOpenChannelNumber
+        16   -> AntCalculateTxChecksum
+        16   -> AntQueueOutgoingMessage
+       8   AntOpenScanningChannel
+         8   -> AntCalculateTxChecksum
+         8   -> AntQueueOutgoingMessage
+      16   AntQueueAcknowledgedMessage
+        16   -> AntCalculateTxChecksum
+        16   -> AntQueueOutgoingMessage
+      16   AntQueueBroadcastMessage
+        16   -> AntCalculateTxChecksum
+        16   -> AntQueueOutgoingMessage
+       0   AntRadioStatusChannel
+      16   AntReadAppMessageBuffer
+        16   -> AntDeQueueApplicationMessage
+      16   AntUnassignChannelNumber
+        16   -> AntCalculateTxChecksum
+        16   -> AntQueueOutgoingMessage
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable11
+       4  ??DataTable11_1
+       4  ??DataTable11_10
+       4  ??DataTable11_11
+       4  ??DataTable11_12
+       4  ??DataTable11_13
+       4  ??DataTable11_14
+       4  ??DataTable11_15
+       4  ??DataTable11_16
+       4  ??DataTable11_17
+       4  ??DataTable11_18
+       4  ??DataTable11_19
+       4  ??DataTable11_2
+       4  ??DataTable11_20
+       4  ??DataTable11_21
+       4  ??DataTable11_22
+       4  ??DataTable11_23
+       4  ??DataTable11_24
+       4  ??DataTable11_25
+       4  ??DataTable11_26
+       4  ??DataTable11_27
+       4  ??DataTable11_28
+       4  ??DataTable11_29
+       4  ??DataTable11_3
+       4  ??DataTable11_30
+       4  ??DataTable11_31
+       4  ??DataTable11_32
+       4  ??DataTable11_4
+       4  ??DataTable11_5
+       4  ??DataTable11_6
+       4  ??DataTable11_7
+       4  ??DataTable11_8
+       4  ??DataTable11_9
+      56  ?_0
+       4  ?_1
+       4  ?_2
+       4  ?_3
+       4  ?_4
+      16  ?_5
+      18  AntApiInitialize
+      10  AntApiRunActiveState
+     182  AntApiSM_AssignChannel
+       2  AntApiSM_Idle
+       4  AntApi_StateMachine
+      28  AntApi_apu8AntAssignChannel
+       4  AntApi_u32Timeout
+     360  AntAssignChannel
+      34  AntCloseChannelNumber
+      72  AntOpenChannelNumber
+      38  AntOpenScanningChannel
+      54  AntQueueAcknowledgedMessage
+      54  AntQueueBroadcastMessage
+      66  AntRadioStatusChannel
+     108  AntReadAppMessageBuffer
+      64  AntUnassignChannelNumber
+       8  G_au8AntApiCurrentMessageBytes
+       1  G_eAntApiCurrentMessageClass
+       8  G_sAntApiCurrentMessageExtData
+       4  G_u32AntApiCurrentMessageTimeStamp
+       4  G_u32AntApiFlags
+       1  bMessageInProgress
+       1  u8CurrentMessageToSend
+       1  u8CurrentMesssageId
+
+ 
+    36 bytes in section .bss
+    28 bytes in section .data
+    88 bytes in section .rodata
+ 1 194 bytes in section .text
+ 
+ 1 194 bytes of CODE  memory
+    88 bytes of CONST memory
+    64 bytes of DATA  memory
+
+Errors: none
+Warnings: none

@@ -1,0 +1,676 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         01/Jan/2019  11:19:46
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\interrupts.c
+#    Command line =  
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWD609.tmp
+#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\interrupts.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\inc\c\DLib_Config_Normal.h" -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        -On --use_c++_inline --require_prototypes -I "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\interrupts.lst
+#    Object file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\interrupts.o
+#
+###############################################################################
+
+\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\interrupts.c
+      1          /**********************************************************************************************************************
+      2          File: interrupts.c                                                               
+      3          
+      4          Description:
+      5          Interrupt definitions for use with LED sign controller firmware.
+      6          ***********************************************************************************************************************/
+      7          
+      8          #include "configuration.h"
+
+   \                                 In section .text, align 2, keep-with-next
+   \   static __interwork __softfp void NVIC_DisableIRQ(IRQn_Type)
+   \                     NVIC_DisableIRQ: (+1)
+   \        0x0   0x2201             MOVS     R2,#+1
+   \        0x2   0xF010 0x011F      ANDS     R1,R0,#0x1F
+   \        0x6   0x408A             LSLS     R2,R2,R1
+   \        0x8   0x....             LDR.N    R1,??DataTable5  ;; 0xe000e180
+   \        0xA   0x0003             MOVS     R3,R0
+   \        0xC   0xB25B             SXTB     R3,R3            ;; SignExt  R3,R3,#+24,#+24
+   \        0xE   0x095B             LSRS     R3,R3,#+5
+   \       0x10   0xF841 0x2023      STR      R2,[R1, R3, LSL #+2]
+   \       0x14   0x4770             BX       LR               ;; return
+
+   \                                 In section .text, align 2, keep-with-next
+   \   static __interwork __softfp void NVIC_ClearPendingIRQ(IRQn_Type)
+   \                     NVIC_ClearPendingIRQ: (+1)
+   \        0x0   0x2201             MOVS     R2,#+1
+   \        0x2   0xF010 0x011F      ANDS     R1,R0,#0x1F
+   \        0x6   0x408A             LSLS     R2,R2,R1
+   \        0x8   0x....             LDR.N    R1,??DataTable5_1  ;; 0xe000e280
+   \        0xA   0x0003             MOVS     R3,R0
+   \        0xC   0xB25B             SXTB     R3,R3            ;; SignExt  R3,R3,#+24,#+24
+   \        0xE   0x095B             LSRS     R3,R3,#+5
+   \       0x10   0xF841 0x2023      STR      R2,[R1, R3, LSL #+2]
+   \       0x14   0x4770             BX       LR               ;; return
+      9          
+     10          /***********************************************************************************************************************
+     11          Global variable definitions with scope across entire project.
+     12          All Global variable names shall start with "G_"
+     13          ***********************************************************************************************************************/
+     14          /* New variables */
+     15          
+     16          
+     17          /*--------------------------------------------------------------------------------------------------------------------*/
+     18          /* Existing variables (defined in other files -- should all contain the "extern" keyword)  */
+     19          extern volatile u32 G_u32SystemTime1ms;                            /* From board-specific source file */
+     20          extern volatile u32 G_u32SystemTime1s;                             /* From board-specific source file */
+     21          
+     22          extern volatile u32 G_u32SystemFlags;                              /* From main.c       */
+     23          
+     24          extern volatile bool G_abButtonDebounceActive[TOTAL_BUTTONS];      /* From buttons.c    */
+     25          extern volatile u32 G_au32ButtonDebounceTimeStart[TOTAL_BUTTONS];  /* From buttons.c    */
+     26          
+     27          
+     28          /***********************************************************************************************************************
+     29          Global variable definitions with scope limited to this local application.
+     30          Variables names shall start with "ISR_" and be declared as static.
+     31          ***********************************************************************************************************************/
+     32          
+     33          
+     34          /**********************************************************************************************************************
+     35          Interrupt Service Routine Definitions
+     36          ***********************************************************************************************************************/
+     37          
+     38          /*----------------------------------------------------------------------------------------------------------------------
+     39          Function: InterruptSetup
+     40          
+     41          Description:
+     42          Sets up interrupt priorities in the NVIC and enables required interrupts.
+     43          Note that other interrupt sources may be enabled outside of this function.
+     44          
+     45          Requires:
+     46            - All peripherals for which interrupts are enabled here should be configured
+     47          
+     48          Promises:
+     49            - Interrupt priorities are set 
+     50          */
+
+   \                                 In section .text, align 2, keep-with-next
+     51          void InterruptSetup(void)
+     52          {
+   \                     InterruptSetup: (+1)
+   \        0x0   0xB510             PUSH     {R4,LR}
+   \        0x2   0xB088             SUB      SP,SP,#+32
+     53            u32 au32PriorityConfig[PRIORITY_REGISTERS] = {IPR0_INIT, IPR1_INIT, IPR2_INIT, 
+     54                                                          IPR3_INIT, IPR4_INIT, IPR5_INIT,
+     55                                                          IPR6_INIT, IPR7_INIT};
+   \        0x4   0x4668             MOV      R0,SP
+   \        0x6   0x....             LDR.N    R1,??DataTable5_2
+   \        0x8   0x2220             MOVS     R2,#+32
+   \        0xA   0x....'....        BL       __aeabi_memcpy4
+     56            
+     57            /* Set interrupt priorities */
+     58            for(u8 i = 0; i < PRIORITY_REGISTERS; i++)
+   \        0xE   0x2000             MOVS     R0,#+0
+   \                     ??InterruptSetup_0: (+1)
+   \       0x10   0x0001             MOVS     R1,R0
+   \       0x12   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x14   0x2908             CMP      R1,#+8
+   \       0x16   0xDA0B             BGE.N    ??InterruptSetup_1
+     59            {
+     60              ((u32*)(AT91C_BASE_NVIC->NVIC_IPR))[i] = au32PriorityConfig[i];
+   \       0x18   0x4669             MOV      R1,SP
+   \       0x1A   0x0002             MOVS     R2,R0
+   \       0x1C   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x1E   0xF851 0x1022      LDR      R1,[R1, R2, LSL #+2]
+   \       0x22   0x....             LDR.N    R2,??DataTable5_3  ;; 0xe000e400
+   \       0x24   0x0003             MOVS     R3,R0
+   \       0x26   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x28   0xF842 0x1023      STR      R1,[R2, R3, LSL #+2]
+     61            }
+   \       0x2C   0x1C40             ADDS     R0,R0,#+1
+   \       0x2E   0xE7EF             B.N      ??InterruptSetup_0
+     62            
+     63            /* Disable all interrupts and ensure pending bits are clear */
+     64            for(u8 i = 0; i < SAM3U2_INTERRUPT_SOURCES; i++)
+   \                     ??InterruptSetup_1: (+1)
+   \       0x30   0x2400             MOVS     R4,#+0
+   \                     ??InterruptSetup_2: (+1)
+   \       0x32   0x0020             MOVS     R0,R4
+   \       0x34   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x36   0x281D             CMP      R0,#+29
+   \       0x38   0xDA09             BGE.N    ??InterruptSetup_3
+     65            {
+     66              NVIC_DisableIRQ( (IRQn_Type)i );
+   \       0x3A   0x0020             MOVS     R0,R4
+   \       0x3C   0xB240             SXTB     R0,R0            ;; SignExt  R0,R0,#+24,#+24
+   \       0x3E   0x....'....        BL       NVIC_DisableIRQ
+     67              NVIC_ClearPendingIRQ( (IRQn_Type) i);
+   \       0x42   0x0020             MOVS     R0,R4
+   \       0x44   0xB240             SXTB     R0,R0            ;; SignExt  R0,R0,#+24,#+24
+   \       0x46   0x....'....        BL       NVIC_ClearPendingIRQ
+     68            } 
+   \       0x4A   0x1C64             ADDS     R4,R4,#+1
+   \       0x4C   0xE7F1             B.N      ??InterruptSetup_2
+     69              
+     70          } /* end InterruptSetup(void) */
+   \                     ??InterruptSetup_3: (+1)
+   \       0x4E   0xB008             ADD      SP,SP,#+32
+   \       0x50   0xBD10             POP      {R4,PC}          ;; return
+     71          
+     72          
+     73          /*----------------------------------------------------------------------------------------------------------------------
+     74          ISR: HardFault_Handler
+     75          
+     76          Description:
+     77          A non-maskable (always available) core interrupt that occurs when something extraordinary
+     78          event.  In many cases, this is referencing an invalid address, but can be other events
+     79          of various levels of mystery.  
+     80          
+     81          Requires:
+     82            -
+     83          
+     84          Promises:
+     85            - Red LED is on, all others off
+     86            - Code held
+     87          */
+
+   \                                 In section .text, align 2, keep-with-next
+     88          void HardFault_Handler(void)
+     89          {
+   \                     HardFault_Handler: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+     90          #ifdef EIE1
+     91            LedOff(WHITE);
+     92            LedOff(CYAN);
+     93            LedOff(PURPLE);
+     94            LedOff(ORANGE);
+     95            LedOff(BLUE);
+     96            LedOff(GREEN);
+     97            LedOff(YELLOW);
+     98            LedOn(RED);
+     99          #endif /* EIE1 */
+    100          
+    101            
+    102          #ifdef MPGL2
+    103          #ifdef MPGL2_R01  
+    104            LedOff(BLUE);
+    105            LedOff(GREEN);
+    106            LedOff(YELLOW);
+    107            LedOn(RED);
+    108          #else
+    109            LedOff(BLUE0);
+   \        0x2   0x2008             MOVS     R0,#+8
+   \        0x4   0x....'....        BL       LedOff
+    110            LedOff(BLUE1);
+   \        0x8   0x2009             MOVS     R0,#+9
+   \        0xA   0x....'....        BL       LedOff
+    111            LedOff(BLUE2);
+   \        0xE   0x200A             MOVS     R0,#+10
+   \       0x10   0x....'....        BL       LedOff
+    112            LedOff(BLUE3);
+   \       0x14   0x200B             MOVS     R0,#+11
+   \       0x16   0x....'....        BL       LedOff
+    113            LedOff(GREEN0);
+   \       0x1A   0x2004             MOVS     R0,#+4
+   \       0x1C   0x....'....        BL       LedOff
+    114            LedOff(GREEN1);
+   \       0x20   0x2005             MOVS     R0,#+5
+   \       0x22   0x....'....        BL       LedOff
+    115            LedOff(GREEN2);
+   \       0x26   0x2006             MOVS     R0,#+6
+   \       0x28   0x....'....        BL       LedOff
+    116            LedOff(GREEN3);
+   \       0x2C   0x2007             MOVS     R0,#+7
+   \       0x2E   0x....'....        BL       LedOff
+    117            LedOff(RED1);
+   \       0x32   0x2001             MOVS     R0,#+1
+   \       0x34   0x....'....        BL       LedOff
+    118            LedOff(RED2);
+   \       0x38   0x2002             MOVS     R0,#+2
+   \       0x3A   0x....'....        BL       LedOff
+    119            LedOff(RED3);
+   \       0x3E   0x2003             MOVS     R0,#+3
+   \       0x40   0x....'....        BL       LedOff
+    120            
+    121            LedOn(RED0);
+   \       0x44   0x2000             MOVS     R0,#+0
+   \       0x46   0x....'....        BL       LedOn
+    122          #endif /* MPGL2_R01 */
+    123          #endif /* MPGL2 */
+    124          
+    125            while(1);  /* !!!!! update to log and/or report error and/or restart */
+   \                     ??HardFault_Handler_0: (+1)
+   \       0x4A   0xE7FE             B.N      ??HardFault_Handler_0
+    126            
+    127          } /* end HardFault_Handler() */
+    128          
+    129          
+    130          /*----------------------------------------------------------------------------------------------------------------------
+    131          ISR: SysTick_Handler
+    132          
+    133          Description:
+    134          Updates the global ms timer.  This interrupt is always enabled and running in 
+    135          the system and is essential for system timing and sleep wakeup.
+    136          This ISR should be as fast as possible!
+    137          
+    138          Requires:
+    139          
+    140          Promises:
+    141            - G_u32SystemTime1ms counter is incremented by 1
+    142            - System tick interrupt pending flag is cleared
+    143          */
+
+   \                                 In section .text, align 2, keep-with-next
+    144          void SysTick_Handler(void)
+    145          {
+    146            static u16 u16SecondCounter = 1000;
+    147            
+    148            /* Update the 1ms system timer and clear sleep flag */
+    149            G_u32SystemTime1ms++;
+   \                     SysTick_Handler: (+1)
+   \        0x0   0x....             LDR.N    R0,??DataTable5_4
+   \        0x2   0x6801             LDR      R1,[R0, #+0]
+   \        0x4   0x1C49             ADDS     R1,R1,#+1
+   \        0x6   0x6001             STR      R1,[R0, #+0]
+    150            G_u32SystemFlags &= ~_SYSTEM_SLEEPING;
+   \        0x8   0x....             LDR.N    R0,??DataTable5_5
+   \        0xA   0x6801             LDR      R1,[R0, #+0]
+   \        0xC   0xF031 0x4180      BICS     R1,R1,#0x40000000
+   \       0x10   0x6001             STR      R1,[R0, #+0]
+    151          
+    152            /* Update the 1 second timer if required */
+    153            if(--u16SecondCounter == 0)
+   \       0x12   0x....             LDR.N    R1,??DataTable5_6
+   \       0x14   0x8808             LDRH     R0,[R1, #+0]
+   \       0x16   0x1E40             SUBS     R0,R0,#+1
+   \       0x18   0x8008             STRH     R0,[R1, #+0]
+   \       0x1A   0x8808             LDRH     R0,[R1, #+0]
+   \       0x1C   0x2800             CMP      R0,#+0
+   \       0x1E   0xD106             BNE.N    ??SysTick_Handler_0
+    154            {
+    155              u16SecondCounter = 1000;
+   \       0x20   0xF44F 0x707A      MOV      R0,#+1000
+   \       0x24   0x8008             STRH     R0,[R1, #+0]
+    156              G_u32SystemTime1s++;
+   \       0x26   0x....             LDR.N    R0,??DataTable5_7
+   \       0x28   0x6801             LDR      R1,[R0, #+0]
+   \       0x2A   0x1C49             ADDS     R1,R1,#+1
+   \       0x2C   0x6001             STR      R1,[R0, #+0]
+    157            }
+    158              
+    159          } /* end SysTickHandler(void) */
+   \                     ??SysTick_Handler_0: (+1)
+   \       0x2E   0x4770             BX       LR               ;; return
+
+   \                                 In section .data, align 2
+   \                     `SysTick_Handler::u16SecondCounter`:
+   \        0x0   0x03E8             DC16 1000
+    160          
+    161          
+    162          /*----------------------------------------------------------------------------------------------------------------------
+    163          ISR: PIOA_IrqHandler
+    164          
+    165          Description:
+    166          Parses the PORTA GPIO interrupts and handles them appropriately.  Note that all PORTA GPIO
+    167          interrupts are ORed and will trigger this handler, therefore any expected interrupt that is enabled
+    168          must be parsed out and handled.
+    169          
+    170          Requires:
+    171            - The button IO bits match the interrupt flag locations
+    172          
+    173          Promises:
+    174            - Buttons: sets the active button's debouncing flag, clears the interrupt
+    175              and initializes the button's debounce timer.
+    176          */
+
+   \                                 In section .text, align 2, keep-with-next
+    177          void PIOA_IrqHandler(void)
+    178          {
+   \                     PIOA_IrqHandler: (+1)
+   \        0x0   0xB5F8             PUSH     {R3-R7,LR}
+    179            u32 u32GPIOInterruptSources;
+    180            u32 u32ButtonInterrupts;
+    181            u32 u32CurrentButtonLocation;
+    182          
+    183            /* Grab a snapshot of the current PORTA status flags (clears all flags) */
+    184            u32GPIOInterruptSources  = AT91C_BASE_PIOA->PIO_ISR;
+   \        0x2   0x....             LDR.N    R0,??DataTable5_8  ;; 0x400e0c4c
+   \        0x4   0x6806             LDR      R6,[R0, #+0]
+    185          
+    186            /******** DO NOT set a breakpoint before this line of the ISR because the debugger
+    187            will "read" PIO_ISR and clear the flags. ********/
+    188            
+    189            /* Examine button interrupts */
+    190            u32ButtonInterrupts = u32GPIOInterruptSources & GPIOA_BUTTONS;
+   \        0x6   0xF416 0x3400      ANDS     R4,R6,#0x20000
+    191            
+    192            /* Check if any port A buttons interrupted */
+    193            if(u32ButtonInterrupts)
+   \        0xA   0x2C00             CMP      R4,#+0
+   \        0xC   0xD01E             BEQ.N    ??PIOA_IrqHandler_0
+    194            {
+    195              /* Parse through all the buttons to find those that have interrupted */
+    196              for(u8 i = 0; i < TOTAL_BUTTONS; i++)
+   \        0xE   0x2700             MOVS     R7,#+0
+   \                     ??PIOA_IrqHandler_1: (+1)
+   \       0x10   0x0038             MOVS     R0,R7
+   \       0x12   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x14   0x2802             CMP      R0,#+2
+   \       0x16   0xDA19             BGE.N    ??PIOA_IrqHandler_0
+    197              {
+    198                /* Get the bit position of the current button and mask against set interrupts */  
+    199                u32CurrentButtonLocation = GetButtonBitLocation(i, BUTTON_PORTA);
+   \       0x18   0x2100             MOVS     R1,#+0
+   \       0x1A   0x0038             MOVS     R0,R7
+   \       0x1C   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x1E   0x....'....        BL       GetButtonBitLocation
+   \       0x22   0x0005             MOVS     R5,R0
+    200                if(u32ButtonInterrupts & u32CurrentButtonLocation)
+   \       0x24   0x422C             TST      R4,R5
+   \       0x26   0xD00F             BEQ.N    ??PIOA_IrqHandler_2
+    201                {
+    202                  /* Button has interrupted: disable the button's interrupt and start the button's debounce timer */ 
+    203                  AT91C_BASE_PIOA->PIO_IDR |= u32CurrentButtonLocation;
+   \       0x28   0x....             LDR.N    R0,??DataTable5_9  ;; 0x400e0c44
+   \       0x2A   0x6801             LDR      R1,[R0, #+0]
+   \       0x2C   0x4329             ORRS     R1,R5,R1
+   \       0x2E   0x6001             STR      R1,[R0, #+0]
+    204          
+    205                  /* Initialize the button's debouncing information */
+    206                  G_abButtonDebounceActive[i] = TRUE;
+   \       0x30   0x2001             MOVS     R0,#+1
+   \       0x32   0x....             LDR.N    R1,??DataTable5_10
+   \       0x34   0x003A             MOVS     R2,R7
+   \       0x36   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x38   0x5488             STRB     R0,[R1, R2]
+    207                  G_au32ButtonDebounceTimeStart[i] = G_u32SystemTime1ms;
+   \       0x3A   0x....             LDR.N    R0,??DataTable5_4
+   \       0x3C   0x6800             LDR      R0,[R0, #+0]
+   \       0x3E   0x....             LDR.N    R1,??DataTable5_11
+   \       0x40   0x003A             MOVS     R2,R7
+   \       0x42   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x44   0xF841 0x0022      STR      R0,[R1, R2, LSL #+2]
+    208                }
+    209              }
+   \                     ??PIOA_IrqHandler_2: (+1)
+   \       0x48   0x1C7F             ADDS     R7,R7,#+1
+   \       0x4A   0xE7E1             B.N      ??PIOA_IrqHandler_1
+    210            } /* end button interrupt checking */
+    211            
+    212            /* Clear the PIOA pending flag and exit */
+    213            NVIC_ClearPendingIRQ(IRQn_PIOA);
+   \                     ??PIOA_IrqHandler_0: (+1)
+   \       0x4C   0x200A             MOVS     R0,#+10
+   \       0x4E   0x....'....        BL       NVIC_ClearPendingIRQ
+    214            
+    215          } /* end PIOA_IrqHandler() */
+   \       0x52   0xBDF1             POP      {R0,R4-R7,PC}    ;; return
+    216          
+    217          
+    218          /*----------------------------------------------------------------------------------------------------------------------
+    219          ISR: PIOB_IrqHandler
+    220          
+    221          Description:
+    222          Parses the PORTB GPIO interrupts and handles them appropriately.  Note that all PORTB GPIO
+    223          interrupts are ORed and will trigger this handler, therefore any expected interrupt that is enabled
+    224          must be parsed out and handled.
+    225          
+    226          Requires:
+    227            - The button IO bits match the interrupt flag locations
+    228          
+    229          Promises:
+    230            - Buttons: sets the active button's debouncing flag, clears the interrupt
+    231              and initializes the button's debounce timer.
+    232          */
+
+   \                                 In section .text, align 2, keep-with-next
+    233          void PIOB_IrqHandler(void)
+    234          {
+   \                     PIOB_IrqHandler: (+1)
+   \        0x0   0xB5F8             PUSH     {R3-R7,LR}
+    235            u32 u32GPIOInterruptSources;
+    236            u32 u32ButtonInterrupts;
+    237            u32 u32CurrentButtonLocation;
+    238          
+    239            /* Grab a snapshot of the current PORTB status flags (clears all flags) */
+    240            u32GPIOInterruptSources  = AT91C_BASE_PIOB->PIO_ISR;
+   \        0x2   0x....             LDR.N    R0,??DataTable5_12  ;; 0x400e0e4c
+   \        0x4   0x6806             LDR      R6,[R0, #+0]
+    241          
+    242            /******** DO NOT set a breakpoint before this line of the ISR because the debugger
+    243            will "read" PIO_ISR and clear the flags. ********/
+    244            
+    245            /* Parse interrupts */
+    246            u32ButtonInterrupts = u32GPIOInterruptSources & GPIOB_BUTTONS;
+   \        0x6   0xF016 0x0401      ANDS     R4,R6,#0x1
+    247            
+    248            /* Check if any port B buttons interrupted */
+    249            if(u32ButtonInterrupts)
+   \        0xA   0x2C00             CMP      R4,#+0
+   \        0xC   0xD01E             BEQ.N    ??PIOB_IrqHandler_0
+    250            {
+    251              /* Parse through all the buttons to find those that have interrupted */
+    252              for(u8 i = 0; i < TOTAL_BUTTONS; i++)
+   \        0xE   0x2700             MOVS     R7,#+0
+   \                     ??PIOB_IrqHandler_1: (+1)
+   \       0x10   0x0038             MOVS     R0,R7
+   \       0x12   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x14   0x2802             CMP      R0,#+2
+   \       0x16   0xDA19             BGE.N    ??PIOB_IrqHandler_0
+    253              {
+    254                /* Get the bit position of the current button and mask against set interrupts */  
+    255                u32CurrentButtonLocation = GetButtonBitLocation(i, BUTTON_PORTB);
+   \       0x18   0x2180             MOVS     R1,#+128
+   \       0x1A   0x0038             MOVS     R0,R7
+   \       0x1C   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x1E   0x....'....        BL       GetButtonBitLocation
+   \       0x22   0x0005             MOVS     R5,R0
+    256                if(u32ButtonInterrupts & u32CurrentButtonLocation)
+   \       0x24   0x422C             TST      R4,R5
+   \       0x26   0xD00F             BEQ.N    ??PIOB_IrqHandler_2
+    257                {
+    258                  /* Button has interrupted: disable the button's interrupt and start the button's debounce timer */ 
+    259                  AT91C_BASE_PIOB->PIO_IDR |= u32CurrentButtonLocation;
+   \       0x28   0x....             LDR.N    R0,??DataTable5_13  ;; 0x400e0e44
+   \       0x2A   0x6801             LDR      R1,[R0, #+0]
+   \       0x2C   0x4329             ORRS     R1,R5,R1
+   \       0x2E   0x6001             STR      R1,[R0, #+0]
+    260          
+    261                  /* Initialize the button's debouncing information */
+    262                  G_abButtonDebounceActive[i] = TRUE;
+   \       0x30   0x2001             MOVS     R0,#+1
+   \       0x32   0x....             LDR.N    R1,??DataTable5_10
+   \       0x34   0x003A             MOVS     R2,R7
+   \       0x36   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x38   0x5488             STRB     R0,[R1, R2]
+    263                  G_au32ButtonDebounceTimeStart[i] = G_u32SystemTime1ms;
+   \       0x3A   0x....             LDR.N    R0,??DataTable5_4
+   \       0x3C   0x6800             LDR      R0,[R0, #+0]
+   \       0x3E   0x....             LDR.N    R1,??DataTable5_11
+   \       0x40   0x003A             MOVS     R2,R7
+   \       0x42   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x44   0xF841 0x0022      STR      R0,[R1, R2, LSL #+2]
+    264                }
+    265              }
+   \                     ??PIOB_IrqHandler_2: (+1)
+   \       0x48   0x1C7F             ADDS     R7,R7,#+1
+   \       0x4A   0xE7E1             B.N      ??PIOB_IrqHandler_1
+    266            } /* end button interrupt checking */
+    267          
+    268            /* Clear the PIOB pending flag and exit */
+    269            //NVIC->ICPR[0] = (1 << IRQn_PIOB);
+    270            NVIC_ClearPendingIRQ(IRQn_PIOB);
+   \                     ??PIOB_IrqHandler_0: (+1)
+   \       0x4C   0x200B             MOVS     R0,#+11
+   \       0x4E   0x....'....        BL       NVIC_ClearPendingIRQ
+    271            
+    272          } /* end PIOB_IrqHandler() */
+   \       0x52   0xBDF1             POP      {R0,R4-R7,PC}    ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5:
+   \        0x0   0xE000'E180        DC32     0xe000e180
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_1:
+   \        0x0   0xE000'E280        DC32     0xe000e280
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_2:
+   \        0x0   0x....'....        DC32     ?_0
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_3:
+   \        0x0   0xE000'E400        DC32     0xe000e400
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_4:
+   \        0x0   0x....'....        DC32     G_u32SystemTime1ms
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_5:
+   \        0x0   0x....'....        DC32     G_u32SystemFlags
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_6:
+   \        0x0   0x....'....        DC32     `SysTick_Handler::u16SecondCounter`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_7:
+   \        0x0   0x....'....        DC32     G_u32SystemTime1s
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_8:
+   \        0x0   0x400E'0C4C        DC32     0x400e0c4c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_9:
+   \        0x0   0x400E'0C44        DC32     0x400e0c44
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_10:
+   \        0x0   0x....'....        DC32     G_abButtonDebounceActive
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_11:
+   \        0x0   0x....'....        DC32     G_au32ButtonDebounceTimeStart
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_12:
+   \        0x0   0x400E'0E4C        DC32     0x400e0e4c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable5_13:
+   \        0x0   0x400E'0E44        DC32     0x400e0e44
+
+   \                                 In section .rodata, align 4
+   \                     ?_0:
+   \        0x0   0xF0F0'00F0        DC32 4042260720, 4042321920, 1347481840, 4029689936, 4028690672
+   \              0xF0F0'F000  
+   \              0x5050'F0F0  
+   \              0xF030'3050  
+   \              0xF020'F0F0  
+   \       0x14   0x4000'F020        DC32 1073803296, 4042321984, 4336
+   \              0xF0F0'F040  
+   \              0x0000'10F0  
+    273          
+    274          
+    275          /*--------------------------------------------------------------------------------------------------------------------*/
+    276          /* End of File */
+    277          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   HardFault_Handler
+         8   -> LedOff
+         8   -> LedOn
+      40   InterruptSetup
+        40   -> NVIC_ClearPendingIRQ
+        40   -> NVIC_DisableIRQ
+        40   -> __aeabi_memcpy4
+       0   NVIC_ClearPendingIRQ
+       0   NVIC_DisableIRQ
+      24   PIOA_IrqHandler
+        24   -> GetButtonBitLocation
+        24   -> NVIC_ClearPendingIRQ
+      24   PIOB_IrqHandler
+        24   -> GetButtonBitLocation
+        24   -> NVIC_ClearPendingIRQ
+       0   SysTick_Handler
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable5
+       4  ??DataTable5_1
+       4  ??DataTable5_10
+       4  ??DataTable5_11
+       4  ??DataTable5_12
+       4  ??DataTable5_13
+       4  ??DataTable5_2
+       4  ??DataTable5_3
+       4  ??DataTable5_4
+       4  ??DataTable5_5
+       4  ??DataTable5_6
+       4  ??DataTable5_7
+       4  ??DataTable5_8
+       4  ??DataTable5_9
+      32  ?_0
+      76  HardFault_Handler
+      82  InterruptSetup
+      22  NVIC_ClearPendingIRQ
+      22  NVIC_DisableIRQ
+      84  PIOA_IrqHandler
+      84  PIOB_IrqHandler
+      48  SysTick_Handler
+       2  u16SecondCounter
+
+ 
+   2 bytes in section .data
+  32 bytes in section .rodata
+ 474 bytes in section .text
+ 
+ 474 bytes of CODE  memory
+  32 bytes of CONST memory
+   2 bytes of DATA  memory
+
+Errors: none
+Warnings: none

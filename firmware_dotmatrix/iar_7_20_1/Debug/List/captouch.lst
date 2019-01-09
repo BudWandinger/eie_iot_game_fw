@@ -1,0 +1,1109 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         01/Jan/2019  11:19:41
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\drivers\captouch.c
+#    Command line =  
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWC135.tmp
+#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\drivers\captouch.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\inc\c\DLib_Config_Normal.h" -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        -On --use_c++_inline --require_prototypes -I "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\captouch.lst
+#    Object file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\captouch.o
+#
+###############################################################################
+
+\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\drivers\captouch.c
+      1          /***********************************************************************************************************************
+      2          File: captouch.c
+      3          
+      4          Description:
+      5          Driver for Capacitive Touch sensors. This code supports the horizontal slider on the MPG2 board
+      6          and any future buttons/sliders that may be added.
+      7          
+      8          ------------------------------------------------------------------------------------------------------------------------
+      9          API:
+     10          void CapTouchOn(void)
+     11          Activates the Captouch sensors
+     12          
+     13          void CapTouchOff(void)
+     14          De-activates the Captouch sensors
+     15          
+     16          u8 CaptouchCurrentHSlidePosition(void)
+     17          Returns the current horizontal slider value where "0" is the furthest left and "255" is the furthest right on the slider.
+     18          
+     19          u8 CaptouchCurrentVSlidePosition(void)
+     20          Returns the current vertical slider value where "0" is the location near the bottom of the board and "255" is the top.
+     21          
+     22          
+     23          ------------------------------------------------------------------------------------------------------------------------
+     24          DISCLAIMER: THIS CODE IS PROVIDED WITHOUT ANY WARRANTY OR GUARANTEES.  USERS MAY
+     25          USE THIS CODE FOR DEVELOPMENT AND EXAMPLE PURPOSES ONLY.  ENGENUICS TECHNOLOGIES
+     26          INCORPORATED IS NOT RESPONSIBLE FOR ANY ERRORS, OMISSIONS, OR DAMAGES THAT COULD
+     27          RESULT FROM USING THIS FIRMWARE IN WHOLE OR IN PART.
+     28          ***********************************************************************************************************************/
+     29          
+     30          #include "configuration.h"
+     31          #include "libqtouch.h"
+     32          
+     33          
+     34          #define GET_SENSOR_STATE(SENSOR_NUMBER) (qt_measure_data.qt_touch_status.sensor_states[(SENSOR_NUMBER/8)] & (1 << (SENSOR_NUMBER % 8)))
+     35          #define GET_ROTOR_SLIDER_POSITION(ROTOR_SLIDER_NUMBER) qt_measure_data.qt_touch_status.rotor_slider_values[ROTOR_SLIDER_NUMBER]
+     36          
+     37          
+     38          /***********************************************************************************************************************
+     39          Global variable definitions with scope across entire project.
+     40          All Global variable names shall start with "G_CapTouch"
+     41          ***********************************************************************************************************************/
+     42          
+     43          
+     44          /*--------------------------------------------------------------------------------------------------------------------*/
+     45          /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
+     46          extern volatile u32 G_u32SystemFlags;                  /* From main.c */
+     47          extern volatile u32 G_u32ApplicationFlags;             /* From main.c */
+     48          
+     49          extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
+     50          extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
+     51          
+     52          /* measurement data */
+     53          extern qt_touch_lib_measure_data_t qt_measure_data;
+     54          
+     55          extern u32 G_u32DebugFlags;                            /* From debug.c */
+     56          
+     57          
+     58          /***********************************************************************************************************************
+     59          Global variable definitions with scope limited to this local application.
+     60          Variable names shall start with "CapTouch_" and be declared as static.
+     61          ***********************************************************************************************************************/
+     62          /* New variables */
+
+   \                                 In section .bss, align 4
+     63          fnCode_type CapTouch_pfnStateMachine;                  /* The state machine function pointer */
+   \                     CapTouch_pfnStateMachine:
+   \        0x0                      DS8 4
+     64          
+
+   \                                 In section .bss, align 4
+     65          u32 CapTouch_u32Timer;                                 /* Measurement timer */        
+   \                     CapTouch_u32Timer:
+   \        0x0                      DS8 4
+
+   \                                 In section .bss, align 1
+     66          u8 CapTouch_u8CurrentHSliderValue;                     /* Current horizontal slider value */
+   \                     CapTouch_u8CurrentHSliderValue:
+   \        0x0                      DS8 1
+
+   \                                 In section .bss, align 1
+     67          u8 CapTouch_u8CurrentVSliderValue;                     /* Current vertical slider value */
+   \                     CapTouch_u8CurrentVSliderValue:
+   \        0x0                      DS8 1
+     68          
+     69          
+     70          /***********************************************************************************************************************
+     71          Function Definitions
+     72          ***********************************************************************************************************************/
+     73          
+     74          /*--------------------------------------------------------------------------------------------------------------------*/
+     75          /* Public functions                                                                                                   */
+     76          /*--------------------------------------------------------------------------------------------------------------------*/
+     77          
+     78          /*----------------------------------------------------------------------------------------------------------------------
+     79          Function: CapTouchOn
+     80          
+     81          Description:
+     82          Sets the state machine to "Measuring" so that the captouch functionality is active.  This is fairly processor intensive.
+     83          
+     84          Requires:
+     85          
+     86          Promises:
+     87            - Horizontal CapTouch sensor is active
+     88          
+     89          */
+
+   \                                 In section .text, align 2, keep-with-next
+     90          void CapTouchOn(void)
+     91          {
+     92            CapTouch_pfnStateMachine = CapTouchSM_Measure;
+   \                     CapTouchOn: (+1)
+   \        0x0   0x....'....        ADR.W    R0,CapTouchSM_Measure
+   \        0x4   0x....             LDR.N    R1,??DataTable10
+   \        0x6   0x6008             STR      R0,[R1, #+0]
+     93            
+     94          } /* end CapTouchOn() */
+   \        0x8   0x4770             BX       LR               ;; return
+     95          
+     96          
+     97          /*----------------------------------------------------------------------------------------------------------------------
+     98          Function: CapTouchOff
+     99          
+    100          Description:
+    101          Sets the state machine to "Idle" so that the captouch functionality is disabled.
+    102          
+    103          Requires:
+    104          
+    105          Promises:
+    106            - Horizontal CapTouch sensor is not active
+    107          */
+
+   \                                 In section .text, align 2, keep-with-next
+    108          void CapTouchOff(void)
+    109          {
+    110            CapTouch_pfnStateMachine = CapTouchSM_Idle;
+   \                     CapTouchOff: (+1)
+   \        0x0   0x....'....        ADR.W    R0,CapTouchSM_Idle
+   \        0x4   0x....             LDR.N    R1,??DataTable10
+   \        0x6   0x6008             STR      R0,[R1, #+0]
+    111            CapTouch_u8CurrentHSliderValue = 0;
+   \        0x8   0x2000             MOVS     R0,#+0
+   \        0xA   0x....             LDR.N    R1,??DataTable10_1
+   \        0xC   0x7008             STRB     R0,[R1, #+0]
+    112            CapTouch_u8CurrentVSliderValue = 0;
+   \        0xE   0x2000             MOVS     R0,#+0
+   \       0x10   0x....             LDR.N    R1,??DataTable10_2
+   \       0x12   0x7008             STRB     R0,[R1, #+0]
+    113            
+    114          } /* end CapTouchOff() */
+   \       0x14   0x4770             BX       LR               ;; return
+    115          
+    116          
+    117          /*----------------------------------------------------------------------------------------------------------------------
+    118          Function: CaptouchCurrentHSlidePosition
+    119          
+    120          Description:
+    121          Returns the current slider count (0-254)
+    122          
+    123          Requires:
+    124          
+    125          Promises:
+    126            - Returns the current slider count (0-254)
+    127          */
+
+   \                                 In section .text, align 2, keep-with-next
+    128          u8 CaptouchCurrentHSlidePosition(void)
+    129          {
+    130            return CapTouch_u8CurrentHSliderValue;
+   \                     CaptouchCurrentHSlidePosition: (+1)
+   \        0x0   0x....             LDR.N    R0,??DataTable10_1
+   \        0x2   0x7800             LDRB     R0,[R0, #+0]
+   \        0x4   0x4770             BX       LR               ;; return
+    131            
+    132          } /* end CaptouchCurrentHSlidePosition() */
+    133          
+    134          
+    135          /*----------------------------------------------------------------------------------------------------------------------
+    136          Function: CaptouchCurrentVSlidePosition
+    137          
+    138          Description:
+    139          Returns the current slider count (0-254)
+    140          
+    141          Requires:
+    142          
+    143          Promises:
+    144            - Returns the current slider count (0-254)
+    145          */
+
+   \                                 In section .text, align 2, keep-with-next
+    146          u8 CaptouchCurrentVSlidePosition(void)
+    147          {
+    148            return CapTouch_u8CurrentVSliderValue;
+   \                     CaptouchCurrentVSlidePosition: (+1)
+   \        0x0   0x....             LDR.N    R0,??DataTable10_2
+   \        0x2   0x7800             LDRB     R0,[R0, #+0]
+   \        0x4   0x4770             BX       LR               ;; return
+    149            
+    150          } /* end CaptouchCurrentVSlidePosition() */
+    151          
+    152          
+    153          /*--------------------------------------------------------------------------------------------------------------------*/
+    154          /* Protected functions                                                                                                */
+    155          /*--------------------------------------------------------------------------------------------------------------------*/
+    156          
+    157          /*----------------------------------------------------------------------------------------------------------------------
+    158          Function: CapTouchInitialize
+    159          
+    160          Description:
+    161          This function initializes the module. The library version is checked, the
+    162          buttons being used are initialized, and the configuration parameters are set.
+    163          
+    164          The qt_xxx functions are part of the QTouch API.
+    165          
+    166          Requires:
+    167          
+    168          Promises:
+    169            - Returns ERROR if the library doesn't match what's expected, else SUCCESS
+    170          
+    171          */
+
+   \                                 In section .text, align 2, keep-with-next
+    172          ErrorStatus CapTouchInitialize(void)
+    173          {
+   \                     CapTouchInitialize: (+1)
+   \        0x0   0xB5E0             PUSH     {R5-R7,LR}
+    174          	/* Ensure library is correct */
+    175          	if (CapTouchVerify() != SUCCESS)
+   \        0x2   0x....'....        BL       CapTouchVerify
+   \        0x6   0x2801             CMP      R0,#+1
+   \        0x8   0xD001             BEQ.N    ??CapTouchInitialize_0
+    176          	{
+    177          		return (ERROR);
+   \        0xA   0x2000             MOVS     R0,#+0
+   \        0xC   0xE037             B.N      ??CapTouchInitialize_1
+    178          	}
+    179          
+    180          	/* Reset touch sensing */
+    181          	qt_reset_sensing();
+   \                     ??CapTouchInitialize_0: (+1)
+   \        0xE   0x....'....        BL       qt_reset_sensing
+    182          
+    183            /* Configure the GPIO used for the Horizontal Slider */
+    184            qt_enable_slider( CHANNEL_0, CHANNEL_2, NO_AKS_GROUP, 50u, HYST_50, RES_8_BIT, 0u  );
+   \       0x12   0x2000             MOVS     R0,#+0
+   \       0x14   0x9002             STR      R0,[SP, #+8]
+   \       0x16   0x2007             MOVS     R0,#+7
+   \       0x18   0x9001             STR      R0,[SP, #+4]
+   \       0x1A   0x2000             MOVS     R0,#+0
+   \       0x1C   0x9000             STR      R0,[SP, #+0]
+   \       0x1E   0x2332             MOVS     R3,#+50
+   \       0x20   0x2200             MOVS     R2,#+0
+   \       0x22   0x2102             MOVS     R1,#+2
+   \       0x24   0x2000             MOVS     R0,#+0
+   \       0x26   0x....'....        BL       qt_enable_slider
+    185          
+    186            /* Configure the GPIO used for the Vertical Slider */
+    187            qt_enable_slider( CHANNEL_19, CHANNEL_21, NO_AKS_GROUP, 50u, HYST_50, RES_8_BIT, 0u  );
+   \       0x2A   0x2000             MOVS     R0,#+0
+   \       0x2C   0x9002             STR      R0,[SP, #+8]
+   \       0x2E   0x2007             MOVS     R0,#+7
+   \       0x30   0x9001             STR      R0,[SP, #+4]
+   \       0x32   0x2000             MOVS     R0,#+0
+   \       0x34   0x9000             STR      R0,[SP, #+0]
+   \       0x36   0x2332             MOVS     R3,#+50
+   \       0x38   0x2200             MOVS     R2,#+0
+   \       0x3A   0x2115             MOVS     R1,#+21
+   \       0x3C   0x2013             MOVS     R0,#+19
+   \       0x3E   0x....'....        BL       qt_enable_slider
+    188          
+    189            /* Initialise and calibrate touch sensing (all sensors must be enabled first)*/
+    190            qt_init_sensing();
+   \       0x42   0x....             LDR.N    R1,??DataTable10_3
+   \       0x44   0x....             LDR.N    R0,??DataTable10_4
+   \       0x46   0x....'....        BL       qt_init_sensing_with_burst
+    191            qt_calibrate_sensing();
+   \       0x4A   0x....'....        BL       qt_calibrate_sensing
+    192          
+    193            /* Set the parameters like recalibration threshold, Max_On_Duration etc .
+    194            These are user configurable */
+    195            CapTouchSetParameters( );
+   \       0x4E   0x....'....        BL       CapTouchSetParameters
+    196          
+    197            /* Address to pass address of user functions */
+    198            /* This function is called after the library has made capacitive measurements,
+    199            but before it has processed them. The user can use this hook to apply filter
+    200            functions to the measured signal values.(Possibly to fix sensor layout faults) */
+    201            qt_filter_callback = 0;
+   \       0x52   0x2000             MOVS     R0,#+0
+   \       0x54   0x....             LDR.N    R1,??DataTable10_5
+   \       0x56   0x6008             STR      R0,[R1, #+0]
+    202          
+    203            CapTouch_u32Timer = 0;
+   \       0x58   0x2000             MOVS     R0,#+0
+   \       0x5A   0x....             LDR.N    R1,??DataTable10_6
+   \       0x5C   0x6008             STR      R0,[R1, #+0]
+    204            CapTouch_u8CurrentHSliderValue = 0;
+   \       0x5E   0x2000             MOVS     R0,#+0
+   \       0x60   0x....             LDR.N    R1,??DataTable10_1
+   \       0x62   0x7008             STRB     R0,[R1, #+0]
+    205            CapTouch_u8CurrentVSliderValue = 0;
+   \       0x64   0x2000             MOVS     R0,#+0
+   \       0x66   0x....             LDR.N    R1,??DataTable10_2
+   \       0x68   0x7008             STRB     R0,[R1, #+0]
+    206            
+    207            CapTouch_pfnStateMachine = CapTouchSM_Idle;
+   \       0x6A   0x....'....        ADR.W    R0,CapTouchSM_Idle
+   \       0x6E   0x....             LDR.N    R1,??DataTable10
+   \       0x70   0x6008             STR      R0,[R1, #+0]
+    208            G_u32ApplicationFlags |= _APPLICATION_FLAGS_CAPTOUCH;
+   \       0x72   0x....             LDR.N    R0,??DataTable10_7
+   \       0x74   0x6801             LDR      R1,[R0, #+0]
+   \       0x76   0xF051 0x0180      ORRS     R1,R1,#0x80
+   \       0x7A   0x6001             STR      R1,[R0, #+0]
+    209            return (SUCCESS);
+   \       0x7C   0x2001             MOVS     R0,#+1
+   \                     ??CapTouchInitialize_1: (+1)
+   \       0x7E   0xBD0E             POP      {R1-R3,PC}       ;; return
+    210          }
+    211          
+    212          
+    213          /*----------------------------------------------------------------------------------------------------------------------
+    214          Function CapTouchRunActiveState()
+    215          
+    216          Description:
+    217          Selects and runs one iteration of the current state in the state machine.
+    218          All state machines have a TOTAL of 1ms to execute, so on average n state machines
+    219          may take 1ms / n to execute.
+    220          
+    221          Requires:
+    222            - State machine function pointer points at current state
+    223          
+    224          Promises:
+    225            - Calls the function to pointed by the state machine function pointer
+    226          */
+
+   \                                 In section .text, align 2, keep-with-next
+    227          void CapTouchRunActiveState(void)
+    228          {
+   \                     CapTouchRunActiveState: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    229            CapTouch_pfnStateMachine();
+   \        0x2   0x....             LDR.N    R0,??DataTable10
+   \        0x4   0x6800             LDR      R0,[R0, #+0]
+   \        0x6   0x4780             BLX      R0
+    230          
+    231          } /* end CapTouchRunActiveState */
+   \        0x8   0xBD01             POP      {R0,PC}          ;; return
+    232          
+    233          
+    234          /*----------------------------------------------------------------------------------------------------------------------
+    235          Function: CapTouchVerify
+    236          
+    237          Description:
+    238          This function verifies the captouch library that's being used and makes sure
+    239          the capabilities (and version) match what's expected and required.
+    240          
+    241          Requires:
+    242          
+    243          Promises:
+    244            - Returns ERROR if the library doesn't match what's expected, else SUCCESS
+    245          
+    246          */
+
+   \                                 In section .text, align 2, keep-with-next
+    247          ErrorStatus CapTouchVerify(void)
+    248          {
+   \                     CapTouchVerify: (+1)
+   \        0x0   0xB51C             PUSH     {R2-R4,LR}
+    249              u32 u32Error = 0;
+   \        0x2   0x2400             MOVS     R4,#+0
+    250          
+    251              qt_lib_siginfo_t plib_sig;
+    252          
+    253              /* Read library signature info */
+    254              qt_measure_sensors( 0 );
+   \        0x4   0x2000             MOVS     R0,#+0
+   \        0x6   0x....'....        BL       qt_measure_sensors
+    255              qt_get_library_sig(&plib_sig);
+   \        0xA   0x4668             MOV      R0,SP
+   \        0xC   0x....'....        BL       qt_get_library_sig
+    256          
+    257              /* QTouch or Matrix */
+    258              if((plib_sig.lib_sig_lword & 0x01) == 0)
+   \       0x10   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x14   0x07C0             LSLS     R0,R0,#+31
+   \       0x16   0xD403             BMI.N    ??CapTouchVerify_0
+    259              {
+    260                  DebugPrintf("Library QTouch ");
+   \       0x18   0x....             LDR.N    R0,??DataTable10_8
+   \       0x1A   0x....'....        BL       DebugPrintf
+   \       0x1E   0xE003             B.N      ??CapTouchVerify_1
+    261              }
+    262              else
+    263              {
+    264                  DebugPrintf("Library QMatrix ");
+   \                     ??CapTouchVerify_0: (+1)
+   \       0x20   0x....             LDR.N    R0,??DataTable10_9
+   \       0x22   0x....'....        BL       DebugPrintf
+    265                  u32Error++;
+   \       0x26   0x1C64             ADDS     R4,R4,#+1
+    266              }
+    267          
+    268              /* Max channels should be 32 */
+    269              if ( ((plib_sig.lib_sig_lword >> 3) & 0x7F) != 32)
+   \                     ??CapTouchVerify_1: (+1)
+   \       0x28   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x2C   0xF3C0 0x00C6      UBFX     R0,R0,#+3,#+7
+   \       0x30   0x2820             CMP      R0,#+32
+   \       0x32   0xD000             BEQ.N    ??CapTouchVerify_2
+    270              {
+    271                 u32Error++;
+   \       0x34   0x1C64             ADDS     R4,R4,#+1
+    272              }
+    273          
+    274              /* Should supoprt sliders/roters */
+    275              if( ((plib_sig.lib_sig_lword >> 10) & 0x01) == 0)
+   \                     ??CapTouchVerify_2: (+1)
+   \       0x36   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x3A   0xF3C0 0x2080      UBFX     R0,R0,#+10,#+1
+   \       0x3E   0x2800             CMP      R0,#+0
+   \       0x40   0xD104             BNE.N    ??CapTouchVerify_3
+    276              {
+    277                  DebugPrintf("supports only keys \r\n");
+   \       0x42   0x....             LDR.N    R0,??DataTable10_10
+   \       0x44   0x....'....        BL       DebugPrintf
+    278                  u32Error++;
+   \       0x48   0x1C64             ADDS     R4,R4,#+1
+   \       0x4A   0xE002             B.N      ??CapTouchVerify_4
+    279              }
+    280              else
+    281              {
+    282                  DebugPrintf("supports keys and rotors/sliders. ");
+   \                     ??CapTouchVerify_3: (+1)
+   \       0x4C   0x....             LDR.N    R0,??DataTable10_11
+   \       0x4E   0x....'....        BL       DebugPrintf
+    283              }
+    284          
+    285              /* Should supoprt 8 sliders */
+    286              if ( ((plib_sig.lib_sig_lword >> 11) & 0x1F) != 8 )
+   \                     ??CapTouchVerify_4: (+1)
+   \       0x52   0xF8BD 0x0000      LDRH     R0,[SP, #+0]
+   \       0x56   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+   \       0x58   0x0AC0             LSRS     R0,R0,#+11
+   \       0x5A   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+   \       0x5C   0x2808             CMP      R0,#+8
+   \       0x5E   0xD000             BEQ.N    ??CapTouchVerify_5
+    287              {
+    288                  u32Error++;
+   \       0x60   0x1C64             ADDS     R4,R4,#+1
+    289              }
+    290          
+    291              /* Current version: $0440 */
+    292              DebugPrintf("Version ");
+   \                     ??CapTouchVerify_5: (+1)
+   \       0x62   0x....             LDR.N    R0,??DataTable10_12
+   \       0x64   0x....'....        BL       DebugPrintf
+    293              DebugPrintNumber(plib_sig.library_version);
+   \       0x68   0xF8BD 0x0004      LDRH     R0,[SP, #+4]
+   \       0x6C   0x....'....        BL       DebugPrintNumber
+    294              DebugLineFeed();
+   \       0x70   0x....'....        BL       DebugLineFeed
+    295              if ( (plib_sig.library_version) != 0x440)
+   \       0x74   0xF8BD 0x0004      LDRH     R0,[SP, #+4]
+   \       0x78   0xF5B0 0x6F88      CMP      R0,#+1088
+   \       0x7C   0xD000             BEQ.N    ??CapTouchVerify_6
+    296              {
+    297                 u32Error++;
+   \       0x7E   0x1C64             ADDS     R4,R4,#+1
+    298              }
+    299          
+    300              /* if error count = 0, all is good */
+    301              if (u32Error == 0)
+   \                     ??CapTouchVerify_6: (+1)
+   \       0x80   0x2C00             CMP      R4,#+0
+   \       0x82   0xD101             BNE.N    ??CapTouchVerify_7
+    302              {
+    303                 return (SUCCESS);
+   \       0x84   0x2001             MOVS     R0,#+1
+   \       0x86   0xE000             B.N      ??CapTouchVerify_8
+    304              }
+    305          
+    306              return (ERROR);
+   \                     ??CapTouchVerify_7: (+1)
+   \       0x88   0x2000             MOVS     R0,#+0
+   \                     ??CapTouchVerify_8: (+1)
+   \       0x8A   0xBD16             POP      {R1,R2,R4,PC}    ;; return
+    307          }
+    308          
+    309          
+    310          /*----------------------------------------------------------------------------------------------------------------------
+    311          Function: CapTouchSetParameters
+    312          
+    313          Description:
+    314          
+    315          This will fill the default threshold values in the configuration
+    316          data structure. These values can be tweaked to optimize performance.
+    317          
+    318          Requires:
+    319            - DEF_QT_xxx values are defined in touch_api.h
+    320          
+    321          Promises:
+    322            -
+    323          
+    324          */
+
+   \                                 In section .text, align 2, keep-with-next
+    325          static void CapTouchSetParameters( void )
+    326          {
+    327              /*  This can be modified by the user to different values   */
+    328              qt_config_data.qt_di              = DEF_QT_DI;
+   \                     CapTouchSetParameters: (+1)
+   \        0x0   0x....             LDR.N    R0,??DataTable10_13
+   \        0x2   0x2104             MOVS     R1,#+4
+   \        0x4   0x7041             STRB     R1,[R0, #+1]
+    329              qt_config_data.qt_neg_drift_rate  = DEF_QT_NEG_DRIFT_RATE;
+   \        0x6   0x2114             MOVS     R1,#+20
+   \        0x8   0x7101             STRB     R1,[R0, #+4]
+    330              qt_config_data.qt_pos_drift_rate  = DEF_QT_POS_DRIFT_RATE;
+   \        0xA   0x2105             MOVS     R1,#+5
+   \        0xC   0x7141             STRB     R1,[R0, #+5]
+    331              qt_config_data.qt_max_on_duration = DEF_QT_MAX_ON_DURATION;
+   \        0xE   0x2100             MOVS     R1,#+0
+   \       0x10   0x70C1             STRB     R1,[R0, #+3]
+    332              qt_config_data.qt_drift_hold_time = DEF_QT_DRIFT_HOLD_TIME;
+   \       0x12   0x2114             MOVS     R1,#+20
+   \       0x14   0x7081             STRB     R1,[R0, #+2]
+    333              qt_config_data.qt_recal_threshold = DEF_QT_RECAL_THRESHOLD;
+   \       0x16   0x2101             MOVS     R1,#+1
+   \       0x18   0x7001             STRB     R1,[R0, #+0]
+    334              qt_config_data.qt_pos_recal_delay = DEF_QT_POS_RECAL_DELAY;
+   \       0x1A   0x2103             MOVS     R1,#+3
+   \       0x1C   0x7181             STRB     R1,[R0, #+6]
+    335          }
+   \       0x1E   0x4770             BX       LR               ;; return
+    336          
+    337          
+    338          /*----------------------------------------------------------------------------------------------------------------------
+    339          Function: CapTouchUpdateSensorReadings
+    340          
+    341          Description:
+    342          
+    343          This is the main read routine to get the cap touch sensor
+    344          readings. It should be called periodically every 25ms.
+    345          
+    346          Requires:
+    347            - u16CurrentTimeMs is the current value of the tick timer
+    348              (ideally in increments of 25ms)
+    349          
+    350          Promises:
+    351            - returns TRUE for successful read
+    352            - returns FALSE if read times out !!!!! TODO 
+    353          
+    354          */
+
+   \                                 In section .text, align 2, keep-with-next
+    355          BOOL CapTouchUpdateSensorReadings(u16 u16CurrentTimeMs_)
+    356          {
+   \                     CapTouchUpdateSensorReadings: (+1)
+   \        0x0   0xB570             PUSH     {R4-R6,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+    357            /*status flags to indicate the re-burst for library*/
+    358            uint16_t status_flag = 0u;
+   \        0x4   0x2500             MOVS     R5,#+0
+    359            uint16_t burst_flag = 0u;
+   \        0x6   0x2600             MOVS     R6,#+0
+    360          
+    361          	do
+    362          	{
+    363          		/*  one time measure touch sensors    */
+    364          		status_flag = qt_measure_sensors( u16CurrentTimeMs_ );
+   \                     ??CapTouchUpdateSensorReadings_0: (+1)
+   \        0x8   0x0020             MOVS     R0,R4
+   \        0xA   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+   \        0xC   0x....'....        BL       qt_measure_sensors
+   \       0x10   0x0005             MOVS     R5,R0
+    365          
+    366          		burst_flag = status_flag & QTLIB_BURST_AGAIN;
+   \       0x12   0xF415 0x7080      ANDS     R0,R5,#0x100
+   \       0x16   0x0006             MOVS     R6,R0
+    367          
+    368          	} while (burst_flag);
+   \       0x18   0x0030             MOVS     R0,R6
+   \       0x1A   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+   \       0x1C   0x2800             CMP      R0,#+0
+   \       0x1E   0xD1F3             BNE.N    ??CapTouchUpdateSensorReadings_0
+    369          
+    370              return (TRUE);  // TODO: add timeout to return false
+   \       0x20   0x2001             MOVS     R0,#+1
+   \       0x22   0xBD70             POP      {R4-R6,PC}       ;; return
+    371          }
+    372          
+    373          #if 0
+    374          /*----------------------------------------------------------------------------------------------------------------------
+    375          Function: u8CapTouchGetButtonValue
+    376          
+    377          Description:
+    378          
+    379          Call this function after a successful read from CapTouchUpdateSensorReadings
+    380          to obtain the value of a button reading.
+    381          
+    382          Requires:
+    383            - eButtonNumber_ is the button to read
+    384          
+    385          Promises:
+    386            - returns 8-bit value for sensor reading
+    387          
+    388          */
+    389          u8 u8CapTouchGetButtonValue(ButtonNumberType eButtonNumber_)
+    390          {
+    391              return (GET_SENSOR_STATE(eButtonNumber_));
+    392          }
+    393          #endif
+    394          
+    395          /*----------------------------------------------------------------------------------------------------------------------
+    396          Function: u8CapTouchGetSliderValue
+    397          
+    398          Description:
+    399          
+    400          Call this function after a successful read from CapTouchUpdateSensorReadings
+    401          to obtain the value of a slider reading.
+    402          
+    403          Requires:
+    404            - eSliderNumber_ is the slider to read
+    405          
+    406          Promises:
+    407            - returns 8-bit value for sensor reading
+    408          
+    409          */
+
+   \                                 In section .text, align 2, keep-with-next
+    410          u8 u8CapTouchGetSliderValue(SliderNumberType eSliderNumber_)
+    411          {
+    412            return (GET_ROTOR_SLIDER_POSITION(eSliderNumber_));
+   \                     u8CapTouchGetSliderValue: (+1)
+   \        0x0   0x....             LDR.N    R1,??DataTable10_14
+   \        0x2   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \        0x4   0x4408             ADD      R0,R1,R0
+   \        0x6   0xF890 0x0084      LDRB     R0,[R0, #+132]
+   \        0xA   0x4770             BX       LR               ;; return
+    413          }
+    414          
+    415          
+    416          /*----------------------------------------------------------------------------------------------------------------------
+    417          Function: CapTouchGetDebugValues
+    418          
+    419          Description:
+    420          
+    421          Call this function after a successful read to obtains the raw channel measurement
+    422          and reference value. This will indicate what the 'normal' values should be when
+    423          the sensor is idle/not active (no finger present) along with the current reading.
+    424          
+    425          Requires:
+    426          
+    427          Promises:
+    428            - *pu16Measure_ returns the value of the current measurement
+    429            - *pu16Reference_ returns the normal, untouched value
+    430          
+    431          */
+
+   \                                 In section .text, align 2, keep-with-next
+    432          void CapTouchGetDebugValues(u8 u8Channel, u16* pu16Measure_, u16* pu16Reference_)
+    433          {
+   \                     CapTouchGetDebugValues: (+1)
+   \        0x0   0xB410             PUSH     {R4}
+    434            *pu16Measure_ = qt_measure_data.channel_signals[u8Channel];
+   \        0x2   0x....             LDR.N    R3,??DataTable10_14
+   \        0x4   0x0004             MOVS     R4,R0
+   \        0x6   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \        0x8   0xF833 0x4014      LDRH     R4,[R3, R4, LSL #+1]
+   \        0xC   0x800C             STRH     R4,[R1, #+0]
+    435            *pu16Reference_ = qt_measure_data.channel_references[u8Channel];
+   \        0xE   0x0004             MOVS     R4,R0
+   \       0x10   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x12   0xEB03 0x0344      ADD      R3,R3,R4, LSL #+1
+   \       0x16   0xF8B3 0x3040      LDRH     R3,[R3, #+64]
+   \       0x1A   0x8013             STRH     R3,[R2, #+0]
+    436          }
+   \       0x1C   0xBC10             POP      {R4}
+   \       0x1E   0x4770             BX       LR               ;; return
+    437          
+    438          
+    439          /***********************************************************************************************************************
+    440          State Machine Function Definitions
+    441          ***********************************************************************************************************************/
+    442          
+    443          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   \                                 In section .text, align 4, keep-with-next
+    444          void CapTouchSM_Idle(void)
+    445          {
+    446            /* Do nothing here as the sensor is off */
+    447            
+    448          } /* end CapTouchSM_Idle */
+   \                     CapTouchSM_Idle: (+1)
+   \        0x0   0x4770             BX       LR               ;; return
+    449          
+    450          
+    451          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   \                                 In section .text, align 4, keep-with-next
+    452          void CapTouchSM_Measure(void)
+    453          {
+   \                     CapTouchSM_Measure: (+1)
+   \        0x0   0xB510             PUSH     {R4,LR}
+    454            static u32 u32DebugPrintTimer = 0;
+    455            static u8 au8CaptouchValuesMessage[] = "Captouch (H:V) "; 
+    456            
+    457            if( IsTimeUp(&CapTouch_u32Timer, QTOUCH_MEASUREMENT_TIME_MS) )
+   \        0x2   0x....             LDR.N    R4,??DataTable10_6
+   \        0x4   0x2119             MOVS     R1,#+25
+   \        0x6   0x0020             MOVS     R0,R4
+   \        0x8   0x....'....        BL       IsTimeUp
+   \        0xC   0x2800             CMP      R0,#+0
+   \        0xE   0xD010             BEQ.N    ??CapTouchSM_Measure_0
+    458            {
+    459              CapTouch_u32Timer = G_u32SystemTime1ms;
+   \       0x10   0x....             LDR.N    R0,??DataTable10_15
+   \       0x12   0x6801             LDR      R1,[R0, #+0]
+   \       0x14   0x6021             STR      R1,[R4, #+0]
+    460              CapTouchUpdateSensorReadings((u16)G_u32SystemTime1ms);
+   \       0x16   0x6800             LDR      R0,[R0, #+0]
+   \       0x18   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+   \       0x1A   0x....'....        BL       CapTouchUpdateSensorReadings
+    461          
+    462              /* Read the horizontal slider */
+    463              CapTouch_u8CurrentHSliderValue = u8CapTouchGetSliderValue(SLIDER0);
+   \       0x1E   0x2000             MOVS     R0,#+0
+   \       0x20   0x....'....        BL       u8CapTouchGetSliderValue
+   \       0x24   0x....             LDR.N    R1,??DataTable10_1
+   \       0x26   0x7008             STRB     R0,[R1, #+0]
+    464              
+    465              /* Read the vertical slider */
+    466              CapTouch_u8CurrentVSliderValue = u8CapTouchGetSliderValue(SLIDER1);
+   \       0x28   0x2001             MOVS     R0,#+1
+   \       0x2A   0x....'....        BL       u8CapTouchGetSliderValue
+   \       0x2E   0x....             LDR.N    R1,??DataTable10_2
+   \       0x30   0x7008             STRB     R0,[R1, #+0]
+    467          
+    468            }
+    469            
+    470            /* Print the current values if Debug function is enabled */
+    471            if(G_u32DebugFlags & _DEBUG_CAPTOUCH_VALUES_ENABLE)
+   \                     ??CapTouchSM_Measure_0: (+1)
+   \       0x32   0x....             LDR.N    R0,??DataTable10_16
+   \       0x34   0x6800             LDR      R0,[R0, #+0]
+   \       0x36   0x03C0             LSLS     R0,R0,#+15
+   \       0x38   0xD519             BPL.N    ??CapTouchSM_Measure_1
+    472            {
+    473              if( IsTimeUp(&u32DebugPrintTimer, QTOUCH_DEBUG_PRINT_PERIOD) )
+   \       0x3A   0x....             LDR.N    R4,??DataTable10_17
+   \       0x3C   0x21C8             MOVS     R1,#+200
+   \       0x3E   0x0020             MOVS     R0,R4
+   \       0x40   0x....'....        BL       IsTimeUp
+   \       0x44   0x2800             CMP      R0,#+0
+   \       0x46   0xD012             BEQ.N    ??CapTouchSM_Measure_1
+    474              {
+    475                u32DebugPrintTimer = G_u32SystemTime1ms;
+   \       0x48   0x....             LDR.N    R0,??DataTable10_15
+   \       0x4A   0x6800             LDR      R0,[R0, #+0]
+   \       0x4C   0x6020             STR      R0,[R4, #+0]
+    476          
+    477                DebugPrintf(au8CaptouchValuesMessage);
+   \       0x4E   0x....             LDR.N    R0,??DataTable10_18
+   \       0x50   0x....'....        BL       DebugPrintf
+    478                DebugPrintNumber(CapTouch_u8CurrentHSliderValue);
+   \       0x54   0x....             LDR.N    R0,??DataTable10_1
+   \       0x56   0x7800             LDRB     R0,[R0, #+0]
+   \       0x58   0x....'....        BL       DebugPrintNumber
+    479                DebugPrintf(":");
+   \       0x5C   0x....             LDR.N    R0,??DataTable10_19
+   \       0x5E   0x....'....        BL       DebugPrintf
+    480                DebugPrintNumber(CapTouch_u8CurrentVSliderValue);
+   \       0x62   0x....             LDR.N    R0,??DataTable10_2
+   \       0x64   0x7800             LDRB     R0,[R0, #+0]
+   \       0x66   0x....'....        BL       DebugPrintNumber
+    481                DebugLineFeed();
+   \       0x6A   0x....'....        BL       DebugLineFeed
+    482              }
+    483             
+    484            }
+    485                         
+    486          } /* end CapTouchSM_Idle */
+   \                     ??CapTouchSM_Measure_1: (+1)
+   \       0x6E   0xBD10             POP      {R4,PC}          ;; return
+
+   \                                 In section .bss, align 4
+   \                     `CapTouchSM_Measure::u32DebugPrintTimer`:
+   \        0x0                      DS8 4
+
+   \                                 In section .data, align 4
+   \                     `CapTouchSM_Measure::au8CaptouchValuesMessage`:
+   \        0x0   0x43 0x61          DC8 "Captouch (H:V) "
+   \              0x70 0x74    
+   \              0x6F 0x75    
+   \              0x63 0x68    
+   \              0x20 0x28    
+   \              0x48 0x3A    
+   \              0x56 0x29    
+   \              0x20 0x00    
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10:
+   \        0x0   0x....'....        DC32     CapTouch_pfnStateMachine
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_1:
+   \        0x0   0x....'....        DC32     CapTouch_u8CurrentHSliderValue
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_2:
+   \        0x0   0x....'....        DC32     CapTouch_u8CurrentVSliderValue
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_3:
+   \        0x0   0x....'....        DC32     calc_masks
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_4:
+   \        0x0   0x....'....        DC32     burst_10_AA_BB
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_5:
+   \        0x0   0x....'....        DC32     qt_filter_callback
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_6:
+   \        0x0   0x....'....        DC32     CapTouch_u32Timer
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_7:
+   \        0x0   0x....'....        DC32     G_u32ApplicationFlags
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_8:
+   \        0x0   0x....'....        DC32     ?_0
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_9:
+   \        0x0   0x....'....        DC32     ?_1
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_10:
+   \        0x0   0x....'....        DC32     ?_2
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_11:
+   \        0x0   0x....'....        DC32     ?_3
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_12:
+   \        0x0   0x....'....        DC32     ?_4
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_13:
+   \        0x0   0x....'....        DC32     qt_config_data
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_14:
+   \        0x0   0x....'....        DC32     qt_measure_data
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_15:
+   \        0x0   0x....'....        DC32     G_u32SystemTime1ms
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_16:
+   \        0x0   0x....'....        DC32     G_u32DebugFlags
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_17:
+   \        0x0   0x....'....        DC32     `CapTouchSM_Measure::u32DebugPrintTimer`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_18:
+   \        0x0   0x....'....        DC32     `CapTouchSM_Measure::au8CaptouchValuesMessage`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_19:
+   \        0x0   0x....'....        DC32     ?_5
+
+   \                                 In section .rodata, align 4
+   \                     ?_0:
+   \        0x0   0x4C 0x69          DC8 "Library QTouch "
+   \              0x62 0x72    
+   \              0x61 0x72    
+   \              0x79 0x20    
+   \              0x51 0x54    
+   \              0x6F 0x75    
+   \              0x63 0x68    
+   \              0x20 0x00    
+
+   \                                 In section .rodata, align 4
+   \                     ?_1:
+   \        0x0   0x4C 0x69          DC8 "Library QMatrix "
+   \              0x62 0x72    
+   \              0x61 0x72    
+   \              0x79 0x20    
+   \              0x51 0x4D    
+   \              0x61 0x74    
+   \              0x72 0x69    
+   \              0x78 0x20    
+   \              0x00         
+   \       0x11   0x00 0x00          DC8 0, 0, 0
+   \              0x00         
+
+   \                                 In section .rodata, align 4
+   \                     ?_2:
+   \        0x0   0x73 0x75          DC8 "supports only keys \015\012"
+   \              0x70 0x70    
+   \              0x6F 0x72    
+   \              0x74 0x73    
+   \              0x20 0x6F    
+   \              0x6E 0x6C    
+   \              0x79 0x20    
+   \              0x6B 0x65    
+   \              0x79 0x73    
+   \              0x20 0x0D    
+   \              0x0A 0x00    
+   \       0x16   0x00 0x00          DC8 0, 0
+
+   \                                 In section .rodata, align 4
+   \                     ?_3:
+   \        0x0   0x73 0x75          DC8 "supports keys and rotors/sliders. "
+   \              0x70 0x70    
+   \              0x6F 0x72    
+   \              0x74 0x73    
+   \              0x20 0x6B    
+   \              0x65 0x79    
+   \              0x73 0x20    
+   \              0x61 0x6E    
+   \              0x64 0x20    
+   \              0x72 0x6F    
+   \              0x74 0x6F    
+   \              0x72 0x73    
+   \              0x2F 0x73    
+   \              0x6C 0x69    
+   \              0x64 0x65    
+   \              0x72 0x73    
+   \              0x2E 0x20    
+   \              0x00         
+   \       0x23   0x00               DC8 0
+
+   \                                 In section .rodata, align 4
+   \                     ?_4:
+   \        0x0   0x56 0x65          DC8 "Version "
+   \              0x72 0x73    
+   \              0x69 0x6F    
+   \              0x6E 0x20    
+   \              0x00         
+   \        0x9   0x00 0x00          DC8 0, 0, 0
+   \              0x00         
+
+   \                                 In section .rodata, align 2
+   \                     ?_5:
+   \        0x0   0x3A 0x00          DC8 ":"
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       4   CapTouchGetDebugValues
+      16   CapTouchInitialize
+        16   -> CapTouchSetParameters
+        16   -> CapTouchVerify
+        16   -> qt_calibrate_sensing
+        16   -> qt_enable_slider
+        16   -> qt_init_sensing_with_burst
+        16   -> qt_reset_sensing
+       0   CapTouchOff
+       0   CapTouchOn
+       8   CapTouchRunActiveState
+         8   -- Indirect call
+       0   CapTouchSM_Idle
+       8   CapTouchSM_Measure
+         8   -> CapTouchUpdateSensorReadings
+         8   -> DebugLineFeed
+         8   -> DebugPrintNumber
+         8   -> DebugPrintf
+         8   -> IsTimeUp
+         8   -> u8CapTouchGetSliderValue
+       0   CapTouchSetParameters
+      16   CapTouchUpdateSensorReadings
+        16   -> qt_measure_sensors
+      16   CapTouchVerify
+        16   -> DebugLineFeed
+        16   -> DebugPrintNumber
+        16   -> DebugPrintf
+        16   -> qt_get_library_sig
+        16   -> qt_measure_sensors
+       0   CaptouchCurrentHSlidePosition
+       0   CaptouchCurrentVSlidePosition
+       0   u8CapTouchGetSliderValue
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable10
+       4  ??DataTable10_1
+       4  ??DataTable10_10
+       4  ??DataTable10_11
+       4  ??DataTable10_12
+       4  ??DataTable10_13
+       4  ??DataTable10_14
+       4  ??DataTable10_15
+       4  ??DataTable10_16
+       4  ??DataTable10_17
+       4  ??DataTable10_18
+       4  ??DataTable10_19
+       4  ??DataTable10_2
+       4  ??DataTable10_3
+       4  ??DataTable10_4
+       4  ??DataTable10_5
+       4  ??DataTable10_6
+       4  ??DataTable10_7
+       4  ??DataTable10_8
+       4  ??DataTable10_9
+      16  ?_0
+      20  ?_1
+      24  ?_2
+      36  ?_3
+      12  ?_4
+       2  ?_5
+      32  CapTouchGetDebugValues
+     128  CapTouchInitialize
+      22  CapTouchOff
+      10  CapTouchOn
+      10  CapTouchRunActiveState
+       2  CapTouchSM_Idle
+     112  CapTouchSM_Measure
+      32  CapTouchSetParameters
+      36  CapTouchUpdateSensorReadings
+     140  CapTouchVerify
+       4  CapTouch_pfnStateMachine
+       4  CapTouch_u32Timer
+       1  CapTouch_u8CurrentHSliderValue
+       1  CapTouch_u8CurrentVSliderValue
+       6  CaptouchCurrentHSlidePosition
+       6  CaptouchCurrentVSlidePosition
+      16  au8CaptouchValuesMessage
+       4  u32DebugPrintTimer
+      12  u8CapTouchGetSliderValue
+
+ 
+  14 bytes in section .bss
+  16 bytes in section .data
+ 110 bytes in section .rodata
+ 628 bytes in section .text
+ 
+ 628 bytes of CODE  memory
+ 110 bytes of CONST memory
+  30 bytes of DATA  memory
+
+Errors: none
+Warnings: none

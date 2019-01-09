@@ -1,0 +1,1091 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         01/Jan/2019  11:19:40
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\buttons.c
+#    Command line =  
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWBAEB.tmp
+#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\buttons.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\inc\c\DLib_Config_Normal.h" -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        -On --use_c++_inline --require_prototypes -I "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\buttons.lst
+#    Object file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\buttons.o
+#
+###############################################################################
+
+\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\buttons.c
+      1          /***********************************************************************************************************************
+      2          File: buttons.c                                                                
+      3          
+      4          Description:
+      5          Button functions and state machine.  The application handles all debouncing and glitch filtering.
+      6          
+      7          ------------------------------------------------------------------------------------------------------------------------
+      8          API:
+      9          Types:
+     10          EIE1: The argument u32Button_ is either BUTTON0, BUTTON1, BUTTON2, or BUTTON3.  
+     11          MPG2: The argument u32Button_ is either BUTTON0 or BUTTON1.  
+     12          
+     13          Public:
+     14          bool IsButtonPressed(u32 u32Button_)
+     15          Returns TRUE if a particular button is currently pressed (and debounced).
+     16          
+     17          bool WasButtonPressed(u32 u32Button_)
+     18          Returns TRUE if a particular button was pressed since last time it was checked even if it is no longer pressed.
+     19          ButtonAcknowledge is typically called immediately after WasButtonPressed() returns TRUE to clear the button
+     20          pressed state.
+     21          
+     22          void ButtonAcknowledge(u32 u32Button_)
+     23          Clears the New Press state of a button -- generally always called after WasButtonPressed() returns TRUE.
+     24          
+     25          bool IsButtonHeld(u32 u32Button_, u32 u32ButtonHeldTime_)
+     26          Returns TRUE if a button has been held for u32ButtonHeldTime_ time in milliseconds.
+     27          
+     28          Protected:
+     29          void ButtonInitialize(void)
+     30          Configures the button system for the product including enabling button GPIO interrupts.  
+     31          
+     32          u32 GetButtonBitLocation(u8 u8Button_, ButtonPortType ePort_)
+     33          Returns the location of the button within its port (should be required only for interrupt service routines).  
+     34          
+     35          DISCLAIMER: THIS CODE IS PROVIDED WITHOUT ANY WARRANTY OR GUARANTEES.  USERS MAY
+     36          USE THIS CODE FOR DEVELOPMENT AND EXAMPLE PURPOSES ONLY.  ENGENUICS TECHNOLOGIES
+     37          INCORPORATED IS NOT RESPONSIBLE FOR ANY ERRORS, OMISSIONS, OR DAMAGES THAT COULD
+     38          RESULT FROM USING THIS FIRMWARE IN WHOLE OR IN PART.
+     39          
+     40          ***********************************************************************************************************************/
+     41          
+     42          #include "configuration.h"
+
+   \                                 In section .text, align 2, keep-with-next
+   \   static __interwork __softfp void NVIC_EnableIRQ(IRQn_Type)
+   \                     NVIC_EnableIRQ: (+1)
+   \        0x0   0x2201             MOVS     R2,#+1
+   \        0x2   0xF010 0x011F      ANDS     R1,R0,#0x1F
+   \        0x6   0x408A             LSLS     R2,R2,R1
+   \        0x8   0x....             LDR.N    R1,??DataTable10  ;; 0xe000e100
+   \        0xA   0x0003             MOVS     R3,R0
+   \        0xC   0xB25B             SXTB     R3,R3            ;; SignExt  R3,R3,#+24,#+24
+   \        0xE   0x095B             LSRS     R3,R3,#+5
+   \       0x10   0xF841 0x2023      STR      R2,[R1, R3, LSL #+2]
+   \       0x14   0x4770             BX       LR               ;; return
+
+   \                                 In section .text, align 2, keep-with-next
+   \   static __interwork __softfp void NVIC_ClearPendingIRQ(IRQn_Type)
+   \                     NVIC_ClearPendingIRQ: (+1)
+   \        0x0   0x2201             MOVS     R2,#+1
+   \        0x2   0xF010 0x011F      ANDS     R1,R0,#0x1F
+   \        0x6   0x408A             LSLS     R2,R2,R1
+   \        0x8   0x....             LDR.N    R1,??DataTable10_1  ;; 0xe000e280
+   \        0xA   0x0003             MOVS     R3,R0
+   \        0xC   0xB25B             SXTB     R3,R3            ;; SignExt  R3,R3,#+24,#+24
+   \        0xE   0x095B             LSRS     R3,R3,#+5
+   \       0x10   0xF841 0x2023      STR      R2,[R1, R3, LSL #+2]
+   \       0x14   0x4770             BX       LR               ;; return
+     43          
+     44          /***********************************************************************************************************************
+     45          Global variable definitions with scope across entire project.
+     46          All Global variable names shall start with "G_<type>Button"
+     47          ***********************************************************************************************************************/
+     48          /* New variables */
+
+   \                                 In section .bss, align 2
+     49          volatile bool G_abButtonDebounceActive[TOTAL_BUTTONS];           /* Flags for buttons being debounced */
+   \                     G_abButtonDebounceActive:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 4
+     50          volatile u32 G_au32ButtonDebounceTimeStart[TOTAL_BUTTONS];       /* Button debounce start time */
+   \                     G_au32ButtonDebounceTimeStart:
+   \        0x0                      DS8 8
+     51          
+     52          /*--------------------------------------------------------------------------------------------------------------------*/
+     53          /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
+     54          extern volatile u32 G_u32SystemTime1ms;        /* From board-specific source file */
+     55          extern volatile u32 G_u32SystemTime1s;         /* From board-specific source file */
+     56          
+     57          extern volatile u32 G_u32SystemFlags;          /* From main.c */
+     58          extern volatile u32 G_u32ApplicationFlags;     /* From main.c */
+     59          
+     60          
+     61          /***********************************************************************************************************************
+     62          Global variable definitions with scope limited to this local application.
+     63          Variable names shall start with "Button_" and be declared as static.
+     64          ***********************************************************************************************************************/
+
+   \                                 In section .bss, align 4
+     65          static fnCode_type Button_pfnStateMachine;                  /* The Button application state machine function pointer */
+   \                     Button_pfnStateMachine:
+   \        0x0                      DS8 4
+     66          
+
+   \                                 In section .bss, align 2
+     67          static ButtonStateType Button_aeCurrentState[TOTAL_BUTTONS];/* Current pressed state of button */
+   \                     Button_aeCurrentState:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 2
+     68          static ButtonStateType Button_aeNewState[TOTAL_BUTTONS];    /* New (pending) pressed state of button */
+   \                     Button_aeNewState:
+   \        0x0                      DS8 2
+
+   \                                 In section .bss, align 4
+     69          static u32 Button_au32HoldTimeStart[TOTAL_BUTTONS];         /* System 1ms time when a button press started */
+   \                     Button_au32HoldTimeStart:
+   \        0x0                      DS8 8
+
+   \                                 In section .bss, align 2
+     70          static bool Button_abNewPress[TOTAL_BUTTONS];               /* Flags to indicate a button was pressed */    
+   \                     Button_abNewPress:
+   \        0x0                      DS8 2
+     71          
+     72          
+     73          /************ %BUTTON% EDIT BOARD-SPECIFIC GPIO DEFINITIONS BELOW ***************/
+     74          /* Add all of the GPIO pin names for the buttons in the system.  
+     75          The order of the definitions below must match the order of the definitions provided in configuration.h */ 
+     76          
+     77          #ifdef EIE1
+     78          static const u32 Button_au32ButtonPins[TOTAL_BUTTONS] = 
+     79          {
+     80            PA_17_BUTTON0, PB_00_BUTTON1, PB_01_BUTTON2, PB_02_BUTTON3
+     81          };
+     82          
+     83          /* Control array for all buttons in system initialized for ButtonInitialize().  Array values correspond to ButtonConfigType fields: 
+     84               eActiveState       ePort                   */
+     85          static ButtonConfigType Buttons_asArray[TOTAL_BUTTONS] = 
+     86          {{BUTTON_ACTIVE_LOW, BUTTON_PORTA}, /* BUTTON0  */
+     87           {BUTTON_ACTIVE_LOW, BUTTON_PORTB}, /* BUTTON1  */
+     88           {BUTTON_ACTIVE_LOW, BUTTON_PORTB}, /* BUTTON2  */
+     89           {BUTTON_ACTIVE_LOW, BUTTON_PORTB}, /* BUTTON3  */
+     90          };   
+     91          #endif /* EIE1 */
+     92          
+     93          #ifdef MPGL2
+
+   \                                 In section .rodata, align 4
+     94          static const u32 Button_au32ButtonPins[TOTAL_BUTTONS] = 
+   \                     Button_au32ButtonPins:
+   \        0x0   0x0002'0000        DC32 131072, 1
+   \              0x0000'0001  
+     95          {
+     96            PA_17_BUTTON0, PB_00_BUTTON1
+     97          };
+     98          
+     99          /* Control array for all buttons in system initialized for ButtonInitialize().  Array values correspond to ButtonConfigType fields: 
+    100               eActiveState       ePort                   */
+
+   \                                 In section .data, align 4
+    101          static ButtonConfigType Buttons_asArray[TOTAL_BUTTONS] = 
+   \                     Buttons_asArray:
+   \        0x0   0x00 0x00          DC8 0, 0, 0, 128
+   \              0x00 0x80    
+    102          {{BUTTON_ACTIVE_LOW, BUTTON_PORTA}, /* BUTTON0  */
+    103           {BUTTON_ACTIVE_LOW, BUTTON_PORTB} /* BUTTON1  */
+    104          };   
+    105          #endif /* MPGL2 */
+    106          
+    107          /************ EDIT BOARD-SPECIFIC GPIO DEFINITIONS ABOVE ***************/
+    108          
+    109          
+    110          /***********************************************************************************************************************
+    111          Function Definitions
+    112          ***********************************************************************************************************************/
+    113          /*--------------------------------------------------------------------------------------------------------------------*/
+    114          /* Public Functions */
+    115          /*--------------------------------------------------------------------------------------------------------------------*/
+    116          
+    117          /*----------------------------------------------------------------------------------------------------------------------
+    118          Function: IsButtonPressed
+    119          
+    120          Description:
+    121          Determine if a particular button is currently pressed at this moment in time.
+    122          The button must still be pressed at the time of this inquiry for the function
+    123          to return TRUE.
+    124          
+    125          Requires:
+    126            - u32Button_ is a valid button index
+    127            - Button_aeCurrentState[u32Button_] is a valid index
+    128           
+    129          Promises:
+    130            - Returns TRUE if Button_aeCurrentState[u32Button_] is pressed; otherwise returns FALSE
+    131          */
+
+   \                                 In section .text, align 2, keep-with-next
+    132          bool IsButtonPressed(u32 u32Button_)
+    133          {
+   \                     IsButtonPressed: (+1)
+   \        0x0   0x0001             MOVS     R1,R0
+    134            if( Button_aeCurrentState[u32Button_] == PRESSED)
+   \        0x2   0x....             LDR.N    R0,??DataTable10_2
+   \        0x4   0x5C40             LDRB     R0,[R0, R1]
+   \        0x6   0x2801             CMP      R0,#+1
+   \        0x8   0xD101             BNE.N    ??IsButtonPressed_0
+    135            {
+    136              return(TRUE);
+   \        0xA   0x2001             MOVS     R0,#+1
+   \        0xC   0xE000             B.N      ??IsButtonPressed_1
+    137            }
+    138            else
+    139            {
+    140              return(FALSE);
+   \                     ??IsButtonPressed_0: (+1)
+   \        0xE   0x2000             MOVS     R0,#+0
+   \                     ??IsButtonPressed_1: (+1)
+   \       0x10   0x4770             BX       LR               ;; return
+    141            }
+    142          
+    143          } /* end IsButtonPressed() */
+    144          
+    145          
+    146          /*----------------------------------------------------------------------------------------------------------------------
+    147          Function: WasButtonPressed
+    148          
+    149          Description:
+    150          Determines if a particular button was pressed since last time it was checked. 
+    151          The button may or may not still be pressed when this inquiry is made.  Mulitple
+    152          button presses are not tracked.  The user should call ButtonAcknowledge immediately
+    153          following this function to clear the state.
+    154          
+    155          Requires:
+    156            - u32 u32Button_ is a valid button index
+    157            - Button_aeCurrentState[u32Button_] is valid
+    158           
+    159          Promises:
+    160            - Returns TRUE if Button_abNewPress[u32Button_] is TRUE; other wise returns FALSE
+    161          */
+
+   \                                 In section .text, align 2, keep-with-next
+    162          bool WasButtonPressed(u32 u32Button_)
+    163          {
+   \                     WasButtonPressed: (+1)
+   \        0x0   0x0001             MOVS     R1,R0
+    164            if( Button_abNewPress[u32Button_] == TRUE)
+   \        0x2   0x....             LDR.N    R0,??DataTable10_3
+   \        0x4   0x5C40             LDRB     R0,[R0, R1]
+   \        0x6   0x2801             CMP      R0,#+1
+   \        0x8   0xD101             BNE.N    ??WasButtonPressed_0
+    165            {
+    166              return(TRUE);
+   \        0xA   0x2001             MOVS     R0,#+1
+   \        0xC   0xE000             B.N      ??WasButtonPressed_1
+    167            }
+    168            else
+    169            {
+    170              return(FALSE);
+   \                     ??WasButtonPressed_0: (+1)
+   \        0xE   0x2000             MOVS     R0,#+0
+   \                     ??WasButtonPressed_1: (+1)
+   \       0x10   0x4770             BX       LR               ;; return
+    171            }
+    172          
+    173          } /* end WasButtonPressed() */
+    174          
+    175          
+    176          /*----------------------------------------------------------------------------------------------------------------------
+    177          Function: ButtonAcknowledge
+    178          
+    179          Description:
+    180          Clears the New Press state of a button.
+    181          
+    182          Requires:
+    183            - u32Button_ is a valid button index
+    184           
+    185          Promises:
+    186            - The flag at Button_abNewPress[u32Button_] is set to FALSE
+    187          */
+
+   \                                 In section .text, align 2, keep-with-next
+    188          void ButtonAcknowledge(u32 u32Button_)
+    189          {
+    190            Button_abNewPress[u32Button_] = FALSE;
+   \                     ButtonAcknowledge: (+1)
+   \        0x0   0x2100             MOVS     R1,#+0
+   \        0x2   0x....             LDR.N    R2,??DataTable10_3
+   \        0x4   0x5411             STRB     R1,[R2, R0]
+    191          
+    192          } /* end ButtonAcknowledge() */
+   \        0x6   0x4770             BX       LR               ;; return
+    193          
+    194          
+    195          /*----------------------------------------------------------------------------------------------------------------------
+    196          Function: IsButtonHeld
+    197          
+    198          Description:
+    199          Queries to see if a button has been held for a certain time.  The button
+    200          must still be pressed when this function is called if it is to return TRUE.
+    201          
+    202          Requires:
+    203            - u32Button_ is a valid button index
+    204            - u32ButtonHeldTime is a time in ms 
+    205           
+    206          Promises:
+    207            - Returns TRUE if eButton_ has been held longer than u32ButtonHeldTime_
+    208          */
+
+   \                                 In section .text, align 2, keep-with-next
+    209          bool IsButtonHeld(u32 u32Button_, u32 u32ButtonHeldTime_)
+    210          {
+   \                     IsButtonHeld: (+1)
+   \        0x0   0xB538             PUSH     {R3-R5,LR}
+   \        0x2   0x0004             MOVS     R4,R0
+   \        0x4   0x000D             MOVS     R5,R1
+    211           if( IsButtonPressed(u32Button_) && 
+    212               IsTimeUp(&Button_au32HoldTimeStart[u32Button_], u32ButtonHeldTime_ ) )
+   \        0x6   0x0020             MOVS     R0,R4
+   \        0x8   0x....'....        BL       IsButtonPressed
+   \        0xC   0x2800             CMP      R0,#+0
+   \        0xE   0xD009             BEQ.N    ??IsButtonHeld_0
+   \       0x10   0x0029             MOVS     R1,R5
+   \       0x12   0x....             LDR.N    R0,??DataTable10_4
+   \       0x14   0xEB00 0x0084      ADD      R0,R0,R4, LSL #+2
+   \       0x18   0x....'....        BL       IsTimeUp
+   \       0x1C   0x2800             CMP      R0,#+0
+   \       0x1E   0xD001             BEQ.N    ??IsButtonHeld_0
+    213           {
+    214             return(TRUE);
+   \       0x20   0x2001             MOVS     R0,#+1
+   \       0x22   0xE000             B.N      ??IsButtonHeld_1
+    215           }
+    216           else
+    217           {
+    218             return(FALSE);
+   \                     ??IsButtonHeld_0: (+1)
+   \       0x24   0x2000             MOVS     R0,#+0
+   \                     ??IsButtonHeld_1: (+1)
+   \       0x26   0xBD32             POP      {R1,R4,R5,PC}    ;; return
+    219           }
+    220          
+    221          } /* end IsButtonHeld() */
+    222          
+    223          
+    224          /*--------------------------------------------------------------------------------------------------------------------*/
+    225          /* Protected Functions */
+    226          /*--------------------------------------------------------------------------------------------------------------------*/
+    227          
+    228          /*----------------------------------------------------------------------------------------------------------------------
+    229          Function: ButtonInitialize
+    230          
+    231          Description:
+    232          Configures the button system for the product including enabling button GPIO 
+    233          interrupts. For all buttons, the default "Input Change Interrupt" is sufficient
+    234          for providing the functionality needed.
+    235          
+    236          Requires:
+    237            - GPIO configuration is already complete for all button inputs
+    238            - Button interrupt initializations and handler functions are ready
+    239           
+    240          Promises:
+    241            - G_abButtonDebounceActive, Button_aeCurrentState and Button_aeNewState 
+    242              are initialized
+    243            - The button state machine is initialized to Idle
+    244          */
+
+   \                                 In section .text, align 2, keep-with-next
+    245          void ButtonInitialize(void)
+    246          {
+   \                     ButtonInitialize: (+1)
+   \        0x0   0xB5F8             PUSH     {R3-R7,LR}
+    247            u32 u32PortAInterruptMask = 0;
+   \        0x2   0x2400             MOVS     R4,#+0
+    248            u32 u32PortBInterruptMask = 0;
+   \        0x4   0x2500             MOVS     R5,#+0
+    249            static u8 au8ButtonStartupMsg[] = "Button task ready\n\r";
+    250            
+    251            /* Setup default data for all of the buttons in the system */
+    252            for(u8 i = 0; i < TOTAL_BUTTONS; i++)
+   \        0x6   0x2000             MOVS     R0,#+0
+   \                     ??ButtonInitialize_0: (+1)
+   \        0x8   0x0001             MOVS     R1,R0
+   \        0xA   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \        0xC   0x2902             CMP      R1,#+2
+   \        0xE   0xDA10             BGE.N    ??ButtonInitialize_1
+    253            {
+    254              G_abButtonDebounceActive[i] = FALSE;
+   \       0x10   0x2100             MOVS     R1,#+0
+   \       0x12   0x....             LDR.N    R2,??DataTable10_5
+   \       0x14   0x0003             MOVS     R3,R0
+   \       0x16   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x18   0x54D1             STRB     R1,[R2, R3]
+    255              Button_aeCurrentState[i]    = RELEASED;
+   \       0x1A   0x2100             MOVS     R1,#+0
+   \       0x1C   0x....             LDR.N    R2,??DataTable10_2
+   \       0x1E   0x0003             MOVS     R3,R0
+   \       0x20   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x22   0x54D1             STRB     R1,[R2, R3]
+    256              Button_aeNewState[i]        = RELEASED;
+   \       0x24   0x2100             MOVS     R1,#+0
+   \       0x26   0x....             LDR.N    R2,??DataTable10_6
+   \       0x28   0x0003             MOVS     R3,R0
+   \       0x2A   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x2C   0x54D1             STRB     R1,[R2, R3]
+    257            }
+   \       0x2E   0x1C40             ADDS     R0,R0,#+1
+   \       0x30   0xE7EA             B.N      ??ButtonInitialize_0
+    258            
+    259            /* Create masks based on any buttons in the system.  It's ok to have an empty mask. */
+    260            for(u8 i = 0; i < TOTAL_BUTTONS; i++)
+   \                     ??ButtonInitialize_1: (+1)
+   \       0x32   0x2100             MOVS     R1,#+0
+   \                     ??ButtonInitialize_2: (+1)
+   \       0x34   0x0008             MOVS     R0,R1
+   \       0x36   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x38   0x2802             CMP      R0,#+2
+   \       0x3A   0xDA1D             BGE.N    ??ButtonInitialize_3
+    261            {
+    262              if(Buttons_asArray[i].ePort == BUTTON_PORTA)
+   \       0x3C   0x....             LDR.N    R2,??DataTable10_7
+   \       0x3E   0x0008             MOVS     R0,R1
+   \       0x40   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x42   0xEB02 0x0040      ADD      R0,R2,R0, LSL #+1
+   \       0x46   0x7840             LDRB     R0,[R0, #+1]
+   \       0x48   0x2800             CMP      R0,#+0
+   \       0x4A   0xD106             BNE.N    ??ButtonInitialize_4
+    263              {
+    264                u32PortAInterruptMask |= Button_au32ButtonPins[i];
+   \       0x4C   0x....             LDR.N    R0,??DataTable10_8
+   \       0x4E   0x000A             MOVS     R2,R1
+   \       0x50   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x52   0xF850 0x0022      LDR      R0,[R0, R2, LSL #+2]
+   \       0x56   0x4304             ORRS     R4,R0,R4
+   \       0x58   0xE00C             B.N      ??ButtonInitialize_5
+    265              }
+    266              else if(Buttons_asArray[i].ePort == BUTTON_PORTB)
+   \                     ??ButtonInitialize_4: (+1)
+   \       0x5A   0x0008             MOVS     R0,R1
+   \       0x5C   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x5E   0xEB02 0x0040      ADD      R0,R2,R0, LSL #+1
+   \       0x62   0x7840             LDRB     R0,[R0, #+1]
+   \       0x64   0x2880             CMP      R0,#+128
+   \       0x66   0xD105             BNE.N    ??ButtonInitialize_5
+    267              {
+    268                u32PortBInterruptMask |= Button_au32ButtonPins[i];
+   \       0x68   0x....             LDR.N    R0,??DataTable10_8
+   \       0x6A   0x000A             MOVS     R2,R1
+   \       0x6C   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x6E   0xF850 0x0022      LDR      R0,[R0, R2, LSL #+2]
+   \       0x72   0x4305             ORRS     R5,R0,R5
+    269              }
+    270            }
+   \                     ??ButtonInitialize_5: (+1)
+   \       0x74   0x1C49             ADDS     R1,R1,#+1
+   \       0x76   0xE7DD             B.N      ??ButtonInitialize_2
+    271          
+    272            /* Enable PIO interrupts */
+    273            AT91C_BASE_PIOA->PIO_IER = u32PortAInterruptMask;
+   \                     ??ButtonInitialize_3: (+1)
+   \       0x78   0x....             LDR.N    R0,??DataTable10_9  ;; 0x400e0c40
+   \       0x7A   0x6004             STR      R4,[R0, #+0]
+    274            AT91C_BASE_PIOB->PIO_IER = u32PortBInterruptMask;
+   \       0x7C   0x....             LDR.N    R0,??DataTable10_10  ;; 0x400e0e40
+   \       0x7E   0x6005             STR      R5,[R0, #+0]
+    275            
+    276            /* Read the ISR register to clear all the current flags */
+    277            u32PortAInterruptMask = AT91C_BASE_PIOA->PIO_ISR;
+   \       0x80   0x....             LDR.N    R0,??DataTable10_11  ;; 0x400e0c4c
+   \       0x82   0x6806             LDR      R6,[R0, #+0]
+    278            u32PortBInterruptMask = AT91C_BASE_PIOB->PIO_ISR;
+   \       0x84   0x....             LDR.N    R0,??DataTable10_12  ;; 0x400e0e4c
+   \       0x86   0x6807             LDR      R7,[R0, #+0]
+    279          
+    280            /* Configure the NVIC to ensure the PIOA and PIOB interrupts are active */
+    281            NVIC_ClearPendingIRQ(IRQn_PIOA);
+   \       0x88   0x200A             MOVS     R0,#+10
+   \       0x8A   0x....'....        BL       NVIC_ClearPendingIRQ
+    282            NVIC_ClearPendingIRQ(IRQn_PIOB);
+   \       0x8E   0x200B             MOVS     R0,#+11
+   \       0x90   0x....'....        BL       NVIC_ClearPendingIRQ
+    283            NVIC_EnableIRQ(IRQn_PIOA);
+   \       0x94   0x200A             MOVS     R0,#+10
+   \       0x96   0x....'....        BL       NVIC_EnableIRQ
+    284            NVIC_EnableIRQ(IRQn_PIOB);
+   \       0x9A   0x200B             MOVS     R0,#+11
+   \       0x9C   0x....'....        BL       NVIC_EnableIRQ
+    285              
+    286            /* Init complete: set function pointer and application flag */
+    287            Button_pfnStateMachine = ButtonSM_Idle;
+   \       0xA0   0x....'....        ADR.W    R0,ButtonSM_Idle
+   \       0xA4   0x....             LDR.N    R1,??DataTable10_13
+   \       0xA6   0x6008             STR      R0,[R1, #+0]
+    288            G_u32ApplicationFlags |= _APPLICATION_FLAGS_BUTTON;
+   \       0xA8   0x....             LDR.N    R0,??DataTable10_14
+   \       0xAA   0x6801             LDR      R1,[R0, #+0]
+   \       0xAC   0xF051 0x0102      ORRS     R1,R1,#0x2
+   \       0xB0   0x6001             STR      R1,[R0, #+0]
+    289            DebugPrintf(au8ButtonStartupMsg);
+   \       0xB2   0x....             LDR.N    R0,??DataTable10_15
+   \       0xB4   0x....'....        BL       DebugPrintf
+    290          
+    291          } /* end ButtonInitialize() */
+   \       0xB8   0xBDF1             POP      {R0,R4-R7,PC}    ;; return
+
+   \                                 In section .data, align 4
+   \                     `ButtonInitialize::au8ButtonStartupMsg`:
+   \        0x0   0x42 0x75          DC8 "Button task ready\012\015"
+   \              0x74 0x74    
+   \              0x6F 0x6E    
+   \              0x20 0x74    
+   \              0x61 0x73    
+   \              0x6B 0x20    
+   \              0x72 0x65    
+   \              0x61 0x64    
+   \              0x79 0x0A    
+   \              0x0D 0x00    
+    292          
+    293          
+    294          /*----------------------------------------------------------------------------------------------------------------------
+    295          Function ButtonRunActiveState()
+    296          
+    297          Description:
+    298          Selects and runs one iteration of the current state in the state machine.
+    299          All state machines have a TOTAL of 1ms to execute, so on average n state machines
+    300          may take 1ms / n to execute.
+    301          
+    302          Requires:
+    303            - State machine function pointer points at current state
+    304          
+    305          Promises:
+    306            - Calls the function to pointed by the state machine function pointer
+    307          */
+
+   \                                 In section .text, align 2, keep-with-next
+    308          void ButtonRunActiveState(void)
+    309          {
+   \                     ButtonRunActiveState: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    310            Button_pfnStateMachine();
+   \        0x2   0x....             LDR.N    R0,??DataTable10_13
+   \        0x4   0x6800             LDR      R0,[R0, #+0]
+   \        0x6   0x4780             BLX      R0
+    311          
+    312          } /* end ButtonRunActiveState */
+   \        0x8   0xBD01             POP      {R0,PC}          ;; return
+    313          
+    314          
+    315          /*----------------------------------------------------------------------------------------------------------------------
+    316          Function: GetButtonBitLocation
+    317          
+    318          Description:
+    319          Returns the location of the button within its port.  
+    320          The GPIO interrupt requires access to this function.
+    321          
+    322          Requires:
+    323            - u8Button_ is a valid ButtonNumberType.
+    324            - ePort_ is the port where the button is located
+    325          
+    326          Promises:
+    327            - Returns a value that has a bit set in the corresponding position of u32Button_ on the button's port
+    328            - Returns 0 if no match
+    329          */
+
+   \                                 In section .text, align 2, keep-with-next
+    330          u32 GetButtonBitLocation(u8 u8Button_, ButtonPortType ePort_)
+    331          {
+   \                     GetButtonBitLocation: (+1)
+   \        0x0   0x0002             MOVS     R2,R0
+    332            /* Make sure the index is valid */
+    333            if(u8Button_ < TOTAL_BUTTONS) 
+   \        0x2   0x0010             MOVS     R0,R2
+   \        0x4   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \        0x6   0x2802             CMP      R0,#+2
+   \        0x8   0xDA0E             BGE.N    ??GetButtonBitLocation_0
+    334            {
+    335              /* Index is valid so check that the button exists on the port */
+    336              if(Buttons_asArray[u8Button_].ePort == ePort_)
+   \        0xA   0x....             LDR.N    R0,??DataTable10_7
+   \        0xC   0x0013             MOVS     R3,R2
+   \        0xE   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x10   0xEB00 0x0043      ADD      R0,R0,R3, LSL #+1
+   \       0x14   0x7840             LDRB     R0,[R0, #+1]
+   \       0x16   0x000B             MOVS     R3,R1
+   \       0x18   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x1A   0x4298             CMP      R0,R3
+   \       0x1C   0xD104             BNE.N    ??GetButtonBitLocation_0
+    337              {
+    338                /* Return the button position if the index is the correct port */
+    339                return(Button_au32ButtonPins[u8Button_]);
+   \       0x1E   0x....             LDR.N    R0,??DataTable10_8
+   \       0x20   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x22   0xF850 0x0022      LDR      R0,[R0, R2, LSL #+2]
+   \       0x26   0xE000             B.N      ??GetButtonBitLocation_1
+    340              }
+    341            }
+    342            
+    343            /* Otherwise return 0 */
+    344            return(0);
+   \                     ??GetButtonBitLocation_0: (+1)
+   \       0x28   0x2000             MOVS     R0,#+0
+   \                     ??GetButtonBitLocation_1: (+1)
+   \       0x2A   0x4770             BX       LR               ;; return
+    345            
+    346          } /* end GetButtonBitLocation() */
+    347          
+    348          
+    349          /*--------------------------------------------------------------------------------------------------------------------*/
+    350          /* Private functions */
+    351          /*--------------------------------------------------------------------------------------------------------------------*/
+    352          
+    353          
+    354          /***********************************************************************************************************************
+    355          State Machine Function Definitions
+    356          
+    357          The button state machine monitors button activity and manages debouncing and
+    358          maintaining the global button states.
+    359          ***********************************************************************************************************************/
+    360          
+    361          /*--------------------------------------------------------------------------------------------------------------------*/
+    362          /* Do nothing but wait for a debounce time to start */
+
+   \                                 In section .text, align 4, keep-with-next
+    363          static void ButtonSM_Idle(void)                
+    364          {
+    365            for(u8 i = 0; i < TOTAL_BUTTONS; i++)
+   \                     ButtonSM_Idle: (+1)
+   \        0x0   0x2100             MOVS     R1,#+0
+   \                     ??ButtonSM_Idle_0: (+1)
+   \        0x2   0x0008             MOVS     R0,R1
+   \        0x4   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \        0x6   0x2802             CMP      R0,#+2
+   \        0x8   0xDA0B             BGE.N    ??ButtonSM_Idle_1
+    366            {
+    367              if(G_abButtonDebounceActive[i])
+   \        0xA   0x....             LDR.N    R0,??DataTable10_5
+   \        0xC   0x000A             MOVS     R2,R1
+   \        0xE   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x10   0x5C80             LDRB     R0,[R0, R2]
+   \       0x12   0x2800             CMP      R0,#+0
+   \       0x14   0xD003             BEQ.N    ??ButtonSM_Idle_2
+    368              {
+    369                Button_pfnStateMachine = ButtonSM_ButtonActive;
+   \       0x16   0x....'....        ADR.W    R0,ButtonSM_ButtonActive
+   \       0x1A   0x....             LDR.N    R2,??DataTable10_13
+   \       0x1C   0x6010             STR      R0,[R2, #+0]
+    370              }
+    371            }
+   \                     ??ButtonSM_Idle_2: (+1)
+   \       0x1E   0x1C49             ADDS     R1,R1,#+1
+   \       0x20   0xE7EF             B.N      ??ButtonSM_Idle_0
+    372            
+    373          } /* end ButtonSM_Idle(void) */
+   \                     ??ButtonSM_Idle_1: (+1)
+   \       0x22   0x4770             BX       LR               ;; return
+    374          
+    375          
+    376          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   \                                 In section .text, align 4, keep-with-next
+    377          static void ButtonSM_ButtonActive(void)         
+    378          {
+   \                     ButtonSM_ButtonActive: (+1)
+   \        0x0   0xE92D 0x43F8      PUSH     {R3-R9,LR}
+    379            u32 *pu32PortAddress;
+    380            u32 *pu32InterruptAddress;
+    381          
+    382            /* Start by resseting back to Idle in case no buttons are active */
+    383            Button_pfnStateMachine = ButtonSM_Idle;
+   \        0x4   0x....             LDR.N    R6,??DataTable10_13
+   \        0x6   0x....             LDR.N    R0,??DataTable10_16
+   \        0x8   0x6030             STR      R0,[R6, #+0]
+    384          
+    385            /* Check for buttons that are debouncing */
+    386            for(u8 i = 0; i < TOTAL_BUTTONS; i++)
+   \        0xA   0x2700             MOVS     R7,#+0
+   \                     ??ButtonSM_ButtonActive_0: (+1)
+   \        0xC   0x0038             MOVS     R0,R7
+   \        0xE   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x10   0x2802             CMP      R0,#+2
+   \       0x12   0xF280 0x8087      BGE.W    ??ButtonSM_ButtonActive_1
+    387            {
+    388              /* Load address offsets for the current button */
+    389              pu32PortAddress = (u32*)(&(AT91C_BASE_PIOA->PIO_PDSR) + Buttons_asArray[i].ePort);
+   \       0x16   0x....'....        LDR.W    R9,??DataTable10_7
+   \       0x1A   0x....             LDR.N    R0,??DataTable10_17  ;; 0x400e0c3c
+   \       0x1C   0x0039             MOVS     R1,R7
+   \       0x1E   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x20   0xEB09 0x0141      ADD      R1,R9,R1, LSL #+1
+   \       0x24   0x7849             LDRB     R1,[R1, #+1]
+   \       0x26   0xEB00 0x0081      ADD      R0,R0,R1, LSL #+2
+   \       0x2A   0x0004             MOVS     R4,R0
+    390              pu32InterruptAddress = (u32*)(&(AT91C_BASE_PIOA->PIO_IER) + Buttons_asArray[i].ePort);
+   \       0x2C   0x....             LDR.N    R0,??DataTable10_9  ;; 0x400e0c40
+   \       0x2E   0x0039             MOVS     R1,R7
+   \       0x30   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x32   0xEB09 0x0141      ADD      R1,R9,R1, LSL #+1
+   \       0x36   0x7849             LDRB     R1,[R1, #+1]
+   \       0x38   0xEB00 0x0081      ADD      R0,R0,R1, LSL #+2
+   \       0x3C   0x0005             MOVS     R5,R0
+    391              
+    392              if( G_abButtonDebounceActive[i] )
+   \       0x3E   0x....'....        LDR.W    R8,??DataTable10_5
+   \       0x42   0x0038             MOVS     R0,R7
+   \       0x44   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x46   0xF818 0x0000      LDRB     R0,[R8, R0]
+   \       0x4A   0x2800             CMP      R0,#+0
+   \       0x4C   0xD068             BEQ.N    ??ButtonSM_ButtonActive_2
+    393              {
+    394                /* Still have an active button */
+    395                Button_pfnStateMachine = ButtonSM_ButtonActive;
+   \       0x4E   0x....             LDR.N    R0,??DataTable10_18
+   \       0x50   0x6030             STR      R0,[R6, #+0]
+    396                
+    397                if( IsTimeUp((u32*)&G_au32ButtonDebounceTimeStart[i], BUTTON_DEBOUNCE_TIME) )
+   \       0x52   0x2119             MOVS     R1,#+25
+   \       0x54   0x....             LDR.N    R0,??DataTable10_19
+   \       0x56   0x003A             MOVS     R2,R7
+   \       0x58   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x5A   0xEB00 0x0082      ADD      R0,R0,R2, LSL #+2
+   \       0x5E   0x....'....        BL       IsTimeUp
+   \       0x62   0x2800             CMP      R0,#+0
+   \       0x64   0xD05C             BEQ.N    ??ButtonSM_ButtonActive_2
+    398                {
+    399                  /* Active low: get current state of button */
+    400                  if(Buttons_asArray[i].eActiveState == BUTTON_ACTIVE_LOW)
+   \       0x66   0x0038             MOVS     R0,R7
+   \       0x68   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x6A   0xF819 0x0010      LDRB     R0,[R9, R0, LSL #+1]
+   \       0x6E   0x2800             CMP      R0,#+0
+   \       0x70   0xD115             BNE.N    ??ButtonSM_ButtonActive_3
+    401                  {
+    402                    if( ~(*pu32PortAddress) & Button_au32ButtonPins[i] )
+   \       0x72   0x6820             LDR      R0,[R4, #+0]
+   \       0x74   0x....             LDR.N    R1,??DataTable10_8
+   \       0x76   0x003A             MOVS     R2,R7
+   \       0x78   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x7A   0xF851 0x1022      LDR      R1,[R1, R2, LSL #+2]
+   \       0x7E   0xEA31 0x0000      BICS     R0,R1,R0
+   \       0x82   0x2800             CMP      R0,#+0
+   \       0x84   0xD005             BEQ.N    ??ButtonSM_ButtonActive_4
+    403                    {          
+    404                      Button_aeNewState[i] = PRESSED;
+   \       0x86   0x2001             MOVS     R0,#+1
+   \       0x88   0x....             LDR.N    R1,??DataTable10_6
+   \       0x8A   0x003A             MOVS     R2,R7
+   \       0x8C   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x8E   0x5488             STRB     R0,[R1, R2]
+   \       0x90   0xE018             B.N      ??ButtonSM_ButtonActive_5
+    405                    }
+    406                    else
+    407                    {
+    408                      Button_aeNewState[i] = RELEASED;
+   \                     ??ButtonSM_ButtonActive_4: (+1)
+   \       0x92   0x2000             MOVS     R0,#+0
+   \       0x94   0x....             LDR.N    R1,??DataTable10_6
+   \       0x96   0x003A             MOVS     R2,R7
+   \       0x98   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x9A   0x5488             STRB     R0,[R1, R2]
+   \       0x9C   0xE012             B.N      ??ButtonSM_ButtonActive_5
+    409                    }
+    410                  }
+    411                  /* Active high */
+    412                  else
+    413                  {
+    414                    if( *pu32PortAddress & Button_au32ButtonPins[i] )
+   \                     ??ButtonSM_ButtonActive_3: (+1)
+   \       0x9E   0x6820             LDR      R0,[R4, #+0]
+   \       0xA0   0x....             LDR.N    R1,??DataTable10_8
+   \       0xA2   0x003A             MOVS     R2,R7
+   \       0xA4   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0xA6   0xF851 0x1022      LDR      R1,[R1, R2, LSL #+2]
+   \       0xAA   0x4208             TST      R0,R1
+   \       0xAC   0xD005             BEQ.N    ??ButtonSM_ButtonActive_6
+    415                    {          
+    416                      Button_aeNewState[i] = PRESSED;
+   \       0xAE   0x2001             MOVS     R0,#+1
+   \       0xB0   0x....             LDR.N    R1,??DataTable10_6
+   \       0xB2   0x003A             MOVS     R2,R7
+   \       0xB4   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0xB6   0x5488             STRB     R0,[R1, R2]
+   \       0xB8   0xE004             B.N      ??ButtonSM_ButtonActive_5
+    417                    }
+    418                    else
+    419                    {
+    420                      Button_aeNewState[i] = RELEASED;
+   \                     ??ButtonSM_ButtonActive_6: (+1)
+   \       0xBA   0x2000             MOVS     R0,#+0
+   \       0xBC   0x....             LDR.N    R1,??DataTable10_6
+   \       0xBE   0x003A             MOVS     R2,R7
+   \       0xC0   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0xC2   0x5488             STRB     R0,[R1, R2]
+    421                    }
+    422                  }
+    423                  
+    424                  /* Update if the button state has changed */
+    425                  if( Button_aeNewState[i] != Button_aeCurrentState[i] )
+   \                     ??ButtonSM_ButtonActive_5: (+1)
+   \       0xC4   0x....             LDR.N    R0,??DataTable10_2
+   \       0xC6   0x....             LDR.N    R1,??DataTable10_6
+   \       0xC8   0x003A             MOVS     R2,R7
+   \       0xCA   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0xCC   0x5C8A             LDRB     R2,[R1, R2]
+   \       0xCE   0x003B             MOVS     R3,R7
+   \       0xD0   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0xD2   0x5CC3             LDRB     R3,[R0, R3]
+   \       0xD4   0x429A             CMP      R2,R3
+   \       0xD6   0xD016             BEQ.N    ??ButtonSM_ButtonActive_7
+    426                  {
+    427                    Button_aeCurrentState[i] = Button_aeNewState[i];
+   \       0xD8   0x003A             MOVS     R2,R7
+   \       0xDA   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0xDC   0x5C89             LDRB     R1,[R1, R2]
+   \       0xDE   0x003A             MOVS     R2,R7
+   \       0xE0   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0xE2   0x5481             STRB     R1,[R0, R2]
+    428                    if(Button_aeCurrentState[i] == PRESSED)
+   \       0xE4   0x0039             MOVS     R1,R7
+   \       0xE6   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0xE8   0x5C40             LDRB     R0,[R0, R1]
+   \       0xEA   0x2801             CMP      R0,#+1
+   \       0xEC   0xD10B             BNE.N    ??ButtonSM_ButtonActive_7
+    429                    {
+    430                      Button_abNewPress[i] = TRUE;
+   \       0xEE   0x2001             MOVS     R0,#+1
+   \       0xF0   0x....             LDR.N    R1,??DataTable10_3
+   \       0xF2   0x003A             MOVS     R2,R7
+   \       0xF4   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0xF6   0x5488             STRB     R0,[R1, R2]
+    431                      Button_au32HoldTimeStart[i] = G_u32SystemTime1ms;
+   \       0xF8   0x....             LDR.N    R0,??DataTable10_20
+   \       0xFA   0x6800             LDR      R0,[R0, #+0]
+   \       0xFC   0x....             LDR.N    R1,??DataTable10_4
+   \       0xFE   0x003A             MOVS     R2,R7
+   \      0x100   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \      0x102   0xF841 0x0022      STR      R0,[R1, R2, LSL #+2]
+    432                    }
+    433                  }
+    434          
+    435                  /* Regardless of a good press or not, clear the debounce active flag and re-enable the interrupts */
+    436                  G_abButtonDebounceActive[i] = FALSE;
+   \                     ??ButtonSM_ButtonActive_7: (+1)
+   \      0x106   0x2000             MOVS     R0,#+0
+   \      0x108   0x0039             MOVS     R1,R7
+   \      0x10A   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \      0x10C   0xF808 0x0001      STRB     R0,[R8, R1]
+    437                  *pu32InterruptAddress |= Button_au32ButtonPins[i];
+   \      0x110   0x6829             LDR      R1,[R5, #+0]
+   \      0x112   0x....             LDR.N    R0,??DataTable10_8
+   \      0x114   0x003A             MOVS     R2,R7
+   \      0x116   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \      0x118   0xF850 0x0022      LDR      R0,[R0, R2, LSL #+2]
+   \      0x11C   0x4301             ORRS     R1,R0,R1
+   \      0x11E   0x6029             STR      R1,[R5, #+0]
+    438                  
+    439                } /* end if( IsTimeUp...) */
+    440              } /* end if(G_abButtonDebounceActive[index]) */
+    441            } /* end for i */
+   \                     ??ButtonSM_ButtonActive_2: (+1)
+   \      0x120   0x1C7F             ADDS     R7,R7,#+1
+   \      0x122   0xE773             B.N      ??ButtonSM_ButtonActive_0
+    442            
+    443          } /* end ButtonSM_ButtonActive() */
+   \                     ??ButtonSM_ButtonActive_1: (+1)
+   \      0x124   0xE8BD 0x83F1      POP      {R0,R4-R9,PC}    ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10:
+   \        0x0   0xE000'E100        DC32     0xe000e100
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_1:
+   \        0x0   0xE000'E280        DC32     0xe000e280
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_2:
+   \        0x0   0x....'....        DC32     Button_aeCurrentState
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_3:
+   \        0x0   0x....'....        DC32     Button_abNewPress
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_4:
+   \        0x0   0x....'....        DC32     Button_au32HoldTimeStart
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_5:
+   \        0x0   0x....'....        DC32     G_abButtonDebounceActive
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_6:
+   \        0x0   0x....'....        DC32     Button_aeNewState
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_7:
+   \        0x0   0x....'....        DC32     Buttons_asArray
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_8:
+   \        0x0   0x....'....        DC32     Button_au32ButtonPins
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_9:
+   \        0x0   0x400E'0C40        DC32     0x400e0c40
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_10:
+   \        0x0   0x400E'0E40        DC32     0x400e0e40
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_11:
+   \        0x0   0x400E'0C4C        DC32     0x400e0c4c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_12:
+   \        0x0   0x400E'0E4C        DC32     0x400e0e4c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_13:
+   \        0x0   0x....'....        DC32     Button_pfnStateMachine
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_14:
+   \        0x0   0x....'....        DC32     G_u32ApplicationFlags
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_15:
+   \        0x0   0x....'....        DC32     `ButtonInitialize::au8ButtonStartupMsg`
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_16:
+   \        0x0   0x....'....        DC32     ButtonSM_Idle
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_17:
+   \        0x0   0x400E'0C3C        DC32     0x400e0c3c
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_18:
+   \        0x0   0x....'....        DC32     ButtonSM_ButtonActive
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_19:
+   \        0x0   0x....'....        DC32     G_au32ButtonDebounceTimeStart
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable10_20:
+   \        0x0   0x....'....        DC32     G_u32SystemTime1ms
+    444          
+    445          
+    446          
+    447          /*--------------------------------------------------------------------------------------------------------------------*/
+    448          /* End of File */
+    449          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   ButtonAcknowledge
+      24   ButtonInitialize
+        24   -> DebugPrintf
+        24   -> NVIC_ClearPendingIRQ
+        24   -> NVIC_EnableIRQ
+       8   ButtonRunActiveState
+         8   -- Indirect call
+      32   ButtonSM_ButtonActive
+        32   -> IsTimeUp
+       0   ButtonSM_Idle
+       0   GetButtonBitLocation
+      16   IsButtonHeld
+        16   -> IsButtonPressed
+        16   -> IsTimeUp
+       0   IsButtonPressed
+       0   NVIC_ClearPendingIRQ
+       0   NVIC_EnableIRQ
+       0   WasButtonPressed
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable10
+       4  ??DataTable10_1
+       4  ??DataTable10_10
+       4  ??DataTable10_11
+       4  ??DataTable10_12
+       4  ??DataTable10_13
+       4  ??DataTable10_14
+       4  ??DataTable10_15
+       4  ??DataTable10_16
+       4  ??DataTable10_17
+       4  ??DataTable10_18
+       4  ??DataTable10_19
+       4  ??DataTable10_2
+       4  ??DataTable10_20
+       4  ??DataTable10_3
+       4  ??DataTable10_4
+       4  ??DataTable10_5
+       4  ??DataTable10_6
+       4  ??DataTable10_7
+       4  ??DataTable10_8
+       4  ??DataTable10_9
+       8  ButtonAcknowledge
+     186  ButtonInitialize
+      10  ButtonRunActiveState
+     296  ButtonSM_ButtonActive
+      36  ButtonSM_Idle
+       2  Button_abNewPress
+       2  Button_aeCurrentState
+       2  Button_aeNewState
+       8  Button_au32ButtonPins
+       8  Button_au32HoldTimeStart
+       4  Button_pfnStateMachine
+       4  Buttons_asArray
+       2  G_abButtonDebounceActive
+       8  G_au32ButtonDebounceTimeStart
+      44  GetButtonBitLocation
+      40  IsButtonHeld
+      18  IsButtonPressed
+      22  NVIC_ClearPendingIRQ
+      22  NVIC_EnableIRQ
+      18  WasButtonPressed
+      20  au8ButtonStartupMsg
+
+ 
+  28 bytes in section .bss
+  24 bytes in section .data
+   8 bytes in section .rodata
+ 784 bytes in section .text
+ 
+ 784 bytes of CODE  memory
+   8 bytes of CONST memory
+  52 bytes of DATA  memory
+
+Errors: none
+Warnings: none

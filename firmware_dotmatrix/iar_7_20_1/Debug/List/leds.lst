@@ -1,0 +1,1143 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         01/Jan/2019  11:19:51
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\leds.c
+#    Command line =  
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWE7A0.tmp
+#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\leds.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\inc\c\DLib_Config_Normal.h" -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        -On --use_c++_inline --require_prototypes -I "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\leds.lst
+#    Object file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\leds.o
+#
+###############################################################################
+
+\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\leds.c
+      1          /***********************************************************************************************************************
+      2          File: leds.c                                                                
+      3          
+      4          Description:
+      5          LED driver that provides on, off, toggle, blink and PWM functionality.
+      6          The basic on/off/toggle functionality is applied directly to the LEDs.
+      7          Blinking and PWMing of LEDs rely on the EIE operating system to provide timing at
+      8          regular 1ms calls to LedUpdate().
+      9          
+     10          ------------------------------------------------------------------------------------------------------------------------
+     11          API:
+     12          LedNumberType: 
+     13            EIE1     - WHITE, PURPLE, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, LCD_RED, LCD_GREEN, LCD_BLUE
+     14            MPGL2_R01 - BLUE, GREEN, YELLOW, RED, LCD_BL
+     15            MPGL2     - BLUE0, BLUE1, BLUE2, BLUE3, GREEN0, GREEN1, GREEN2, GREEN3, RED0, RED1, RED2, RED3, LCD_BL
+     16          
+     17          LedRateType: LED_0_5HZ, LED_1HZ, LED_2HZ, LED_4HZ, LED_8HZ, 
+     18                       LED_PWM_0, LED_PWM_5, ..., LED_PWM_100
+     19          *Note that PWM values in LedRateType are continuous, thus stepping a variable of LedRateType by one will select the next 
+     20          PWM level. However, decrementing past LED_PWM_0 or incrementing past LED_PWM_100 is undefined.
+     21          
+     22          
+     23          Public:
+     24          void LedOn(LedNumberType eLED_)
+     25          Turn the specified LED on. LED response is immediate.
+     26          e.g. LedOn(BLUE);
+     27          
+     28          void LedOff(LedNumberType eLED_)
+     29          Turn the specified LED off. LED response is immediate.
+     30          e.g. LedOff(BLUE);
+     31          
+     32          void LedToggle(LedNumberType eLED_)
+     33          Toggle the specified LED.  LED response is immediate. LED must be in NORMAL mode.
+     34          e.g. LedToggle(BLUE);
+     35          
+     36          void LedPWM(LedNumberType eLED_, LedRateType ePwmRate_)
+     37          Sets up an LED for PWM mode.  PWM mode requires the main loop to be running at 1ms period.
+     38          e.g. LedPWM(BLUE, LED_PWM_5);
+     39          
+     40          void LedBlink(LedNumberType eLED_, LedRateType eBlinkRate_)
+     41          Sets an LED to BLINK mode.  BLINK mode requires the main loop to be running at 1ms period.
+     42          e.g. LedBlink(BLUE, LED_1HZ);
+     43          
+     44          Protected:
+     45          void LedInitialize(void)
+     46          Test all LEDs and initialize to OFF state.
+     47          
+     48          DISCLAIMER: THIS CODE IS PROVIDED WITHOUT ANY WARRANTY OR GUARANTEES.  USERS MAY
+     49          USE THIS CODE FOR DEVELOPMENT AND EXAMPLE PURPOSES ONLY.  ENGENUICS TECHNOLOGIES
+     50          INCORPORATED IS NOT RESPONSIBLE FOR ANY ERRORS, OMISSIONS, OR DAMAGES THAT COULD
+     51          RESULT FROM USING THIS FIRMWARE IN WHOLE OR IN PART.
+     52          ***********************************************************************************************************************/
+     53          
+     54          #include "configuration.h"
+     55          
+     56          
+     57          /***********************************************************************************************************************
+     58          Global variable definitions with scope across entire project.
+     59          All Global variable names shall start with "G_xxLed"
+     60          ***********************************************************************************************************************/
+     61          /*--------------------------------------------------------------------------------------------------------------------*/
+     62          /* New variables (all shall start with G_xxLed*/
+     63          
+     64          
+     65          /*--------------------------------------------------------------------------------------------------------------------*/
+     66          /* External global variables defined in other files (must indicate which file they are defined in) */
+     67          extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
+     68          extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
+     69          
+     70          extern volatile u32 G_u32ApplicationFlags;             /* From main.c */
+     71          
+     72          
+     73          /***********************************************************************************************************************
+     74          Global variable definitions with scope limited to this local application.
+     75          Variable names shall start with "Led_" and be declared as static.
+     76          ***********************************************************************************************************************/
+     77          
+     78          /************ %LED% EDIT BOARD-SPECIFIC GPIO DEFINITIONS BELOW ***************/
+     79          
+     80          #ifdef EIE1
+     81          /* LED locations: order must correspond to the order set in LedNumberType in the header file. */
+     82          static u32 Led_au32BitPositions[] = {PB_13_LED_WHT, PB_14_LED_PRP, PB_18_LED_BLU, PB_16_LED_CYN,
+     83                                               PB_19_LED_GRN, PB_17_LED_YLW, PB_15_LED_ORG, PB_20_LED_RED,
+     84                                               PB_10_LCD_BL_RED, PB_11_LCD_BL_GRN, PB_12_LCD_BL_BLU};
+     85          
+     86          /* Control array for all LEDs in system initialized for LedInitialize().  Array values correspond to LedConfigType fields: 
+     87               eMode         eRate      u16Count       eCurrentDuty     eActiveState     ePort      LedNumberType */
+     88          static LedConfigType Leds_asLedArray[TOTAL_LEDS] = 
+     89          {{LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* WHITE      */
+     90           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* PURPLE     */
+     91           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* BLUE       */
+     92           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* CYAN       */
+     93           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* GREEN      */
+     94           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* YELLOW     */
+     95           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* ORANGE     */
+     96           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* RED        */
+     97           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* LCD_RED    */
+     98           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* LCD_GREEN  */
+     99           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}  /* LCD_BLUE   */
+    100          };   
+    101          #endif /* EIE1 */
+    102          
+    103          #ifdef MPGL2
+    104          
+    105          #ifdef MPGL2_R01
+    106          /* LED locations: order must correspond to the order set in LedNumberType in the header file. */
+    107          static u32 Led_au32BitPositions[] = {PB_18_LED_BLU, PB_19_LED_GRN, PB_17_LED_YLW, PB_20_LED_RED, PB_11_LCD_BL};
+    108          
+    109          /* Control array for all LEDs in system initialized for LedInitialize().  Array values correspond to LedConfigType fields: 
+    110               eMode         eRate      u16Count       eCurrentDuty     eActiveState     ePort      LedNumberType */
+    111          static LedConfigType Leds_asLedArray[TOTAL_LEDS] = 
+    112          {{LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* BLUE       */
+    113           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* GREEN      */
+    114           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* YELLOW     */
+    115           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* RED        */
+    116           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* LCD_BL     */
+    117          };   
+    118          #else
+    119          /* LED locations: order must correspond to the order set in LedNumberType in the header file. */
+
+   \                                 In section .data, align 4
+    120          static u32 Led_au32BitPositions[] = {PB_20_LED0_RED, PB_17_LED1_RED, PB_19_LED2_RED, PB_18_LED3_RED,
+   \                     Led_au32BitPositions:
+   \        0x0   0x0010'0000        DC32 1048576, 131072, 524288, 262144, 536870912, 4, 67108864, 128, 2
+   \              0x0002'0000  
+   \              0x0008'0000  
+   \              0x0004'0000  
+   \              0x2000'0000  
+   \              0x0000'0004  
+   \              0x0400'0000  
+   \              0x0000'0080  
+   \              0x0000'0002  
+   \       0x24   0x0000'2000        DC32 8192, 64, 256, 32
+   \              0x0000'0040  
+   \              0x0000'0100  
+   \              0x0000'0020  
+    121                                               PA_29_LED0_GRN, PB_02_LED1_GRN, PA_26_LED2_GRN, PA_07_LED3_GRN,
+    122                                               PB_01_LED0_BLU, PB_13_LED1_BLU, PA_06_LED2_BLU, PA_08_LED3_BLU,
+    123                                               PB_05_LCD_BL};
+    124          
+    125          /* Control array for all LEDs in system initialized for LedInitialize().  Array values correspond to LedConfigType fields: 
+    126               eMode         eRate      u16Count       eCurrentDuty     eActiveState     ePort      LedNumberType */
+
+   \                                 In section .data, align 4
+    127          static LedConfigType Leds_asLedArray[TOTAL_LEDS] = 
+   \                     Leds_asLedArray:
+   \        0x0   0x01 0x00          DC8 1, 0
+   \        0x2   0x0014 0x0014      DC16 20, 20
+   \        0x6   0x01 0x01          DC8 1, 1, 128, 0, 1, 0
+   \              0x80 0x00    
+   \              0x01 0x00    
+   \        0xC   0x0014 0x0014      DC16 20, 20
+   \       0x10   0x01 0x01          DC8 1, 1, 128, 0, 1, 0
+   \              0x80 0x00    
+   \              0x01 0x00    
+   \       0x16   0x0014 0x0014      DC16 20, 20
+   \       0x1A   0x01 0x01          DC8 1, 1, 128, 0, 1, 0
+   \              0x80 0x00    
+   \              0x01 0x00    
+   \       0x20   0x0014 0x0014      DC16 20, 20
+   \       0x24   0x01 0x01          DC8 1, 1, 128, 0, 1, 0
+   \              0x80 0x00    
+   \              0x01 0x00    
+   \       0x2A   0x0014 0x0014      DC16 20, 20
+   \       0x2E   0x01 0x01          DC8 1, 1, 0, 0, 1, 0
+   \              0x00 0x00    
+   \              0x01 0x00    
+   \       0x34   0x0014 0x0014      DC16 20, 20
+   \       0x38   0x01 0x01          DC8 1, 1, 128, 0, 1, 0
+   \              0x80 0x00    
+   \              0x01 0x00    
+   \       0x3E   0x0014 0x0014      DC16 20, 20
+   \       0x42   0x01 0x01          DC8 1, 1, 0, 0, 1, 0
+   \              0x00 0x00    
+   \              0x01 0x00    
+   \       0x48   0x0014 0x0014      DC16 20, 20
+   \       0x4C   0x01 0x01          DC8 1, 1, 0, 0, 1, 0
+   \              0x00 0x00    
+   \              0x01 0x00    
+   \       0x52   0x0014 0x0014      DC16 20, 20
+   \       0x56   0x01 0x01          DC8 1, 1, 128, 0, 1, 0
+   \              0x80 0x00    
+   \              0x01 0x00    
+   \       0x5C   0x0014 0x0014      DC16 20, 20
+   \       0x60   0x01 0x01          DC8 1, 1, 128, 0, 1, 0
+   \              0x80 0x00    
+   \              0x01 0x00    
+   \       0x66   0x0014 0x0014      DC16 20, 20
+   \       0x6A   0x01 0x01          DC8 1, 1, 0, 0, 1, 0
+   \              0x00 0x00    
+   \              0x01 0x00    
+   \       0x70   0x0014 0x0014      DC16 20, 20
+   \       0x74   0x01 0x01          DC8 1, 1, 0, 0, 1, 0
+   \              0x00 0x00    
+   \              0x01 0x00    
+   \       0x7A   0x0014 0x0014      DC16 20, 20
+   \       0x7E   0x01 0x01          DC8 1, 1, 128, 0, 0, 0
+   \              0x80 0x00    
+   \              0x00 0x00    
+    128          {{LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* RED0       */
+    129           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* RED1       */
+    130           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* RED2       */
+    131           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* RED3       */
+    132           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTA}, /* GREEN0     */
+    133           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* GREEN1     */
+    134           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTA}, /* GREEN2     */
+    135           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTA}, /* GREEN3     */
+    136           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* BLUE0      */
+    137           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* BLUE1      */
+    138           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTA}, /* BLUE2      */
+    139           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTA}, /* BLUE3      */
+    140           {LED_PWM_MODE, LED_PWM_100, LED_PWM_100, LED_PWM_DUTY_HIGH, LED_ACTIVE_HIGH, LED_PORTB}, /* LCD_BL     */
+    141          };  
+    142          #endif /* MPGL2_R01 */
+    143          
+    144          #endif /* MPGL2 */
+    145          
+    146          /************ EDIT BOARD-SPECIFIC GPIO DEFINITIONS ABOVE ***************/
+    147           
+    148          
+    149          /***********************************************************************************************************************
+    150          * Function Definitions
+    151          ***********************************************************************************************************************/
+    152          
+    153          /*--------------------------------------------------------------------------------------------------------------------*/
+    154          /* Public functions */
+    155          /*--------------------------------------------------------------------------------------------------------------------*/
+    156          
+    157          /*----------------------------------------------------------------------------------------------------------------------
+    158          Function: LedOn
+    159          
+    160          Description:
+    161          Turn the specified LED on.  Automatically takes care of the active low vs. active
+    162          high LEDs.  
+    163          
+    164          Requires:
+    165            - eLED_ is a valid LED index
+    166            - Definitions in Leds_asLedArray[eLED_] are correct
+    167          
+    168          Promises:
+    169            - Requested LED is configured to be turned on next LedUpdate()
+    170            - Requested LED is always set to LED_NORMAL_MODE mode
+    171          */
+
+   \                                 In section .text, align 2, keep-with-next
+    172          void LedOn(LedNumberType eLED_)
+    173          {
+   \                     LedOn: (+1)
+   \        0x0   0xB430             PUSH     {R4,R5}
+    174            u32 *pu32SetAddress;
+    175          
+    176            /* Configure set and clear addresses */
+    177            if(Leds_asLedArray[eLED_].eActiveState == LED_ACTIVE_HIGH)
+   \        0x2   0x210A             MOVS     R1,#+10
+   \        0x4   0x....             LDR.N    R2,??DataTable6
+   \        0x6   0x0003             MOVS     R3,R0
+   \        0x8   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \        0xA   0x434B             MULS     R3,R1,R3
+   \        0xC   0x4413             ADD      R3,R2,R3
+   \        0xE   0x79DB             LDRB     R3,[R3, #+7]
+   \       0x10   0x2B01             CMP      R3,#+1
+   \       0x12   0xD108             BNE.N    ??LedOn_0
+    178            {
+    179              /* Active high LEDs use SODR to turn on */
+    180              pu32SetAddress = (u32*)(&(AT91C_BASE_PIOA->PIO_SODR) + Leds_asLedArray[eLED_].ePort);
+   \       0x14   0x....             LDR.N    R3,??DataTable6_1  ;; 0x400e0c30
+   \       0x16   0x0004             MOVS     R4,R0
+   \       0x18   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x1A   0x434C             MULS     R4,R1,R4
+   \       0x1C   0x4414             ADD      R4,R2,R4
+   \       0x1E   0x7A24             LDRB     R4,[R4, #+8]
+   \       0x20   0xEB03 0x0384      ADD      R3,R3,R4, LSL #+2
+   \       0x24   0xE007             B.N      ??LedOn_1
+    181            }
+    182            else
+    183            {
+    184              /* Active low LEDs use CODR to turn on */
+    185              pu32SetAddress = (u32*)(&(AT91C_BASE_PIOA->PIO_CODR) + Leds_asLedArray[eLED_].ePort);
+   \                     ??LedOn_0: (+1)
+   \       0x26   0x....             LDR.N    R3,??DataTable6_2  ;; 0x400e0c34
+   \       0x28   0x0004             MOVS     R4,R0
+   \       0x2A   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x2C   0x434C             MULS     R4,R1,R4
+   \       0x2E   0x4414             ADD      R4,R2,R4
+   \       0x30   0x7A24             LDRB     R4,[R4, #+8]
+   \       0x32   0xEB03 0x0384      ADD      R3,R3,R4, LSL #+2
+    186            }
+    187            
+    188            /* Turn on the LED */
+    189            *pu32SetAddress = Led_au32BitPositions[(u8)eLED_];
+   \                     ??LedOn_1: (+1)
+   \       0x36   0x....             LDR.N    R4,??DataTable6_3
+   \       0x38   0x0005             MOVS     R5,R0
+   \       0x3A   0xB2ED             UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+   \       0x3C   0xF854 0x4025      LDR      R4,[R4, R5, LSL #+2]
+   \       0x40   0x601C             STR      R4,[R3, #+0]
+    190            
+    191            /* Always set the LED back to LED_NORMAL_MODE mode */
+    192          	Leds_asLedArray[(u8)eLED_].eMode = LED_NORMAL_MODE;
+   \       0x42   0x2400             MOVS     R4,#+0
+   \       0x44   0x0005             MOVS     R5,R0
+   \       0x46   0xB2ED             UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+   \       0x48   0xFB01 0xF105      MUL      R1,R1,R5
+   \       0x4C   0x5454             STRB     R4,[R2, R1]
+    193          
+    194          } /* end LedOn() */
+   \       0x4E   0xBC30             POP      {R4,R5}
+   \       0x50   0x4770             BX       LR               ;; return
+    195          
+    196          
+    197          /*----------------------------------------------------------------------------------------------------------------------
+    198          Function: LedOff
+    199          
+    200          Description:
+    201          Turn the specified LED off.  Automatically takes care of the active low vs. active
+    202          high LEDs.  
+    203          
+    204          Requires:
+    205            - eLED_ is a valid LED index
+    206            - Definitions in Leds_asLedArray[eLED_] are correct
+    207          
+    208          Promises:
+    209            - Requested LED is turned off
+    210            - Requested LED is always set to LED_NORMAL_MODE mode
+    211          */
+
+   \                                 In section .text, align 2, keep-with-next
+    212          void LedOff(LedNumberType eLED_)
+    213          {
+   \                     LedOff: (+1)
+   \        0x0   0xB430             PUSH     {R4,R5}
+    214            u32 *pu32ClearAddress;
+    215          
+    216            /* Configure set and clear addresses */
+    217            if(Leds_asLedArray[eLED_].eActiveState == LED_ACTIVE_HIGH)
+   \        0x2   0x210A             MOVS     R1,#+10
+   \        0x4   0x....             LDR.N    R2,??DataTable6
+   \        0x6   0x0003             MOVS     R3,R0
+   \        0x8   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \        0xA   0x434B             MULS     R3,R1,R3
+   \        0xC   0x4413             ADD      R3,R2,R3
+   \        0xE   0x79DB             LDRB     R3,[R3, #+7]
+   \       0x10   0x2B01             CMP      R3,#+1
+   \       0x12   0xD108             BNE.N    ??LedOff_0
+    218            {
+    219              /* Active high LEDs use CODR to turn off */
+    220              pu32ClearAddress = (u32*)(&(AT91C_BASE_PIOA->PIO_CODR) + Leds_asLedArray[eLED_].ePort);
+   \       0x14   0x....             LDR.N    R3,??DataTable6_2  ;; 0x400e0c34
+   \       0x16   0x0004             MOVS     R4,R0
+   \       0x18   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x1A   0x434C             MULS     R4,R1,R4
+   \       0x1C   0x4414             ADD      R4,R2,R4
+   \       0x1E   0x7A24             LDRB     R4,[R4, #+8]
+   \       0x20   0xEB03 0x0384      ADD      R3,R3,R4, LSL #+2
+   \       0x24   0xE007             B.N      ??LedOff_1
+    221            }
+    222            else
+    223            {
+    224              /* Active low LEDs use SODR to turn off */
+    225              pu32ClearAddress = (u32*)(&(AT91C_BASE_PIOA->PIO_SODR) + Leds_asLedArray[eLED_].ePort);
+   \                     ??LedOff_0: (+1)
+   \       0x26   0x....             LDR.N    R3,??DataTable6_1  ;; 0x400e0c30
+   \       0x28   0x0004             MOVS     R4,R0
+   \       0x2A   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x2C   0x434C             MULS     R4,R1,R4
+   \       0x2E   0x4414             ADD      R4,R2,R4
+   \       0x30   0x7A24             LDRB     R4,[R4, #+8]
+   \       0x32   0xEB03 0x0384      ADD      R3,R3,R4, LSL #+2
+    226            }
+    227            
+    228            /* Clear the bit corresponding to eLED_ */
+    229          	*pu32ClearAddress = Led_au32BitPositions[(u8)eLED_];
+   \                     ??LedOff_1: (+1)
+   \       0x36   0x....             LDR.N    R4,??DataTable6_3
+   \       0x38   0x0005             MOVS     R5,R0
+   \       0x3A   0xB2ED             UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+   \       0x3C   0xF854 0x4025      LDR      R4,[R4, R5, LSL #+2]
+   \       0x40   0x601C             STR      R4,[R3, #+0]
+    230          
+    231            /* Always set the LED back to LED_NORMAL_MODE mode */
+    232          	Leds_asLedArray[(u8)eLED_].eMode = LED_NORMAL_MODE;
+   \       0x42   0x2400             MOVS     R4,#+0
+   \       0x44   0x0005             MOVS     R5,R0
+   \       0x46   0xB2ED             UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+   \       0x48   0xFB01 0xF105      MUL      R1,R1,R5
+   \       0x4C   0x5454             STRB     R4,[R2, R1]
+    233            
+    234          } /* end LedOff() */
+   \       0x4E   0xBC30             POP      {R4,R5}
+   \       0x50   0x4770             BX       LR               ;; return
+    235          
+    236          
+    237          /*----------------------------------------------------------------------------------------------------------------------
+    238          Function: LedToggle
+    239          
+    240          Description:
+    241          Toggle the specified LED.
+    242          
+    243          Requires:
+    244            - eLED_ is a valid LED index
+    245            - eLED_ *should* be in LED_NORMAL_MODE
+    246            - Write access to PIOx_ODSR is enabled
+    247          
+    248          Promises:
+    249            - Requested LED is toggled if the LED is in LED_NORMAL_MODE mode
+    250          */
+
+   \                                 In section .text, align 2, keep-with-next
+    251          void LedToggle(LedNumberType eLED_)
+    252          {
+   \                     LedToggle: (+1)
+   \        0x0   0xB410             PUSH     {R4}
+    253            u32 *pu32Address = (u32*)(&(AT91C_BASE_PIOA->PIO_ODSR) + Leds_asLedArray[eLED_].ePort);
+   \        0x2   0x....             LDR.N    R2,??DataTable6_4  ;; 0x400e0c38
+   \        0x4   0x....             LDR.N    R3,??DataTable6
+   \        0x6   0x0004             MOVS     R4,R0
+   \        0x8   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \        0xA   0x210A             MOVS     R1,#+10
+   \        0xC   0x434C             MULS     R4,R1,R4
+   \        0xE   0xEB03 0x0104      ADD      R1,R3,R4
+   \       0x12   0x7A09             LDRB     R1,[R1, #+8]
+   \       0x14   0xEB02 0x0281      ADD      R2,R2,R1, LSL #+2
+    254          
+    255            *pu32Address ^= Led_au32BitPositions[ (u8)eLED_ ];
+   \       0x18   0x6813             LDR      R3,[R2, #+0]
+   \       0x1A   0x....             LDR.N    R1,??DataTable6_3
+   \       0x1C   0x0004             MOVS     R4,R0
+   \       0x1E   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x20   0xF851 0x1024      LDR      R1,[R1, R4, LSL #+2]
+   \       0x24   0x404B             EORS     R3,R1,R3
+   \       0x26   0x6013             STR      R3,[R2, #+0]
+    256            
+    257          } /* end LedToggle() */
+   \       0x28   0xBC10             POP      {R4}
+   \       0x2A   0x4770             BX       LR               ;; return
+    258          
+    259          
+    260          /*----------------------------------------------------------------------------------------------------------------------
+    261          Function: LedPWM
+    262          
+    263          Description:
+    264          Sets an LED to PWM mode
+    265          
+    266          Requires:
+    267            - eLED_ is a valid LED index
+    268            - ePwmRate_ is an allowed duty cycle:
+    269              LED_PWM_0, LED_PWM_5, LED_PWM_10, ..., LED_PWM_95, LED_PWM_100
+    270          
+    271          Promises:
+    272            - Requested LED is set to PWM mode at the duty cycle specified
+    273          */
+
+   \                                 In section .text, align 2, keep-with-next
+    274          void LedPWM(LedNumberType eLED_, LedRateType ePwmRate_)
+    275          {
+   \                     LedPWM: (+1)
+   \        0x0   0xB430             PUSH     {R4,R5}
+    276          	Leds_asLedArray[(u8)eLED_].eMode = LED_PWM_MODE;
+   \        0x2   0x220A             MOVS     R2,#+10
+   \        0x4   0x....             LDR.N    R3,??DataTable6
+   \        0x6   0x2401             MOVS     R4,#+1
+   \        0x8   0x0005             MOVS     R5,R0
+   \        0xA   0xB2ED             UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+   \        0xC   0x4355             MULS     R5,R2,R5
+   \        0xE   0x555C             STRB     R4,[R3, R5]
+    277          	Leds_asLedArray[(u8)eLED_].eRate = ePwmRate_;
+   \       0x10   0x0004             MOVS     R4,R0
+   \       0x12   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x14   0x4354             MULS     R4,R2,R4
+   \       0x16   0x441C             ADD      R4,R3,R4
+   \       0x18   0x8061             STRH     R1,[R4, #+2]
+    278          	Leds_asLedArray[(u8)eLED_].u16Count = (u16)ePwmRate_;
+   \       0x1A   0x0004             MOVS     R4,R0
+   \       0x1C   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x1E   0x4354             MULS     R4,R2,R4
+   \       0x20   0x441C             ADD      R4,R3,R4
+   \       0x22   0x80A1             STRH     R1,[R4, #+4]
+    279            Leds_asLedArray[(u8)eLED_].eCurrentDuty = LED_PWM_DUTY_HIGH;
+   \       0x24   0x0004             MOVS     R4,R0
+   \       0x26   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x28   0xFB02 0xF204      MUL      R2,R2,R4
+   \       0x2C   0x441A             ADD      R2,R3,R2
+   \       0x2E   0x2301             MOVS     R3,#+1
+   \       0x30   0x7193             STRB     R3,[R2, #+6]
+    280          
+    281          } /* end LedPWM() */
+   \       0x32   0xBC30             POP      {R4,R5}
+   \       0x34   0x4770             BX       LR               ;; return
+    282          
+    283          
+    284          /*----------------------------------------------------------------------------------------------------------------------
+    285          Function: LedBlink
+    286          
+    287          Description:
+    288          Sets an LED to BLINK mode.
+    289          
+    290          Requires:
+    291            - eLED_ is a valid LED index
+    292            - eBlinkRate_ is an allowed frequency:
+    293              LED_0_5HZ, LED_1HZ, LED_2HZ, LED_4HZ, LED_8HZ
+    294          
+    295          Promises:
+    296            - Requested LED is set to BLINK mode at the rate specified
+    297          */
+
+   \                                 In section .text, align 2, keep-with-next
+    298          void LedBlink(LedNumberType eLED_, LedRateType eBlinkRate_)
+    299          {
+   \                     LedBlink: (+1)
+   \        0x0   0xB430             PUSH     {R4,R5}
+    300          	Leds_asLedArray[(u8)eLED_].eMode = LED_BLINK_MODE;
+   \        0x2   0x220A             MOVS     R2,#+10
+   \        0x4   0x....             LDR.N    R3,??DataTable6
+   \        0x6   0x2402             MOVS     R4,#+2
+   \        0x8   0x0005             MOVS     R5,R0
+   \        0xA   0xB2ED             UXTB     R5,R5            ;; ZeroExt  R5,R5,#+24,#+24
+   \        0xC   0x4355             MULS     R5,R2,R5
+   \        0xE   0x555C             STRB     R4,[R3, R5]
+    301          	Leds_asLedArray[(u8)eLED_].eRate = eBlinkRate_;
+   \       0x10   0x0004             MOVS     R4,R0
+   \       0x12   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x14   0x4354             MULS     R4,R2,R4
+   \       0x16   0x441C             ADD      R4,R3,R4
+   \       0x18   0x8061             STRH     R1,[R4, #+2]
+    302          	Leds_asLedArray[(u8)eLED_].u16Count = eBlinkRate_;
+   \       0x1A   0x0004             MOVS     R4,R0
+   \       0x1C   0xB2E4             UXTB     R4,R4            ;; ZeroExt  R4,R4,#+24,#+24
+   \       0x1E   0xFB02 0xF204      MUL      R2,R2,R4
+   \       0x22   0x441A             ADD      R2,R3,R2
+   \       0x24   0x8091             STRH     R1,[R2, #+4]
+    303          
+    304          } /* end LedBlink() */
+   \       0x26   0xBC30             POP      {R4,R5}
+   \       0x28   0x4770             BX       LR               ;; return
+    305          
+    306          
+    307          /*--------------------------------------------------------------------------------------------------------------------*/
+    308          /* Protected functions */
+    309          /*--------------------------------------------------------------------------------------------------------------------*/
+    310          
+    311          /*----------------------------------------------------------------------------------------------------------------------
+    312          Function: LedInitialize
+    313          
+    314          Description:
+    315          Initialization of LED system paramters and visual LED check.
+    316          
+    317          Requires:
+    318            - G_u32SystemTime1ms ticking
+    319            - All LEDs already initialized to LED_NORMAL_MODE mode ON
+    320          
+    321          Promises:
+    322            - All LEDs in LED_NORMAL_MODE mode with OFF
+    323          */
+
+   \                                 In section .text, align 2, keep-with-next
+    324          void LedInitialize(void)
+    325          {
+   \                     LedInitialize: (+1)
+   \        0x0   0xE92D 0x41FC      PUSH     {R2-R8,LR}
+    326            u32 u32Timer;
+    327            u8  u8Index;
+    328          
+    329            u32 u32Buzzer1Frequency = 4000;
+   \        0x4   0xF44F 0x647A      MOV      R4,#+4000
+    330            u32 u32Buzzer2Frequency = 500;
+   \        0x8   0xF44F 0x75FA      MOV      R5,#+500
+    331            u32 u32StepSize = (u32Buzzer1Frequency - u32Buzzer2Frequency) / 20;
+   \        0xC   0x1B60             SUBS     R0,R4,R5
+   \        0xE   0x2114             MOVS     R1,#+20
+   \       0x10   0xFBB0 0xF6F1      UDIV     R6,R0,R1
+    332          
+    333            static u8 au8LedStartupMsg[] = "LED functions ready\n\r";
+    334          
+    335          #if MPGL2
+    336            /* Test code for checking LEDs */
+    337          #if 0
+    338            LedOn(RED0);
+    339            LedOn(RED1);
+    340            LedOn(RED2);
+    341            LedOn(RED3);
+    342            LedOn(BLUE0);
+    343            LedOn(BLUE1);
+    344            LedOn(BLUE2);
+    345            LedOn(BLUE3);
+    346            LedOn(GREEN0);
+    347            LedOn(GREEN1);
+    348            LedOn(GREEN2);
+    349            LedOn(GREEN3);
+    350          #endif
+    351          
+    352          #endif /* MPGL2 */
+    353            
+    354            /* Turn all LEDs on full, then fade them out over a few seconds */
+    355            for(u8Index = 20; u8Index > 0; u8Index--)
+   \       0x14   0x2714             MOVS     R7,#+20
+   \                     ??LedInitialize_0: (+1)
+   \       0x16   0x0038             MOVS     R0,R7
+   \       0x18   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x1A   0x2800             CMP      R0,#+0
+   \       0x1C   0xD035             BEQ.N    ??LedInitialize_1
+    356            {
+    357          #ifdef STARTUP_SOUND
+    358              /* Configure Buzzers to provide some audio during start up */
+    359              PWMAudioSetFrequency(BUZZER1, u32Buzzer1Frequency);
+    360              PWMAudioOn(BUZZER1);
+    361          #ifdef  EIE1
+    362              PWMAudioSetFrequency(BUZZER2, u32Buzzer2Frequency);
+    363              PWMAudioOn(BUZZER2);
+    364          #endif /* EIE1 */
+    365          #endif /* STARTUP_SOUND */
+    366              
+    367              /* Spend a little bit of time in each level of intensity */
+    368              for(u16 j = 20; j > 0; j--)
+   \       0x1E   0xF05F 0x0814      MOVS     R8,#+20
+   \                     ??LedInitialize_2: (+1)
+   \       0x22   0x4640             MOV      R0,R8
+   \       0x24   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
+   \       0x26   0x2800             CMP      R0,#+0
+   \       0x28   0xD00D             BEQ.N    ??LedInitialize_3
+    369              {
+    370                u32Timer = G_u32SystemTime1ms;
+   \       0x2A   0x....             LDR.N    R0,??DataTable6_5
+   \       0x2C   0x6800             LDR      R0,[R0, #+0]
+   \       0x2E   0x9000             STR      R0,[SP, #+0]
+    371                while( !IsTimeUp(&u32Timer, 1) );
+   \                     ??LedInitialize_4: (+1)
+   \       0x30   0x2101             MOVS     R1,#+1
+   \       0x32   0x4668             MOV      R0,SP
+   \       0x34   0x....'....        BL       IsTimeUp
+   \       0x38   0x2800             CMP      R0,#+0
+   \       0x3A   0xD0F9             BEQ.N    ??LedInitialize_4
+    372                LedUpdate();
+   \       0x3C   0x....'....        BL       LedUpdate
+    373              }
+   \       0x40   0xF1B8 0x0801      SUBS     R8,R8,#+1
+   \       0x44   0xE7ED             B.N      ??LedInitialize_2
+    374              /* Pause for a bit on the first iteration to show the LEDs on for little while */
+    375              if(u8Index == 20)
+   \                     ??LedInitialize_3: (+1)
+   \       0x46   0x0038             MOVS     R0,R7
+   \       0x48   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x4A   0x2814             CMP      R0,#+20
+   \       0x4C   0xD105             BNE.N    ??LedInitialize_5
+    376              {
+    377                while( !IsTimeUp(&u32Timer, 200) );
+   \                     ??LedInitialize_6: (+1)
+   \       0x4E   0x21C8             MOVS     R1,#+200
+   \       0x50   0x4668             MOV      R0,SP
+   \       0x52   0x....'....        BL       IsTimeUp
+   \       0x56   0x2800             CMP      R0,#+0
+   \       0x58   0xD0F9             BEQ.N    ??LedInitialize_6
+    378              }
+    379              
+    380              /* Set the LED intensity for the next iteration */
+    381              for(u8 j = 0; j < TOTAL_LEDS; j++)
+   \                     ??LedInitialize_5: (+1)
+   \       0x5A   0x2100             MOVS     R1,#+0
+   \                     ??LedInitialize_7: (+1)
+   \       0x5C   0x0008             MOVS     R0,R1
+   \       0x5E   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x60   0x280D             CMP      R0,#+13
+   \       0x62   0xDA0E             BGE.N    ??LedInitialize_8
+    382              {
+    383                Leds_asLedArray[j].eRate = (LedRateType)(u8Index - 1);
+   \       0x64   0x0038             MOVS     R0,R7
+   \       0x66   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x68   0x1E42             SUBS     R2,R0,#+1
+   \       0x6A   0x....             LDR.N    R3,??DataTable6
+   \       0x6C   0x468C             MOV      R12,R1
+   \       0x6E   0xFA5F 0xFC8C      UXTB     R12,R12          ;; ZeroExt  R12,R12,#+24,#+24
+   \       0x72   0x200A             MOVS     R0,#+10
+   \       0x74   0xFB00 0xFC0C      MUL      R12,R0,R12
+   \       0x78   0xEB03 0x000C      ADD      R0,R3,R12
+   \       0x7C   0x8042             STRH     R2,[R0, #+2]
+    384              }
+   \       0x7E   0x1C49             ADDS     R1,R1,#+1
+   \       0x80   0xE7EC             B.N      ??LedInitialize_7
+    385              
+    386              /* Set the buzzer frequency for the next iteration */
+    387              u32Buzzer1Frequency -= u32StepSize;
+   \                     ??LedInitialize_8: (+1)
+   \       0x82   0x1BA4             SUBS     R4,R4,R6
+    388              u32Buzzer2Frequency += u32StepSize;
+   \       0x84   0x1975             ADDS     R5,R6,R5
+    389            }
+   \       0x86   0x1E7F             SUBS     R7,R7,#+1
+   \       0x88   0xE7C5             B.N      ??LedInitialize_0
+    390          
+    391            /* Final update to set last state, hold for a short period */
+    392            LedUpdate();
+   \                     ??LedInitialize_1: (+1)
+   \       0x8A   0x....'....        BL       LedUpdate
+    393            while( !IsTimeUp(&u32Timer, 200) );
+   \                     ??LedInitialize_9: (+1)
+   \       0x8E   0x21C8             MOVS     R1,#+200
+   \       0x90   0x4668             MOV      R0,SP
+   \       0x92   0x....'....        BL       IsTimeUp
+   \       0x96   0x2800             CMP      R0,#+0
+   \       0x98   0xD0F9             BEQ.N    ??LedInitialize_9
+    394            
+    395          #ifdef STARTUP_SOUND
+    396            /* Turn off the buzzers */
+    397            PWMAudioOff(BUZZER1);
+    398          #ifdef  EIE1
+    399            PWMAudioOff(BUZZER2);
+    400          #endif /* EIE1 */
+    401            
+    402          #endif /* STARTUP_SOUND */
+    403          
+    404           
+    405            /* The discrete LEDs are off and the backlight is on (white) -- this
+    406            is how we will exit the LED init.  But should we set all the LEDs to
+    407            NORMAL mode?  This would solve the LedToggle() problem described in 
+    408            LedBasic module.  So if the code below is added, then the module
+    409            information must be updated. */
+    410          #if 0 
+    411            for(u8 i = 0; i < TOTAL_LEDS; i++)
+    412            {
+    413              Leds_asLedArray[i].eMode = LED_NORMAL_MODE;
+    414            }
+    415          #endif
+    416          
+    417          #ifdef EIE1
+    418            LedOn(LCD_RED);
+    419            LedOn(LCD_GREEN);
+    420            LedOn(LCD_BLUE);
+    421          #endif
+    422            
+    423          #ifdef MPGL2
+    424            LedOn(LCD_BL);
+   \       0x9A   0x200C             MOVS     R0,#+12
+   \       0x9C   0x....'....        BL       LedOn
+    425          #endif
+    426          
+    427            /* Final setup and report that LED system is ready */
+    428            G_u32ApplicationFlags |= _APPLICATION_FLAGS_LED;
+   \       0xA0   0x....             LDR.N    R0,??DataTable6_6
+   \       0xA2   0x6801             LDR      R1,[R0, #+0]
+   \       0xA4   0xF051 0x0101      ORRS     R1,R1,#0x1
+   \       0xA8   0x6001             STR      R1,[R0, #+0]
+    429            DebugPrintf(au8LedStartupMsg);
+   \       0xAA   0x....             LDR.N    R0,??DataTable6_7
+   \       0xAC   0x....'....        BL       DebugPrintf
+    430            
+    431          } /* end LedInitialize() */
+   \       0xB0   0xE8BD 0x81F3      POP      {R0,R1,R4-R8,PC}  ;; return
+
+   \                                 In section .data, align 4
+   \                     `LedInitialize::au8LedStartupMsg`:
+   \        0x0   0x4C 0x45          DC8 "LED functions ready\012\015"
+   \              0x44 0x20    
+   \              0x66 0x75    
+   \              0x6E 0x63    
+   \              0x74 0x69    
+   \              0x6F 0x6E    
+   \              0x73 0x20    
+   \              0x72 0x65    
+   \              0x61 0x64    
+   \              0x79 0x0A    
+   \              0x0D 0x00    
+   \       0x16   0x00 0x00          DC8 0, 0
+    432          
+    433          
+    434          /*--------------------------------------------------------------------------------------------------------------------*/
+    435          /* Private functions */
+    436          /*--------------------------------------------------------------------------------------------------------------------*/
+    437          
+    438          /*----------------------------------------------------------------------------------------------------------------------
+    439          Function: LedUpdate
+    440          
+    441          Description:
+    442          Update all LEDs for the current cycle.
+    443          
+    444          Requires:
+    445           - G_u32SystemTime1ms is counting
+    446          
+    447          Promises:
+    448             - All LEDs updated based on their counters
+    449          */
+
+   \                                 In section .text, align 2, keep-with-next
+    450          void LedUpdate(void)
+    451          {
+   \                     LedUpdate: (+1)
+   \        0x0   0xB570             PUSH     {R4-R6,LR}
+    452          	/* Loop through each LED */
+    453            for(u8 i = 0; i < TOTAL_LEDS; i++)
+   \        0x2   0x2400             MOVS     R4,#+0
+   \                     ??LedUpdate_0: (+1)
+   \        0x4   0x0020             MOVS     R0,R4
+   \        0x6   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \        0x8   0x280D             CMP      R0,#+13
+   \        0xA   0xF280 0x8098      BGE.W    ??LedUpdate_1
+    454            {
+    455              /* Check if LED is PWMing */
+    456              if(Leds_asLedArray[(LedNumberType)i].eMode == LED_PWM_MODE)
+   \        0xE   0x250A             MOVS     R5,#+10
+   \       0x10   0x....             LDR.N    R6,??DataTable6
+   \       0x12   0x0020             MOVS     R0,R4
+   \       0x14   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x16   0x4368             MULS     R0,R5,R0
+   \       0x18   0x5C30             LDRB     R0,[R6, R0]
+   \       0x1A   0x2801             CMP      R0,#+1
+   \       0x1C   0xD165             BNE.N    ??LedUpdate_2
+    457              {
+    458                /* Handle special case of 0% duty cycle */
+    459                if( Leds_asLedArray[i].eRate == LED_PWM_0 )
+   \       0x1E   0x0020             MOVS     R0,R4
+   \       0x20   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x22   0x4368             MULS     R0,R5,R0
+   \       0x24   0x4430             ADD      R0,R6,R0
+   \       0x26   0xF9B0 0x0002      LDRSH    R0,[R0, #+2]
+   \       0x2A   0x2800             CMP      R0,#+0
+   \       0x2C   0xD104             BNE.N    ??LedUpdate_3
+    460                {
+    461                  LedOff( (LedNumberType)i );
+   \       0x2E   0x0020             MOVS     R0,R4
+   \       0x30   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x32   0x....'....        BL       LedOff
+   \       0x36   0xE051             B.N      ??LedUpdate_4
+    462                }
+    463                
+    464                /* Handle special case of 100% duty cycle */
+    465                else if( Leds_asLedArray[i].eRate == LED_PWM_100 )
+   \                     ??LedUpdate_3: (+1)
+   \       0x38   0x0020             MOVS     R0,R4
+   \       0x3A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x3C   0x4368             MULS     R0,R5,R0
+   \       0x3E   0x4430             ADD      R0,R6,R0
+   \       0x40   0xF9B0 0x0002      LDRSH    R0,[R0, #+2]
+   \       0x44   0x2814             CMP      R0,#+20
+   \       0x46   0xD104             BNE.N    ??LedUpdate_5
+    466                {
+    467                  LedOn( (LedNumberType)i );
+   \       0x48   0x0020             MOVS     R0,R4
+   \       0x4A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x4C   0x....'....        BL       LedOn
+   \       0x50   0xE044             B.N      ??LedUpdate_4
+    468                }
+    469            
+    470                /* Otherwise, regular PWM: decrement counter; toggle and reload if counter reaches 0 */
+    471                else
+    472                {
+    473                  if(--Leds_asLedArray[(LedNumberType)i].u16Count == 0)
+   \                     ??LedUpdate_5: (+1)
+   \       0x52   0x0020             MOVS     R0,R4
+   \       0x54   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x56   0x4368             MULS     R0,R5,R0
+   \       0x58   0x4430             ADD      R0,R6,R0
+   \       0x5A   0x0021             MOVS     R1,R4
+   \       0x5C   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x5E   0x4369             MULS     R1,R5,R1
+   \       0x60   0x4431             ADD      R1,R6,R1
+   \       0x62   0x8889             LDRH     R1,[R1, #+4]
+   \       0x64   0x1E49             SUBS     R1,R1,#+1
+   \       0x66   0x8081             STRH     R1,[R0, #+4]
+   \       0x68   0x0020             MOVS     R0,R4
+   \       0x6A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x6C   0x4368             MULS     R0,R5,R0
+   \       0x6E   0x4430             ADD      R0,R6,R0
+   \       0x70   0x8880             LDRH     R0,[R0, #+4]
+   \       0x72   0x2800             CMP      R0,#+0
+   \       0x74   0xD132             BNE.N    ??LedUpdate_4
+    474                  {
+    475                    if(Leds_asLedArray[(LedNumberType)i].eCurrentDuty == LED_PWM_DUTY_HIGH)
+   \       0x76   0x0020             MOVS     R0,R4
+   \       0x78   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x7A   0x4368             MULS     R0,R5,R0
+   \       0x7C   0x4430             ADD      R0,R6,R0
+   \       0x7E   0x7980             LDRB     R0,[R0, #+6]
+   \       0x80   0x2801             CMP      R0,#+1
+   \       0x82   0xD117             BNE.N    ??LedUpdate_6
+    476                    {
+    477                      /* Turn the LED off and update the counters for the next cycle */
+    478                      LedOff( (LedNumberType)i );
+   \       0x84   0x0020             MOVS     R0,R4
+   \       0x86   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x88   0x....'....        BL       LedOff
+    479                      Leds_asLedArray[(LedNumberType)i].u16Count = LED_PWM_PERIOD - Leds_asLedArray[(LedNumberType)i].eRate;
+   \       0x8C   0x0020             MOVS     R0,R4
+   \       0x8E   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x90   0x4368             MULS     R0,R5,R0
+   \       0x92   0x4430             ADD      R0,R6,R0
+   \       0x94   0x0021             MOVS     R1,R4
+   \       0x96   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0x98   0x4369             MULS     R1,R5,R1
+   \       0x9A   0x4431             ADD      R1,R6,R1
+   \       0x9C   0xF9B1 0x1002      LDRSH    R1,[R1, #+2]
+   \       0xA0   0xF1D1 0x0114      RSBS     R1,R1,#+20
+   \       0xA4   0x8081             STRH     R1,[R0, #+4]
+    480                      Leds_asLedArray[(LedNumberType)i].eCurrentDuty = LED_PWM_DUTY_LOW;
+   \       0xA6   0x0020             MOVS     R0,R4
+   \       0xA8   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0xAA   0x4368             MULS     R0,R5,R0
+   \       0xAC   0x4430             ADD      R0,R6,R0
+   \       0xAE   0x2100             MOVS     R1,#+0
+   \       0xB0   0x7181             STRB     R1,[R0, #+6]
+   \       0xB2   0xE013             B.N      ??LedUpdate_4
+    481                    }
+    482                    else
+    483                    {
+    484                      /* Turn the LED on and update the counters for the next cycle */
+    485                      LedOn( (LedNumberType)i );
+   \                     ??LedUpdate_6: (+1)
+   \       0xB4   0x0020             MOVS     R0,R4
+   \       0xB6   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0xB8   0x....'....        BL       LedOn
+    486                      Leds_asLedArray[i].u16Count = Leds_asLedArray[i].eRate;
+   \       0xBC   0x0020             MOVS     R0,R4
+   \       0xBE   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0xC0   0x4368             MULS     R0,R5,R0
+   \       0xC2   0x4430             ADD      R0,R6,R0
+   \       0xC4   0x0021             MOVS     R1,R4
+   \       0xC6   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0xC8   0x4369             MULS     R1,R5,R1
+   \       0xCA   0x4431             ADD      R1,R6,R1
+   \       0xCC   0x8849             LDRH     R1,[R1, #+2]
+   \       0xCE   0x8081             STRH     R1,[R0, #+4]
+    487                      Leds_asLedArray[i].eCurrentDuty = LED_PWM_DUTY_HIGH;
+   \       0xD0   0x0020             MOVS     R0,R4
+   \       0xD2   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0xD4   0x4368             MULS     R0,R5,R0
+   \       0xD6   0x4430             ADD      R0,R6,R0
+   \       0xD8   0x2101             MOVS     R1,#+1
+   \       0xDA   0x7181             STRB     R1,[R0, #+6]
+    488                    }
+    489                  }
+    490                }
+    491          
+    492                /* Set the LED back to PWM mode since LedOff and LedOn set it to normal mode */
+    493               	Leds_asLedArray[(LedNumberType)i].eMode = LED_PWM_MODE;
+   \                     ??LedUpdate_4: (+1)
+   \       0xDC   0x2001             MOVS     R0,#+1
+   \       0xDE   0x0021             MOVS     R1,R4
+   \       0xE0   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \       0xE2   0xFB05 0xF501      MUL      R5,R5,R1
+   \       0xE6   0x5570             STRB     R0,[R6, R5]
+   \       0xE8   0xE027             B.N      ??LedUpdate_7
+    494                
+    495              } /* end if PWM mode */
+    496              
+    497              /* LED is in LED_BLINK_MODE mode */
+    498              else if(Leds_asLedArray[(LedNumberType)i].eMode == LED_BLINK_MODE)
+   \                     ??LedUpdate_2: (+1)
+   \       0xEA   0x0020             MOVS     R0,R4
+   \       0xEC   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0xEE   0x4368             MULS     R0,R5,R0
+   \       0xF0   0x5C30             LDRB     R0,[R6, R0]
+   \       0xF2   0x2802             CMP      R0,#+2
+   \       0xF4   0xD121             BNE.N    ??LedUpdate_7
+    499              {
+    500                /* Decrement counter; toggle and reload if counter reaches 0 */
+    501                if( --Leds_asLedArray[(LedNumberType)i].u16Count == 0)
+   \       0xF6   0x0020             MOVS     R0,R4
+   \       0xF8   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0xFA   0x4368             MULS     R0,R5,R0
+   \       0xFC   0x4430             ADD      R0,R6,R0
+   \       0xFE   0x0021             MOVS     R1,R4
+   \      0x100   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \      0x102   0x4369             MULS     R1,R5,R1
+   \      0x104   0x4431             ADD      R1,R6,R1
+   \      0x106   0x8889             LDRH     R1,[R1, #+4]
+   \      0x108   0x1E49             SUBS     R1,R1,#+1
+   \      0x10A   0x8081             STRH     R1,[R0, #+4]
+   \      0x10C   0x0020             MOVS     R0,R4
+   \      0x10E   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \      0x110   0x4368             MULS     R0,R5,R0
+   \      0x112   0x4430             ADD      R0,R6,R0
+   \      0x114   0x8880             LDRH     R0,[R0, #+4]
+   \      0x116   0x2800             CMP      R0,#+0
+   \      0x118   0xD10F             BNE.N    ??LedUpdate_7
+    502                {
+    503                  LedToggle( (LedNumberType)i );
+   \      0x11A   0x0020             MOVS     R0,R4
+   \      0x11C   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \      0x11E   0x....'....        BL       LedToggle
+    504                  Leds_asLedArray[(LedNumberType)i].u16Count = Leds_asLedArray[(LedNumberType)i].eRate;
+   \      0x122   0x0020             MOVS     R0,R4
+   \      0x124   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \      0x126   0x4368             MULS     R0,R5,R0
+   \      0x128   0x4430             ADD      R0,R6,R0
+   \      0x12A   0x0021             MOVS     R1,R4
+   \      0x12C   0xB2C9             UXTB     R1,R1            ;; ZeroExt  R1,R1,#+24,#+24
+   \      0x12E   0xFB05 0xF501      MUL      R5,R5,R1
+   \      0x132   0xEB06 0x0105      ADD      R1,R6,R5
+   \      0x136   0x8849             LDRH     R1,[R1, #+2]
+   \      0x138   0x8081             STRH     R1,[R0, #+4]
+    505                }
+    506              }
+    507            } /* end for */
+   \                     ??LedUpdate_7: (+1)
+   \      0x13A   0x1C64             ADDS     R4,R4,#+1
+   \      0x13C   0xE762             B.N      ??LedUpdate_0
+    508          } /* end LedUpdate() */
+   \                     ??LedUpdate_1: (+1)
+   \      0x13E   0xBD70             POP      {R4-R6,PC}       ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6:
+   \        0x0   0x....'....        DC32     Leds_asLedArray
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6_1:
+   \        0x0   0x400E'0C30        DC32     0x400e0c30
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6_2:
+   \        0x0   0x400E'0C34        DC32     0x400e0c34
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6_3:
+   \        0x0   0x....'....        DC32     Led_au32BitPositions
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6_4:
+   \        0x0   0x400E'0C38        DC32     0x400e0c38
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6_5:
+   \        0x0   0x....'....        DC32     G_u32SystemTime1ms
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6_6:
+   \        0x0   0x....'....        DC32     G_u32ApplicationFlags
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable6_7:
+   \        0x0   0x....'....        DC32     `LedInitialize::au8LedStartupMsg`
+    509          
+    510          
+    511          
+    512          
+    513          /*--------------------------------------------------------------------------------------------------------------------*/
+    514          /* End of File */
+    515          /*--------------------------------------------------------------------------------------------------------------------*/
+    516          
+    517          
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       8   LedBlink
+      32   LedInitialize
+        32   -> DebugPrintf
+        32   -> IsTimeUp
+        32   -> LedOn
+        32   -> LedUpdate
+       8   LedOff
+       8   LedOn
+       8   LedPWM
+       4   LedToggle
+      16   LedUpdate
+        16   -> LedOff
+        16   -> LedOn
+        16   -> LedToggle
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable6
+       4  ??DataTable6_1
+       4  ??DataTable6_2
+       4  ??DataTable6_3
+       4  ??DataTable6_4
+       4  ??DataTable6_5
+       4  ??DataTable6_6
+       4  ??DataTable6_7
+      42  LedBlink
+     180  LedInitialize
+      82  LedOff
+      82  LedOn
+      54  LedPWM
+      44  LedToggle
+     320  LedUpdate
+      52  Led_au32BitPositions
+     132  Leds_asLedArray
+      24  au8LedStartupMsg
+
+ 
+ 208 bytes in section .data
+ 836 bytes in section .text
+ 
+ 836 bytes of CODE memory
+ 208 bytes of DATA memory
+
+Errors: none
+Warnings: none

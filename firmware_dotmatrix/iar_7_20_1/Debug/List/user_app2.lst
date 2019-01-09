@@ -1,0 +1,263 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         01/Jan/2019  11:20:04
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\application\user_app2.c
+#    Command line =  
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EW1976.tmp
+#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\application\user_app2.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\inc\c\DLib_Config_Normal.h" -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        -On --use_c++_inline --require_prototypes -I "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\user_app2.lst
+#    Object file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\user_app2.o
+#
+###############################################################################
+
+\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\application\user_app2.c
+      1          /**********************************************************************************************************************
+      2          File: user_app2.c                                                                
+      3          
+      4          Description:
+      5          This is a user_app2.c file template 
+      6          
+      7          ------------------------------------------------------------------------------------------------------------------------
+      8          API:
+      9          
+     10          Public functions:
+     11          
+     12          
+     13          Protected System functions:
+     14          void UserApp2Initialize(void)
+     15          Runs required initialzation for the task.  Should only be called once in main init section.
+     16          
+     17          void UserApp2RunActiveState(void)
+     18          Runs current task state.  Should only be called once in main loop.
+     19          
+     20          
+     21          **********************************************************************************************************************/
+     22          
+     23          #include "configuration.h"
+     24          
+     25          /***********************************************************************************************************************
+     26          Global variable definitions with scope across entire project.
+     27          All Global variable names shall start with "G_UserApp2"
+     28          ***********************************************************************************************************************/
+     29          /* New variables */
+
+   \                                 In section .bss, align 4
+     30          volatile u32 G_u32UserApp2Flags;                       /* Global state flags */
+   \                     G_u32UserApp2Flags:
+   \        0x0                      DS8 4
+     31          
+     32          
+     33          /*--------------------------------------------------------------------------------------------------------------------*/
+     34          /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
+     35          extern volatile u32 G_u32SystemFlags;                  /* From main.c */
+     36          extern volatile u32 G_u32ApplicationFlags;             /* From main.c */
+     37          
+     38          extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
+     39          extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
+     40          
+     41          
+     42          /***********************************************************************************************************************
+     43          Global variable definitions with scope limited to this local application.
+     44          Variable names shall start with "UserApp2_" and be declared as static.
+     45          ***********************************************************************************************************************/
+
+   \                                 In section .bss, align 4
+     46          static fnCode_type UserApp2_StateMachine;            /* The state machine function pointer */
+   \                     UserApp2_StateMachine:
+   \        0x0                      DS8 4
+     47          //static u32 UserApp2_u32Timeout;                      /* Timeout counter used across states */
+     48          
+     49          
+     50          /**********************************************************************************************************************
+     51          Function Definitions
+     52          **********************************************************************************************************************/
+     53          
+     54          /*--------------------------------------------------------------------------------------------------------------------*/
+     55          /* Public functions                                                                                                   */
+     56          /*--------------------------------------------------------------------------------------------------------------------*/
+     57          
+     58          
+     59          /*--------------------------------------------------------------------------------------------------------------------*/
+     60          /* Protected functions                                                                                                */
+     61          /*--------------------------------------------------------------------------------------------------------------------*/
+     62          
+     63          /*--------------------------------------------------------------------------------------------------------------------
+     64          Function: UserApp2Initialize
+     65          
+     66          Description:
+     67          Initializes the State Machine and its variables.
+     68          
+     69          Requires:
+     70            -
+     71          
+     72          Promises:
+     73            - 
+     74          */
+
+   \                                 In section .text, align 2, keep-with-next
+     75          void UserApp2Initialize(void)
+     76          {
+     77            /* If good initialization, set state to Idle */
+     78            if( 1 )
+     79            {
+     80              UserApp2_StateMachine = UserApp2SM_Idle;
+   \                     UserApp2Initialize: (+1)
+   \        0x0   0x....'....        ADR.W    R0,UserApp2SM_Idle
+   \        0x4   0x....             LDR.N    R1,??DataTable1
+   \        0x6   0x6008             STR      R0,[R1, #+0]
+     81            }
+     82            else
+     83            {
+     84              /* The task isn't properly initialized, so shut it down and don't run */
+     85              UserApp2_StateMachine = UserApp2SM_FailedInit;
+     86            }
+     87          
+     88          } /* end UserApp2Initialize() */
+   \        0x8   0x4770             BX       LR               ;; return
+     89          
+     90            
+     91          /*----------------------------------------------------------------------------------------------------------------------
+     92          Function UserApp2RunActiveState()
+     93          
+     94          Description:
+     95          Selects and runs one iteration of the current state in the state machine.
+     96          All state machines have a TOTAL of 1ms to execute, so on average n state machines
+     97          may take 1ms / n to execute.
+     98          
+     99          Requires:
+    100            - State machine function pointer points at current state
+    101          
+    102          Promises:
+    103            - Calls the function to pointed by the state machine function pointer
+    104          */
+
+   \                                 In section .text, align 2, keep-with-next
+    105          void UserApp2RunActiveState(void)
+    106          {
+   \                     UserApp2RunActiveState: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+    107            UserApp2_StateMachine();
+   \        0x2   0x....             LDR.N    R0,??DataTable1
+   \        0x4   0x6800             LDR      R0,[R0, #+0]
+   \        0x6   0x4780             BLX      R0
+    108          
+    109          } /* end UserApp2RunActiveState */
+   \        0x8   0xBD01             POP      {R0,PC}          ;; return
+    110          
+    111          
+    112          /*--------------------------------------------------------------------------------------------------------------------*/
+    113          /* Private functions                                                                                                  */
+    114          /*--------------------------------------------------------------------------------------------------------------------*/
+    115          
+    116          
+    117          /**********************************************************************************************************************
+    118          State Machine Function Definitions
+    119          **********************************************************************************************************************/
+    120          
+    121          /*-------------------------------------------------------------------------------------------------------------------*/
+    122          /* Wait for ??? */
+
+   \                                 In section .text, align 4, keep-with-next
+    123          static void UserApp2SM_Idle(void)
+    124          {
+    125              
+    126          } /* end UserApp2SM_Idle() */
+   \                     UserApp2SM_Idle: (+1)
+   \        0x0   0x4770             BX       LR               ;; return
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable1:
+   \        0x0   0x....'....        DC32     UserApp2_StateMachine
+    127               
+    128          #if 0
+    129          /*-------------------------------------------------------------------------------------------------------------------*/
+    130          /* Handle an error */
+    131          static void UserApp2SM_Error(void)          
+    132          {
+    133            
+    134          } /* end UserApp2SM_Error() */
+    135          #endif
+    136          
+    137          
+    138          /*-------------------------------------------------------------------------------------------------------------------*/
+    139          /* State to sit in if init failed */
+    140          static void UserApp2SM_FailedInit(void)          
+    141          {
+    142              
+    143          } /* end UserApp2SM_FailedInit() */
+    144          
+    145          
+    146          /*--------------------------------------------------------------------------------------------------------------------*/
+    147          /* End of File                                                                                                        */
+    148          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   UserApp2Initialize
+       8   UserApp2RunActiveState
+         8   -- Indirect call
+       0   UserApp2SM_Idle
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+       4  G_u32UserApp2Flags
+      10  UserApp2Initialize
+      10  UserApp2RunActiveState
+       2  UserApp2SM_Idle
+       4  UserApp2_StateMachine
+
+ 
+  8 bytes in section .bss
+ 26 bytes in section .text
+ 
+ 26 bytes of CODE memory
+  8 bytes of DATA memory
+
+Errors: none
+Warnings: none

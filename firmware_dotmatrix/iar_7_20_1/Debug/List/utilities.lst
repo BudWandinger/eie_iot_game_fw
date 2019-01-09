@@ -1,0 +1,761 @@
+###############################################################################
+#
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         01/Jan/2019  11:20:07
+# Copyright 1999-2018 IAR Systems AB.
+#
+#    Cpu mode     =  
+#    Endian       =  little
+#    Source file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\utilities.c
+#    Command line =  
+#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EW25BD.tmp
+#        (\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\utilities.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
+#        --no_clustering --no_scheduling --debug --endian=little
+#        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\inc\c\DLib_Config_Normal.h" -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\bsp\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\drivers\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        -On --use_c++_inline --require_prototypes -I "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
+#        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
+#        8.2\arm\CMSIS\DSP\Include\")
+#    Locale       =  C
+#    List file    =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\List\utilities.lst
+#    Object file  =  
+#        \\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_dotmatrix\iar_7_20_1\Debug\Obj\utilities.o
+#
+###############################################################################
+
+\\Mac\Home\Documents\GitHub\Razor_Atmel\firmware_common\drivers\utilities.c
+      1          /***********************************************************************************************************************
+      2          File: utilities.c                                                                
+      3          
+      4          Description:
+      5          Various useful functions.
+      6          
+      7          API:
+      8          bool IsTimeUp(u32 *pu32SavedTick_, u32 u32Period_)
+      9          Calculates if u32Period_ time has passed (in ms) using comparison of
+     10          pu32SavedTick_ against G_u32SystemTime1ms.  
+     11          e.g. do nothing until 1 second has elapsed
+     12          u32ApplicationTimer = G_u32SystemTime1ms;
+     13          if( !IsTimeUp(&u32ApplicationTimer, 1000)
+     14          {
+     15            // Time has elapsed so update timer for next period and do whatever
+     16            u32ApplicationTimer = G_u32SystemTime1ms;
+     17          }
+     18          
+     19          
+     20          ***********************************************************************************************************************/
+     21          
+     22          #include "configuration.h"
+     23          
+     24          /***********************************************************************************************************************
+     25          Global variable definitions with scope across entire project.
+     26          All Global variable names shall start with "G_"
+     27          ***********************************************************************************************************************/
+     28          /* New variables */
+
+   \                                 In section .data, align 4
+     29          u8 G_au8MessageOK[]   = MESSAGE_OK;            /* Common "OK" message */
+   \                     G_au8MessageOK:
+   \        0x0   0x4F 0x4B          DC8 "OK\015\012"
+   \              0x0D 0x0A    
+   \              0x00         
+   \        0x5   0x00 0x00          DC8 0, 0, 0
+   \              0x00         
+
+   \                                 In section .data, align 4
+     30          u8 G_au8MessageFAIL[] = MESSAGE_FAIL;          /* Common "FAIL" message */
+   \                     G_au8MessageFAIL:
+   \        0x0   0x46 0x41          DC8 "FAIL\015\012"
+   \              0x49 0x4C    
+   \              0x0D 0x0A    
+   \              0x00         
+   \        0x7   0x00               DC8 0
+
+   \                                 In section .data, align 4
+     31          u8 G_au8MessageON[]   = MESSAGE_ON;            /* Common "ON" message */
+   \                     G_au8MessageON:
+   \        0x0   0x4F 0x4E          DC8 "ON\015\012"
+   \              0x0D 0x0A    
+   \              0x00         
+   \        0x5   0x00 0x00          DC8 0, 0, 0
+   \              0x00         
+
+   \                                 In section .data, align 4
+     32          u8 G_au8MessageOFF[]  = MESSAGE_OFF;           /* Common "OFF" message */
+   \                     G_au8MessageOFF:
+   \        0x0   0x4F 0x46          DC8 "OFF\015\012"
+   \              0x46 0x0D    
+   \              0x0A 0x00    
+   \        0x6   0x00 0x00          DC8 0, 0
+     33          
+     34          
+     35          /*--------------------------------------------------------------------------------------------------------------------*/
+     36          /* Existing variables (defined in other files -- should all contain the "extern" keyword) */
+     37          extern volatile u32 G_u32SystemTime1ms;        /* From scroll-ehw-ae.c */
+     38          extern volatile u32 G_u32SystemTime1s;         /* From scroll-ehw-ae.c */
+     39          
+     40          extern volatile u32 G_u32SystemFlags;          /* From main.c */
+     41          extern volatile u32 G_u32ApplicationFlags;     /* From main.c */
+     42          
+     43          
+     44          /***********************************************************************************************************************
+     45          Global variable definitions with scope limited to this local application.
+     46          Variable names shall start with "Util_" and be declared as static.
+     47          ***********************************************************************************************************************/
+     48          
+     49          
+     50          /***********************************************************************************************************************
+     51          Function Definitions
+     52          ***********************************************************************************************************************/
+     53          /*--------------------------------------------------------------------------------------------------------------------*/
+     54          /* Public Functions */
+     55          /*--------------------------------------------------------------------------------------------------------------------*/
+     56          
+     57          /*----------------------------------------------------------------------------
+     58          Function: IsTimeUp
+     59            
+     60          Description:
+     61          Checks if the difference between the current time and the saved time is greater
+     62          than the period specified. The referenced current time is always G_u32SystemTime1ms.
+     63          
+     64          Requires:
+     65            - *pu32SavedTick_ points to the saved tick value (in ms)
+     66            - u32Period_ is the desired period in ms
+     67          
+     68          Promises:
+     69            - Returns FALSE if u32Period_ has not elapsed
+     70            - Returns TRUE if u32Period_ has elapsed
+     71          */
+
+   \                                 In section .text, align 2, keep-with-next
+     72          bool IsTimeUp(u32 *pu32SavedTick_, u32 u32Period_)
+     73          {
+   \                     IsTimeUp: (+1)
+   \        0x0   0xB410             PUSH     {R4}
+   \        0x2   0x0002             MOVS     R2,R0
+     74            u32 u32TimeElapsed;
+     75            
+     76            /* Check to see if the timer in question has rolled */
+     77            if(G_u32SystemTime1ms >= *pu32SavedTick_)
+   \        0x4   0x....             LDR.N    R0,??DataTable1
+   \        0x6   0x6803             LDR      R3,[R0, #+0]
+   \        0x8   0x6814             LDR      R4,[R2, #+0]
+   \        0xA   0x42A3             CMP      R3,R4
+   \        0xC   0xD303             BCC.N    ??IsTimeUp_0
+     78            {
+     79              u32TimeElapsed = G_u32SystemTime1ms - *pu32SavedTick_;
+   \        0xE   0x6800             LDR      R0,[R0, #+0]
+   \       0x10   0x6813             LDR      R3,[R2, #+0]
+   \       0x12   0x1AC3             SUBS     R3,R0,R3
+   \       0x14   0xE005             B.N      ??IsTimeUp_1
+     80            }
+     81            else
+     82            {
+     83              u32TimeElapsed = (0xFFFFFFFF - *pu32SavedTick_) + G_u32SystemTime1ms;
+   \                     ??IsTimeUp_0: (+1)
+   \       0x16   0xF05F 0x34FF      MOVS     R4,#-1
+   \       0x1A   0x6813             LDR      R3,[R2, #+0]
+   \       0x1C   0x1AE3             SUBS     R3,R4,R3
+   \       0x1E   0x6800             LDR      R0,[R0, #+0]
+   \       0x20   0x18C3             ADDS     R3,R0,R3
+     84            }
+     85          
+     86            /* Now determine if time is up */
+     87            if(u32TimeElapsed < u32Period_)
+   \                     ??IsTimeUp_1: (+1)
+   \       0x22   0x428B             CMP      R3,R1
+   \       0x24   0xD201             BCS.N    ??IsTimeUp_2
+     88            {
+     89              return(FALSE);
+   \       0x26   0x2000             MOVS     R0,#+0
+   \       0x28   0xE000             B.N      ??IsTimeUp_3
+     90            }
+     91            else
+     92            {
+     93              return(TRUE);
+   \                     ??IsTimeUp_2: (+1)
+   \       0x2A   0x2001             MOVS     R0,#+1
+   \                     ??IsTimeUp_3: (+1)
+   \       0x2C   0xBC10             POP      {R4}
+   \       0x2E   0x4770             BX       LR               ;; return
+     94            }
+     95          
+     96          } /* end IsTimeUp() */
+     97          
+     98          
+     99          /*-----------------------------------------------------------------------------/
+    100          Function: ASCIIHexCharToChar
+    101          
+    102          Description:
+    103          Determines the numerical value of a hexidecimal ASCII char of that number
+    104          ('0' - 'F' or '0' - 'f' -> 0 - 15).
+    105          
+    106          Requires:
+    107            - Standard ASCII table is in use
+    108           
+    109          Promises:
+    110            - If valid 0-9, A-F or a-f, returns the numerical value of the ASCII char
+    111            - Otherwise returns 0xff
+    112          */
+
+   \                                 In section .text, align 2, keep-with-next
+    113          u8 ASCIIHexCharToChar(u8 u8Char_)
+    114          {
+   \                     ASCIIHexCharToChar: (+1)
+   \        0x0   0x0001             MOVS     R1,R0
+    115            if( (u8Char_ >= '0') && (u8Char_ <= '9') )
+   \        0x2   0x0008             MOVS     R0,R1
+   \        0x4   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \        0x6   0x2830             CMP      R0,#+48
+   \        0x8   0xDB07             BLT.N    ??ASCIIHexCharToChar_0
+   \        0xA   0x0008             MOVS     R0,R1
+   \        0xC   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \        0xE   0x283A             CMP      R0,#+58
+   \       0x10   0xDA03             BGE.N    ??ASCIIHexCharToChar_0
+    116              return(u8Char_ - NUMBER_ASCII_TO_DEC);
+   \       0x12   0xF1B1 0x0030      SUBS     R0,R1,#+48
+   \       0x16   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x18   0xE018             B.N      ??ASCIIHexCharToChar_1
+    117                 
+    118            if( (u8Char_ >= 'A') && (u8Char_ <= 'F') )
+   \                     ??ASCIIHexCharToChar_0: (+1)
+   \       0x1A   0x0008             MOVS     R0,R1
+   \       0x1C   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x1E   0x2841             CMP      R0,#+65
+   \       0x20   0xDB07             BLT.N    ??ASCIIHexCharToChar_2
+   \       0x22   0x0008             MOVS     R0,R1
+   \       0x24   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x26   0x2847             CMP      R0,#+71
+   \       0x28   0xDA03             BGE.N    ??ASCIIHexCharToChar_2
+    119              return(u8Char_ - UPPERCASE_ASCII_TO_DEC);
+   \       0x2A   0xF1B1 0x0037      SUBS     R0,R1,#+55
+   \       0x2E   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x30   0xE00C             B.N      ??ASCIIHexCharToChar_1
+    120            
+    121            if( (u8Char_ >= 'a') && (u8Char_ <= 'f') )
+   \                     ??ASCIIHexCharToChar_2: (+1)
+   \       0x32   0x0008             MOVS     R0,R1
+   \       0x34   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x36   0x2861             CMP      R0,#+97
+   \       0x38   0xDB07             BLT.N    ??ASCIIHexCharToChar_3
+   \       0x3A   0x0008             MOVS     R0,R1
+   \       0x3C   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x3E   0x2867             CMP      R0,#+103
+   \       0x40   0xDA03             BGE.N    ??ASCIIHexCharToChar_3
+    122              return(u8Char_ - LOWERCASE_ASCII_TO_DEC);
+   \       0x42   0xF1B1 0x0057      SUBS     R0,R1,#+87
+   \       0x46   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x48   0xE000             B.N      ??ASCIIHexCharToChar_1
+    123            
+    124            return(0xff);
+   \                     ??ASCIIHexCharToChar_3: (+1)
+   \       0x4A   0x20FF             MOVS     R0,#+255
+   \                     ??ASCIIHexCharToChar_1: (+1)
+   \       0x4C   0x4770             BX       LR               ;; return
+    125          
+    126          } /* end ASCIIHexChartoChar */
+    127          
+    128          
+    129          /*-----------------------------------------------------------------------------/
+    130          Function: HexToASCIICharUpper
+    131          
+    132          Description:
+    133          Determines the ASCII char of a single digit number
+    134          0 - 15 -> '0' - 'F'
+    135          
+    136          Requires:
+    137            - Standard ASCII table is in use
+    138           
+    139          Promises:
+    140            - If valid 0-15, returns the corresponding ASCII hex char 0-9, A-F
+    141            - Otherwise returns 0xff
+    142          */
+
+   \                                 In section .text, align 2, keep-with-next
+    143          u8 HexToASCIICharUpper(u8 u8Char_)
+    144          {
+   \                     HexToASCIICharUpper: (+1)
+   \        0x0   0x0001             MOVS     R1,R0
+    145            u8 u8ReturnValue = 0xFF;
+   \        0x2   0x20FF             MOVS     R0,#+255
+    146            
+    147            if( u8Char_ <= 9 )
+   \        0x4   0x000A             MOVS     R2,R1
+   \        0x6   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \        0x8   0x2A0A             CMP      R2,#+10
+   \        0xA   0xDA03             BGE.N    ??HexToASCIICharUpper_0
+    148            {
+    149              u8ReturnValue = u8Char_ + NUMBER_ASCII_TO_DEC;
+   \        0xC   0xF111 0x0230      ADDS     R2,R1,#+48
+   \       0x10   0x0010             MOVS     R0,R2
+   \       0x12   0xE00A             B.N      ??HexToASCIICharUpper_1
+    150            }
+    151            
+    152            else if( (u8Char_ >= 10) && (u8Char_ <= 15) )
+   \                     ??HexToASCIICharUpper_0: (+1)
+   \       0x14   0x000A             MOVS     R2,R1
+   \       0x16   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x18   0x2A0A             CMP      R2,#+10
+   \       0x1A   0xDB06             BLT.N    ??HexToASCIICharUpper_1
+   \       0x1C   0x000A             MOVS     R2,R1
+   \       0x1E   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x20   0x2A10             CMP      R2,#+16
+   \       0x22   0xDA02             BGE.N    ??HexToASCIICharUpper_1
+    153            {
+    154              u8ReturnValue = u8Char_ + UPPERCASE_ASCII_TO_DEC;
+   \       0x24   0xF111 0x0237      ADDS     R2,R1,#+55
+   \       0x28   0x0010             MOVS     R0,R2
+    155            }
+    156            
+    157            return(u8ReturnValue);
+   \                     ??HexToASCIICharUpper_1: (+1)
+   \       0x2A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x2C   0x4770             BX       LR               ;; return
+    158          
+    159          } /* end HexToASCIICharUpper */
+    160          
+    161          
+    162          /*-----------------------------------------------------------------------------/
+    163          Function: HexToASCIICharLower
+    164          
+    165          Description:
+    166          Determines the ASCII char of a single digit number
+    167          0 - 15 -> '0' - 'f'
+    168          
+    169          Requires:
+    170            - Standard ASCII table is in use
+    171           
+    172          Promises:
+    173            - If valid 0-15, returns the corresponding ASCII hex char 0-9, a-f
+    174            - Otherwise returns 0xFF
+    175          */
+
+   \                                 In section .text, align 2, keep-with-next
+    176          u8 HexToASCIICharLower(u8 u8Char_)
+    177          {
+   \                     HexToASCIICharLower: (+1)
+   \        0x0   0x0001             MOVS     R1,R0
+    178            u8 u8ReturnValue = 0xFF;
+   \        0x2   0x20FF             MOVS     R0,#+255
+    179            
+    180            if( u8Char_ <= 9 )
+   \        0x4   0x000A             MOVS     R2,R1
+   \        0x6   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \        0x8   0x2A0A             CMP      R2,#+10
+   \        0xA   0xDA03             BGE.N    ??HexToASCIICharLower_0
+    181            {
+    182              u8ReturnValue = u8Char_ + NUMBER_ASCII_TO_DEC;
+   \        0xC   0xF111 0x0230      ADDS     R2,R1,#+48
+   \       0x10   0x0010             MOVS     R0,R2
+   \       0x12   0xE00A             B.N      ??HexToASCIICharLower_1
+    183            }
+    184            
+    185            else if( (u8Char_ >= 10) && (u8Char_ <= 15) )
+   \                     ??HexToASCIICharLower_0: (+1)
+   \       0x14   0x000A             MOVS     R2,R1
+   \       0x16   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x18   0x2A0A             CMP      R2,#+10
+   \       0x1A   0xDB06             BLT.N    ??HexToASCIICharLower_1
+   \       0x1C   0x000A             MOVS     R2,R1
+   \       0x1E   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x20   0x2A10             CMP      R2,#+16
+   \       0x22   0xDA02             BGE.N    ??HexToASCIICharLower_1
+    186            {
+    187              u8ReturnValue = u8Char_ + LOWERCASE_ASCII_TO_DEC;
+   \       0x24   0xF111 0x0257      ADDS     R2,R1,#+87
+   \       0x28   0x0010             MOVS     R0,R2
+    188            }
+    189            
+    190            return(u8ReturnValue);
+   \                     ??HexToASCIICharLower_1: (+1)
+   \       0x2A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x2C   0x4770             BX       LR               ;; return
+    191          
+    192          } /* end HexToASCIICharLower */
+    193          
+    194          
+    195          /*-----------------------------------------------------------------------------/
+    196          Function: NumberToAscii
+    197          
+    198          Description:
+    199          Converts a long into an ASCII string.  Maximum of 10 digits + NULL.
+    200          
+    201          Requires:
+    202            - u32Number_ is the number to convert
+    203            - *pu8AsciiString_ points to the destination string location
+    204           
+    205          Promises:
+    206            - Null-terminated string of the number is loaded to pu8AsciiString_
+    207            - Returns the number of digits
+    208          */
+
+   \                                 In section .text, align 2, keep-with-next
+    209          u8 NumberToAscii(u32 u32Number_, u8* pu8AsciiString_)
+    210          {
+   \                     NumberToAscii: (+1)
+   \        0x0   0xE92D 0x43FE      PUSH     {R1-R9,LR}
+   \        0x4   0x4680             MOV      R8,R0
+   \        0x6   0x000D             MOVS     R5,R1
+    211            bool bFoundDigit = FALSE;
+   \        0x8   0x2600             MOVS     R6,#+0
+    212            u8 au8AsciiNumber[11];
+    213            u8 u8CharCount = 0;
+   \        0xA   0x2700             MOVS     R7,#+0
+    214            u32 u32Divider = 1000000000;
+   \        0xC   0x....'....        LDR.W    R9,??DataTable1_1  ;; 0x3b9aca00
+    215            u8 u8Temp;
+    216            
+    217            /* Parse out all the digits, start counting after leading zeros */
+    218            for(u8 i = 0; i < 10; i++)
+   \       0x10   0x2100             MOVS     R1,#+0
+   \                     ??NumberToAscii_0: (+1)
+   \       0x12   0x0008             MOVS     R0,R1
+   \       0x14   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x16   0x280A             CMP      R0,#+10
+   \       0x18   0xDA1C             BGE.N    ??NumberToAscii_1
+    219            {
+    220              u8Temp = (u32Number_ / u32Divider);
+   \       0x1A   0xFBB8 0xF0F9      UDIV     R0,R8,R9
+   \       0x1E   0x0004             MOVS     R4,R0
+    221              
+    222              /* Check for first non-leading zero */
+    223              if(u8Temp != 0)
+   \       0x20   0x0020             MOVS     R0,R4
+   \       0x22   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x24   0x2800             CMP      R0,#+0
+   \       0x26   0xD001             BEQ.N    ??NumberToAscii_2
+    224              {
+    225                bFoundDigit = TRUE;
+   \       0x28   0x2001             MOVS     R0,#+1
+   \       0x2A   0x0006             MOVS     R6,R0
+    226              }
+    227          
+    228              /* As long as a non-leading zero has been found, add the ASCII char */
+    229              if(bFoundDigit)
+   \                     ??NumberToAscii_2: (+1)
+   \       0x2C   0x0030             MOVS     R0,R6
+   \       0x2E   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x30   0x2800             CMP      R0,#+0
+   \       0x32   0xD006             BEQ.N    ??NumberToAscii_3
+    230              {
+    231                au8AsciiNumber[u8CharCount] = u8Temp + 0x30;
+   \       0x34   0xF114 0x0030      ADDS     R0,R4,#+48
+   \       0x38   0x466A             MOV      R2,SP
+   \       0x3A   0x003B             MOVS     R3,R7
+   \       0x3C   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
+   \       0x3E   0x54D0             STRB     R0,[R2, R3]
+    232                u8CharCount++;
+   \       0x40   0x1C7F             ADDS     R7,R7,#+1
+    233              }
+    234              
+    235              /* Update for next iteration */
+    236              u32Number_ %= u32Divider;
+   \                     ??NumberToAscii_3: (+1)
+   \       0x42   0xFBB8 0xF0F9      UDIV     R0,R8,R9
+   \       0x46   0xFB09 0x8810      MLS      R8,R9,R0,R8
+    237              u32Divider /= 10;
+   \       0x4A   0x200A             MOVS     R0,#+10
+   \       0x4C   0xFBB9 0xF9F0      UDIV     R9,R9,R0
+    238            }
+   \       0x50   0x1C49             ADDS     R1,R1,#+1
+   \       0x52   0xE7DE             B.N      ??NumberToAscii_0
+    239            
+    240            /* Handle special case where u32Number == 0 */
+    241            if(!bFoundDigit)
+   \                     ??NumberToAscii_1: (+1)
+   \       0x54   0x0030             MOVS     R0,R6
+   \       0x56   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x58   0x2800             CMP      R0,#+0
+   \       0x5A   0xD104             BNE.N    ??NumberToAscii_4
+    242            {
+    243              u8CharCount = 1;
+   \       0x5C   0x2001             MOVS     R0,#+1
+   \       0x5E   0x0007             MOVS     R7,R0
+    244              au8AsciiNumber[0] = '0';
+   \       0x60   0x2030             MOVS     R0,#+48
+   \       0x62   0xF88D 0x0000      STRB     R0,[SP, #+0]
+    245            }
+    246            
+    247            /* Add the null and copy to destination */
+    248            au8AsciiNumber[u8CharCount] = NULL;
+   \                     ??NumberToAscii_4: (+1)
+   \       0x66   0x2000             MOVS     R0,#+0
+   \       0x68   0x4669             MOV      R1,SP
+   \       0x6A   0x003A             MOVS     R2,R7
+   \       0x6C   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
+   \       0x6E   0x5488             STRB     R0,[R1, R2]
+    249            strcpy((char *)pu8AsciiString_, (const char*)au8AsciiNumber);
+   \       0x70   0x4669             MOV      R1,SP
+   \       0x72   0x0028             MOVS     R0,R5
+   \       0x74   0x....'....        BL       strcpy
+    250            
+    251            return(u8CharCount);
+   \       0x78   0x0038             MOVS     R0,R7
+   \       0x7A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
+   \       0x7C   0xE8BD 0x83FE      POP      {R1-R9,PC}       ;; return
+    252          
+    253          } /* end NumberToAscii() */
+    254          
+    255          
+    256          /*-----------------------------------------------------------------------------/
+    257          Function: SearchString
+    258          
+    259          Description:
+    260          Searches a string for another string.  Finds only an exact match of the string (case sensitive).
+    261          Character following matched string must be space, <CR> or <LF>.
+    262          
+    263          Requires:
+    264            - Standard ASCII table is in use
+    265            - pu8TargetString_ points to the start of a NULL, <CR> or <LF> terminated string to search
+    266            - pu8MatchString_ points to the start of a NULL, <CR> or <LF> terminated string to be found in pu8TargetString_
+    267           
+    268          Promises:
+    269            - Returns TRUE if the string is found
+    270          */
+
+   \                                 In section .text, align 2, keep-with-next
+    271          bool SearchString(u8* pu8TargetString_, u8* pu8MatchString_)
+    272          {
+   \                     SearchString: (+1)
+   \        0x0   0xB430             PUSH     {R4,R5}
+   \        0x2   0x0002             MOVS     R2,R0
+    273            u8* pu8MatchChar = pu8MatchString_;
+   \        0x4   0x000B             MOVS     R3,R1
+    274            u8* pu8TargetChar = pu8TargetString_;
+   \        0x6   0x0014             MOVS     R4,R2
+    275            
+    276            do
+    277            {
+    278              /* Scan for the current character of pu8MatchString_ in pu8TargetString_ */
+    279              while( (*pu8MatchChar != *pu8TargetChar) && (*pu8TargetChar != NULL) && 
+    280                     (*pu8TargetChar != ASCII_LINEFEED) && (*pu8TargetChar != ASCII_CARRIAGE_RETURN) )
+   \                     ??SearchString_0: (+1)
+   \        0x8   0x7818             LDRB     R0,[R3, #+0]
+   \        0xA   0x7825             LDRB     R5,[R4, #+0]
+   \        0xC   0x42A8             CMP      R0,R5
+   \        0xE   0xD00A             BEQ.N    ??SearchString_1
+   \       0x10   0x7820             LDRB     R0,[R4, #+0]
+   \       0x12   0x2800             CMP      R0,#+0
+   \       0x14   0xD007             BEQ.N    ??SearchString_1
+   \       0x16   0x7820             LDRB     R0,[R4, #+0]
+   \       0x18   0x280A             CMP      R0,#+10
+   \       0x1A   0xD004             BEQ.N    ??SearchString_1
+   \       0x1C   0x7820             LDRB     R0,[R4, #+0]
+   \       0x1E   0x280D             CMP      R0,#+13
+   \       0x20   0xD001             BEQ.N    ??SearchString_1
+    281              {
+    282                pu8TargetChar++;
+   \       0x22   0x1C64             ADDS     R4,R4,#+1
+   \       0x24   0xE7F0             B.N      ??SearchString_0
+    283              }
+    284              
+    285              /* Exit if we're at the end of the target string */
+    286              if( (*pu8TargetChar == NULL) || 
+    287                  (*pu8TargetChar == ASCII_LINEFEED) || (*pu8TargetChar == ASCII_CARRIAGE_RETURN) )
+   \                     ??SearchString_1: (+1)
+   \       0x26   0x7820             LDRB     R0,[R4, #+0]
+   \       0x28   0x2800             CMP      R0,#+0
+   \       0x2A   0xD005             BEQ.N    ??SearchString_2
+   \       0x2C   0x7820             LDRB     R0,[R4, #+0]
+   \       0x2E   0x280A             CMP      R0,#+10
+   \       0x30   0xD002             BEQ.N    ??SearchString_2
+   \       0x32   0x7820             LDRB     R0,[R4, #+0]
+   \       0x34   0x280D             CMP      R0,#+13
+   \       0x36   0xD101             BNE.N    ??SearchString_3
+    288              {
+    289                return(FALSE);
+   \                     ??SearchString_2: (+1)
+   \       0x38   0x2000             MOVS     R0,#+0
+   \       0x3A   0xE032             B.N      ??SearchString_4
+    290              }
+    291              
+    292              /* If we found a match, look for next char */
+    293              while ( *pu8MatchChar == *pu8TargetChar )
+   \                     ??SearchString_3: (+1)
+   \       0x3C   0x7818             LDRB     R0,[R3, #+0]
+   \       0x3E   0x7825             LDRB     R5,[R4, #+0]
+   \       0x40   0x42A8             CMP      R0,R5
+   \       0x42   0xD118             BNE.N    ??SearchString_5
+    294              {
+    295                pu8MatchChar++;
+   \       0x44   0x1C5B             ADDS     R3,R3,#+1
+    296                pu8TargetChar++;
+   \       0x46   0x1C64             ADDS     R4,R4,#+1
+    297                
+    298                /* At the end of the match string? */
+    299                if( (*pu8MatchChar == NULL) || (*pu8MatchChar == ASCII_LINEFEED) || (*pu8MatchChar == ASCII_CARRIAGE_RETURN) )
+   \       0x48   0x7818             LDRB     R0,[R3, #+0]
+   \       0x4A   0x2800             CMP      R0,#+0
+   \       0x4C   0xD005             BEQ.N    ??SearchString_6
+   \       0x4E   0x7818             LDRB     R0,[R3, #+0]
+   \       0x50   0x280A             CMP      R0,#+10
+   \       0x52   0xD002             BEQ.N    ??SearchString_6
+   \       0x54   0x7818             LDRB     R0,[R3, #+0]
+   \       0x56   0x280D             CMP      R0,#+13
+   \       0x58   0xD1F0             BNE.N    ??SearchString_3
+    300                {
+    301                  /* Check if the next character in pu8TargetChar is space, <CR>, <LF> or ':' */
+    302                  if( (*pu8TargetChar == ' ') ||
+    303                      (*pu8TargetChar == ASCII_CARRIAGE_RETURN) ||
+    304                      (*pu8TargetChar == ASCII_LINEFEED) ||
+    305                      (*pu8TargetChar == ':')  )
+   \                     ??SearchString_6: (+1)
+   \       0x5A   0x7820             LDRB     R0,[R4, #+0]
+   \       0x5C   0x2820             CMP      R0,#+32
+   \       0x5E   0xD008             BEQ.N    ??SearchString_7
+   \       0x60   0x7820             LDRB     R0,[R4, #+0]
+   \       0x62   0x280D             CMP      R0,#+13
+   \       0x64   0xD005             BEQ.N    ??SearchString_7
+   \       0x66   0x7820             LDRB     R0,[R4, #+0]
+   \       0x68   0x280A             CMP      R0,#+10
+   \       0x6A   0xD002             BEQ.N    ??SearchString_7
+   \       0x6C   0x7820             LDRB     R0,[R4, #+0]
+   \       0x6E   0x283A             CMP      R0,#+58
+   \       0x70   0xD1E4             BNE.N    ??SearchString_3
+    306                  {
+    307                    return(TRUE);
+   \                     ??SearchString_7: (+1)
+   \       0x72   0x2001             MOVS     R0,#+1
+   \       0x74   0xE015             B.N      ??SearchString_4
+    308                  }
+    309                }
+    310              }
+    311          
+    312              /* At the end of the target string? */
+    313              if( (*pu8TargetChar == NULL) || (*pu8TargetChar == ASCII_LINEFEED) || (*pu8TargetChar == ASCII_CARRIAGE_RETURN) )
+   \                     ??SearchString_5: (+1)
+   \       0x76   0x7820             LDRB     R0,[R4, #+0]
+   \       0x78   0x2800             CMP      R0,#+0
+   \       0x7A   0xD005             BEQ.N    ??SearchString_8
+   \       0x7C   0x7820             LDRB     R0,[R4, #+0]
+   \       0x7E   0x280A             CMP      R0,#+10
+   \       0x80   0xD002             BEQ.N    ??SearchString_8
+   \       0x82   0x7820             LDRB     R0,[R4, #+0]
+   \       0x84   0x280D             CMP      R0,#+13
+   \       0x86   0xD101             BNE.N    ??SearchString_9
+    314              {
+    315                return(FALSE);
+   \                     ??SearchString_8: (+1)
+   \       0x88   0x2000             MOVS     R0,#+0
+   \       0x8A   0xE00A             B.N      ??SearchString_4
+    316              }
+    317              
+    318              /* If here, match was not found (yet), but as long as there are more characters in pu8TargetChar,
+    319              then we can scan again. */
+    320              
+    321              /* Reset match pointer back to the start of its string */
+    322              pu8MatchChar = pu8MatchString_;
+   \                     ??SearchString_9: (+1)
+   \       0x8C   0x000B             MOVS     R3,R1
+    323            } while ( (*pu8TargetChar != NULL) && 
+    324                      (*pu8TargetChar != ASCII_LINEFEED) && (*pu8TargetChar != ASCII_CARRIAGE_RETURN) );
+   \       0x8E   0x7820             LDRB     R0,[R4, #+0]
+   \       0x90   0x2800             CMP      R0,#+0
+   \       0x92   0xD005             BEQ.N    ??SearchString_10
+   \       0x94   0x7820             LDRB     R0,[R4, #+0]
+   \       0x96   0x280A             CMP      R0,#+10
+   \       0x98   0xD002             BEQ.N    ??SearchString_10
+   \       0x9A   0x7820             LDRB     R0,[R4, #+0]
+   \       0x9C   0x280D             CMP      R0,#+13
+   \       0x9E   0xD1B3             BNE.N    ??SearchString_0
+    325            
+    326            /* If we get here, no match was found */
+    327            return(FALSE);
+   \                     ??SearchString_10: (+1)
+   \       0xA0   0x2000             MOVS     R0,#+0
+   \                     ??SearchString_4: (+1)
+   \       0xA2   0xBC30             POP      {R4,R5}
+   \       0xA4   0x4770             BX       LR               ;; return
+    328          
+    329          } /* end SearchString */
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable1:
+   \        0x0   0x....'....        DC32     G_u32SystemTime1ms
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable1_1:
+   \        0x0   0x3B9A'CA00        DC32     0x3b9aca00
+    330          
+    331          
+    332          /*--------------------------------------------------------------------------------------------------------------------*/
+    333          /* Protected Functions */
+    334          /*--------------------------------------------------------------------------------------------------------------------*/
+    335          
+    336          /*--------------------------------------------------------------------------------------------------------------------*/
+    337          /* Private functions */
+    338          /*--------------------------------------------------------------------------------------------------------------------*/
+    339          
+    340          
+    341          
+    342          
+    343          /*--------------------------------------------------------------------------------------------------------------------*/
+    344          /* End of File */
+    345          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   Maximum stack usage in bytes:
+
+   .cstack Function
+   ------- --------
+       0   ASCIIHexCharToChar
+       0   HexToASCIICharLower
+       0   HexToASCIICharUpper
+       4   IsTimeUp
+      40   NumberToAscii
+        40   -> strcpy
+       8   SearchString
+
+
+   Section sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       4  ??DataTable1
+       4  ??DataTable1_1
+      78  ASCIIHexCharToChar
+       8  G_au8MessageFAIL
+       8  G_au8MessageOFF
+       8  G_au8MessageOK
+       8  G_au8MessageON
+      46  HexToASCIICharLower
+      46  HexToASCIICharUpper
+      48  IsTimeUp
+     128  NumberToAscii
+     166  SearchString
+
+ 
+  32 bytes in section .data
+ 520 bytes in section .text
+ 
+ 520 bytes of CODE memory
+  32 bytes of DATA memory
+
+Errors: none
+Warnings: none
