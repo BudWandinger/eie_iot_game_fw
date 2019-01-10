@@ -77,8 +77,8 @@ void drawDot(GameboardCoordinateType* coordinate_)
     {
       PixelAddressType pixel =
       {
-        .u16PixelRowAddress = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET) + i,
-        .u16PixelColumnAddress = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET) + j
+        .u16PixelRowAddress = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET) + i,
+        .u16PixelColumnAddress = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET) + j
       };
       
       LcdSetPixel(&pixel);
@@ -87,13 +87,151 @@ void drawDot(GameboardCoordinateType* coordinate_)
   
   PixelBlockType updateArea =
   {
-    .u16RowStart = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET),
-    .u16ColumnStart = GAMEBOARD_BORDER_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET),
+    .u16RowStart = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET),
+    .u16ColumnStart = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET),
     .u16RowSize = GAMEBOARD_DOT_WIDTH,
     .u16ColumnSize = GAMEBOARD_DOT_WIDTH
   };
   
   LcdUpdateScreenRefreshArea(&updateArea);
+}
+
+void drawEmptyGameboard(void)
+{
+  u8 i, j;
+  for(i = 0; i < GAMEBOARD_SIZE; i++)
+  {
+    for(j = 0; j < GAMEBOARD_SIZE; j++)
+    {
+      GameboardCoordinateType coordinate =
+      {
+        .u8RowCoordinate = i,
+        .u8ColumnCoordinate = j
+      };
+      drawDot(&coordinate);
+    }
+  }
+}
+
+void drawVerticalLine(GameboardCoordinateType* coordinate_)
+{
+  u8 i, j;
+  for(i = 0; i < GAMEBOARD_LINE_LENGTH; i++)
+  {
+    for(j = 0; j < GAMEBOARD_LINE_WIDTH; j++)
+    {
+      PixelAddressType pixel =
+      {
+        .u16PixelRowAddress = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET) + i,
+        .u16PixelColumnAddress = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET) + j
+      };
+      
+      LcdSetPixel(&pixel);
+    }
+  }
+  
+  PixelBlockType updateArea =
+  {
+    .u16RowStart = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET),
+    .u16ColumnStart = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET),
+    .u16RowSize = GAMEBOARD_LINE_WIDTH,
+    .u16ColumnSize = GAMEBOARD_LINE_LENGTH
+  };
+  
+  LcdUpdateScreenRefreshArea(&updateArea);
+}
+
+void drawHorizontalLine(GameboardCoordinateType* coordinate_)
+{
+  u8 i, j;
+  for(i = 0; i < GAMEBOARD_LINE_WIDTH; i++)
+  {
+    for(j = 0; j < GAMEBOARD_LINE_LENGTH; j++)
+    {
+      PixelAddressType pixel =
+      {
+        .u16PixelRowAddress = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET) + i,
+        .u16PixelColumnAddress = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET) + j
+      };
+      
+      LcdSetPixel(&pixel);
+    }
+  }
+  
+  PixelBlockType updateArea =
+  {
+    .u16RowStart = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET),
+    .u16ColumnStart = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET),
+    .u16RowSize = GAMEBOARD_LINE_LENGTH,
+    .u16ColumnSize = GAMEBOARD_LINE_WIDTH
+  };
+  
+  LcdUpdateScreenRefreshArea(&updateArea);
+}
+
+
+void testGameboardDrawingFunctions(void)
+{
+    static u8 i = 0;
+    static u8 j = 0;
+    
+    if(i < 8)
+    {
+      GameboardCoordinateType coord =
+      {
+        .u8RowCoordinate = i,
+        .u8RowCoordinate = j
+      };
+      drawDot(&coord);
+      
+      if(j < 8)
+      {
+        j++;
+      }
+      else
+      {
+        i++;
+        j = 0;
+      }
+    }
+    else if(i < (8 + 8))
+    {
+      GameboardCoordinateType coord =
+      {
+        .u8RowCoordinate = (i - 8),
+        .u8ColumnCoordinate = (j - 8)
+      };
+      drawHorizontalLine(&coord);
+      
+      if(j < (7 + 8))
+      {
+        j++;
+      }
+      else
+      {
+        i++;
+        j = (0 + 8);
+      }
+    }
+    else if(i < (8 + 8 + 7))
+    {
+      GameboardCoordinateType coord =
+      {
+        .u8RowCoordinate = (i - 8 - 8),
+        .u8ColumnCoordinate = (j - 8 - 7)
+      };
+      drawVerticalLine(&coord);
+      
+      if(j < (8 + 7 + 8))
+      {
+        j++;
+      }
+      else
+      {
+        i++;
+        j = (0 + 8 + 7);
+      }
+    }
 }
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
@@ -120,7 +258,21 @@ void UserApp1Initialize(void)
     UserApp1_StateMachine = UserApp1SM_Idle;
     
     LcdClearScreen();
+    /*drawEmptyGameboard();
     
+    u8 i , j;
+    for(i = 0; i < GAMEBOARD_SIZE; i++)
+    {
+      for(j = 0; j < GAMEBOARD_SIZE - 1; j++)
+      {
+        GameboardCoordinateType lineLocation =
+        {
+          .u8RowCoordinate = i,
+          .u8ColumnCoordinate = j
+        };
+        drawHorizontalLine(&lineLocation);
+      }
+    }*/
   }
   else
   {
@@ -166,23 +318,11 @@ State Machine Function Definitions
 static void UserApp1SM_Idle(void)
 {
     static uint32_t timer = 0;
-    static uint8_t i = 0;
-    static uint8_t j = 0;
     
-    if((timer % 500 == 0) && (i < 8) && (j < 8))
+    if(timer % 500 == 0)
     {
-      GameboardCoordinateType dotCoord =
-      {
-        .u8RowCoordinate = i,
-        .u8ColumnCoordinate = j
-      };
-      
-      drawDot(&dotCoord);
-      
-      j++;
-      i++;
+      testGameboardDrawingFunctions();
     }
-    
     timer++;
 } /* end UserApp1SM_Idle() */
     

@@ -18254,6 +18254,10 @@ Constants / Definitions
 
 
 
+
+
+
+  
 /**********************************************************************************************************************
 Function Declarations
 **********************************************************************************************************************/
@@ -18262,7 +18266,10 @@ Function Declarations
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 void drawDot(GameboardCoordinateType* coordinate_);
-
+void drawEmptyGameboard(void);
+void drawVerticalLine(GameboardCoordinateType* coordinate_);
+void drawHorizontalLine(GameboardCoordinateType* coordinate_);
+void testGameboardDrawingFunctions(void);
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/

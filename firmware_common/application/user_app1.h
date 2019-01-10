@@ -32,13 +32,17 @@ typedef struct
 /**********************************************************************************************************************
 Constants / Definitions
 **********************************************************************************************************************/
-#define GAMEBOARD_BORDER_OFFSET (u8)2
+#define GAMEBOARD_SIZE          (u8)8
 #define GAMEBOARD_DOT_WIDTH     (u8)3
 #define GAMEBOARD_LINE_WIDTH    (u8)1
 #define GAMEBOARD_LINE_LENGTH   (u8)5
 
-#define GAMEBOARD_DOT_OFFSET    (GAMEBOARD_DOT_WIDTH + GAMEBOARD_LINE_LENGTH)
-
+#define GAMEBOARD_BORDER_DOT_OFFSET             (u8)2
+#define GAMEBOARD_DOT_OFFSET                    (u8)8
+#define GAMEBOARD_BORDER_LINE_WIDTH_OFFSET      (u8)3
+#define GAMEBOARD_BORDER_LINE_LENGTH_OFFSET     (u8)5
+#define GAMEBOARD_LINE_OFFSET                   (u8)8
+  
 /**********************************************************************************************************************
 Function Declarations
 **********************************************************************************************************************/
@@ -47,7 +51,10 @@ Function Declarations
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 void drawDot(GameboardCoordinateType* coordinate_);
-
+void drawEmptyGameboard(void);
+void drawVerticalLine(GameboardCoordinateType* coordinate_);
+void drawHorizontalLine(GameboardCoordinateType* coordinate_);
+void testGameboardDrawingFunctions(void);
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/

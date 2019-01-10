@@ -18255,6 +18255,10 @@ Constants / Definitions
 
 
 
+
+
+
+  
 /**********************************************************************************************************************
 Function Declarations
 **********************************************************************************************************************/
@@ -18263,7 +18267,10 @@ Function Declarations
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 void drawDot(GameboardCoordinateType* coordinate_);
-
+void drawEmptyGameboard(void);
+void drawVerticalLine(GameboardCoordinateType* coordinate_);
+void drawHorizontalLine(GameboardCoordinateType* coordinate_);
+void testGameboardDrawingFunctions(void);
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -19591,8 +19598,8 @@ void drawDot(GameboardCoordinateType* coordinate_)
     {
       PixelAddressType pixel =
       {
-        .u16PixelRowAddress = (u8)2 + (coordinate_->u8RowCoordinate * ((u8)3 + (u8)5)) + i,
-        .u16PixelColumnAddress = (u8)2 + (coordinate_->u8ColumnCoordinate * ((u8)3 + (u8)5)) + j
+        .u16PixelRowAddress = (u8)2 + (coordinate_->u8RowCoordinate * (u8)8) + i,
+        .u16PixelColumnAddress = (u8)2 + (coordinate_->u8ColumnCoordinate * (u8)8) + j
       };
       
       LcdSetPixel(&pixel);
@@ -19601,13 +19608,151 @@ void drawDot(GameboardCoordinateType* coordinate_)
   
   PixelBlockType updateArea =
   {
-    .u16RowStart = (u8)2 + (coordinate_->u8RowCoordinate * ((u8)3 + (u8)5)),
-    .u16ColumnStart = (u8)2 + (coordinate_->u8ColumnCoordinate * ((u8)3 + (u8)5)),
+    .u16RowStart = (u8)2 + (coordinate_->u8RowCoordinate * (u8)8),
+    .u16ColumnStart = (u8)2 + (coordinate_->u8ColumnCoordinate * (u8)8),
     .u16RowSize = (u8)3,
     .u16ColumnSize = (u8)3
   };
   
   LcdUpdateScreenRefreshArea(&updateArea);
+}
+
+void drawEmptyGameboard(void)
+{
+  u8 i, j;
+  for(i = 0; i < (u8)8; i++)
+  {
+    for(j = 0; j < (u8)8; j++)
+    {
+      GameboardCoordinateType coordinate =
+      {
+        .u8RowCoordinate = i,
+        .u8ColumnCoordinate = j
+      };
+      drawDot(&coordinate);
+    }
+  }
+}
+
+void drawVerticalLine(GameboardCoordinateType* coordinate_)
+{
+  u8 i, j;
+  for(i = 0; i < (u8)5; i++)
+  {
+    for(j = 0; j < (u8)1; j++)
+    {
+      PixelAddressType pixel =
+      {
+        .u16PixelRowAddress = (u8)5 + (coordinate_->u8RowCoordinate * (u8)8) + i,
+        .u16PixelColumnAddress = (u8)3 + (coordinate_->u8ColumnCoordinate * (u8)8) + j
+      };
+      
+      LcdSetPixel(&pixel);
+    }
+  }
+  
+  PixelBlockType updateArea =
+  {
+    .u16RowStart = (u8)5 + (coordinate_->u8RowCoordinate * (u8)8),
+    .u16ColumnStart = (u8)3 + (coordinate_->u8ColumnCoordinate * (u8)8),
+    .u16RowSize = (u8)1,
+    .u16ColumnSize = (u8)5
+  };
+  
+  LcdUpdateScreenRefreshArea(&updateArea);
+}
+
+void drawHorizontalLine(GameboardCoordinateType* coordinate_)
+{
+  u8 i, j;
+  for(i = 0; i < (u8)1; i++)
+  {
+    for(j = 0; j < (u8)5; j++)
+    {
+      PixelAddressType pixel =
+      {
+        .u16PixelRowAddress = (u8)3 + (coordinate_->u8RowCoordinate * (u8)8) + i,
+        .u16PixelColumnAddress = (u8)5 + (coordinate_->u8ColumnCoordinate * (u8)8) + j
+      };
+      
+      LcdSetPixel(&pixel);
+    }
+  }
+  
+  PixelBlockType updateArea =
+  {
+    .u16RowStart = (u8)3 + (coordinate_->u8RowCoordinate * (u8)8),
+    .u16ColumnStart = (u8)5 + (coordinate_->u8ColumnCoordinate * (u8)8),
+    .u16RowSize = (u8)5,
+    .u16ColumnSize = (u8)1
+  };
+  
+  LcdUpdateScreenRefreshArea(&updateArea);
+}
+
+
+void testGameboardDrawingFunctions(void)
+{
+    static u8 i = 0;
+    static u8 j = 0;
+    
+    if(i < 8)
+    {
+      GameboardCoordinateType coord =
+      {
+        .u8RowCoordinate = i,
+        .u8RowCoordinate = j
+      };
+      drawDot(&coord);
+      
+      if(j < 8)
+      {
+        j++;
+      }
+      else
+      {
+        i++;
+        j = 0;
+      }
+    }
+    else if(i < (8 + 8))
+    {
+      GameboardCoordinateType coord =
+      {
+        .u8RowCoordinate = (i - 8),
+        .u8ColumnCoordinate = (j - 8)
+      };
+      drawHorizontalLine(&coord);
+      
+      if(j < (7 + 8))
+      {
+        j++;
+      }
+      else
+      {
+        i++;
+        j = (0 + 8);
+      }
+    }
+    else if(i < (8 + 8 + 7))
+    {
+      GameboardCoordinateType coord =
+      {
+        .u8RowCoordinate = (i - 8 - 8),
+        .u8ColumnCoordinate = (j - 8 - 7)
+      };
+      drawVerticalLine(&coord);
+      
+      if(j < (8 + 7 + 8))
+      {
+        j++;
+      }
+      else
+      {
+        i++;
+        j = (0 + 8 + 7);
+      }
+    }
 }
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
@@ -19634,7 +19779,21 @@ void UserApp1Initialize(void)
     UserApp1_StateMachine = UserApp1SM_Idle;
     
     LcdClearScreen();
+    /*drawEmptyGameboard();
     
+    u8 i , j;
+    for(i = 0; i < GAMEBOARD_SIZE; i++)
+    {
+      for(j = 0; j < GAMEBOARD_SIZE - 1; j++)
+      {
+        GameboardCoordinateType lineLocation =
+        {
+          .u8RowCoordinate = i,
+          .u8ColumnCoordinate = j
+        };
+        drawHorizontalLine(&lineLocation);
+      }
+    }*/
   }
   else
   {
@@ -19680,23 +19839,11 @@ State Machine Function Definitions
 static void UserApp1SM_Idle(void)
 {
     static uint32_t timer = 0;
-    static uint8_t i = 0;
-    static uint8_t j = 0;
     
-    if((timer % 500 == 0) && (i < 8) && (j < 8))
+    if(timer % 500 == 0)
     {
-      GameboardCoordinateType dotCoord =
-      {
-        .u8RowCoordinate = i,
-        .u8ColumnCoordinate = j
-      };
-      
-      drawDot(&dotCoord);
-      
-      j++;
-      i++;
+      testGameboardDrawingFunctions();
     }
-    
     timer++;
 } /* end UserApp1SM_Idle() */
     
