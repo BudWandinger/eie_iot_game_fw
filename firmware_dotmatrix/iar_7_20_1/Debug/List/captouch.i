@@ -18232,6 +18232,34 @@ Header file for user_app1.c
 /**********************************************************************************************************************
 Type Definitions
 **********************************************************************************************************************/
+typedef enum
+{
+  GAMEBOARD_SUCCESS,
+  BOUNDARY_ERROR_DOT_X,
+  BOUNDARY_ERROR_DOT_Y,
+  BOUNDARY_ERROR_VLINE_X,
+  BOUNDARY_ERROR_VLINE_Y,
+  BOUNDARY_ERROR_HLINE_X,
+  BOUNDARY_ERROR_HLINE_Y
+} GameboardErrorType;
+
+typedef enum
+{
+  SETTING_DOTS,
+  SETTING_VLINES,
+  SETTING_HLINES,
+  CLEARING_HLINES,
+  CLEARING_VLINES,
+  CLEARING_DOTS,
+  DRAWING_COMPLETE
+}DrawingTestState;
+
+typedef enum
+{
+  DRAW_SET,
+  DRAW_CLEAR
+} DrawType;
+  
 typedef struct
 {
   u8 u8RowCoordinate;
@@ -18259,11 +18287,13 @@ Function Declarations
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
-void drawDot(GameboardCoordinateType* coordinate_);
-void drawEmptyGameboard(void);
-void drawVerticalLine(GameboardCoordinateType* coordinate_);
-void drawHorizontalLine(GameboardCoordinateType* coordinate_);
-void testGameboardDrawingFunctions(void);
+GameboardErrorType setDot(GameboardCoordinateType* coordinate_);
+GameboardErrorType clearDot(GameboardCoordinateType* coordinate_);
+GameboardErrorType setVerticalLine(GameboardCoordinateType* coordinate_);
+GameboardErrorType clearVerticalLine(GameboardCoordinateType* coordinate_);
+GameboardErrorType setHorizontalLine(GameboardCoordinateType* coordinate_);
+GameboardErrorType clearHorizontalLine(GameboardCoordinateType* coordinate_);
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -18274,7 +18304,11 @@ void UserApp1RunActiveState(void);
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+static GameboardErrorType drawDot(GameboardCoordinateType* coordinate_, DrawType drawType_);
+static GameboardErrorType drawVerticalLine(GameboardCoordinateType* coordinate_, DrawType drawType_);
+static GameboardErrorType drawHorizontalLine(GameboardCoordinateType* coordinate_, DrawType drawType_);
+static GameboardErrorType drawEmptyGameboard(void);
+static GameboardErrorType testGameboardDrawingFunctions(void);
 
 /***********************************************************************************************************************
 State Machine Declarations

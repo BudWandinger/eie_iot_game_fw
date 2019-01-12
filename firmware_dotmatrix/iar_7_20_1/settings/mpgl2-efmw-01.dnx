@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>1250520503</Checksum>
+        <Checksum>1151673987</Checksum>
     </DebugChecksum>
     <JLinkDriver>
         <WatchCond>_ 0</WatchCond>
@@ -32,8 +32,8 @@
         <ShowArgs>0</ShowArgs>
     </CallStack>
     <Disassembly>
-        <InstrCount>0</InstrCount>
         <MixedMode>1</MixedMode>
+        <InstrCount>0</InstrCount>
     </Disassembly>
     <InterruptLog>
         <LogEnabled>0</LogEnabled>
@@ -78,10 +78,6 @@
         <Bp2>_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\..\firmware_mpg_common\application\user_app.c}.94.5" 0 0 1 "" 0 "" 0</Bp2>
         <Count>3</Count>
     </Breakpoints2>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -104,4 +100,8 @@
     <CallStackStripe>
         <ShowTiming>1</ShowTiming>
     </CallStackStripe>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
 </settings>
