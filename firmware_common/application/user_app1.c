@@ -59,6 +59,13 @@ Variable names shall start with "UserApp1_" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
+static CapTouchMovementState horizontalMoveState;
+static CapTouchMovementState verticalMoveState;
+static GameboardErrorType err;
+static u32 u32Timer;
+static CursorType cursor;
+static UserPlayState userPlayState;
+static Gameboard gameboard;
 
 /**********************************************************************************************************************
 Function Definitions
@@ -120,22 +127,36 @@ void UserApp1Initialize(void)
   {
     UserApp1_StateMachine = UserApp1SM_Idle;
     
+    /* Init Gameboard */
     LcdClearScreen();
-    /*drawEmptyGameboard();
+    drawEmptyGameboard();
     
-    u8 i , j;
-    for(i = 0; i < GAMEBOARD_SIZE; i++)
+    /* Init captouch */
+    CapTouchOn();
+    
+    /* Init cursor */
+    cursor.cursorLocation.u8RowCoordinate = 0;
+    cursor.cursorLocation.u8ColumnCoordinate = 0;
+    cursor.cursorState = CURSOR_OFF;
+    
+    /* Init cursor state machine */
+    horizontalMoveState = MOVEMENT_NOT_STARTED;
+    verticalMoveState = MOVEMENT_NOT_STARTED;
+    
+    /* Init user play state machine. */
+    userPlayState = SELECTED_NOTHING;
+    
+    /* Init gameboard */
+    gameboard.pu8HorizontalLines = (u8*)malloc(sizeof(u8) * (GAMEBOARD_SIZE - 1));
+    gameboard.pu8VerticalLines = (u8*)malloc(sizeof(u8) * (GAMEBOARD_SIZE - 1));
+    for(uint8_t i = 0; i < GAMEBOARD_SIZE - 1; i++)
     {
-      for(j = 0; j < GAMEBOARD_SIZE - 1; j++)
-      {
-        GameboardCoordinateType lineLocation =
-        {
-          .u8RowCoordinate = i,
-          .u8ColumnCoordinate = j
-        };
-        drawHorizontalLine(&lineLocation);
-      }
-    }*/
+      *(gameboard.pu8HorizontalLines + i) = 0;
+      *(gameboard.pu8VerticalLines + i) = 0;
+    }
+    
+    /* Init app timer */
+    u32Timer = 0;
   }
   else
   {
@@ -486,6 +507,158 @@ static GameboardErrorType testGameboardDrawingFunctions(void)
     return GAMEBOARD_SUCCESS;
 }
 
+static GameboardErrorType blinkCursor(void)
+{
+  if(u32Timer % 250 == 0)
+  {
+    switch(cursor.cursorState)
+    {
+      case CURSOR_OFF:
+        err = setDot(&cursor.cursorLocation);
+        if(err != GAMEBOARD_SUCCESS)
+        {
+          return err;
+        }
+        cursor.cursorState = CURSOR_ON;
+        break;
+        
+      case CURSOR_ON:
+        err = clearDot(&cursor.cursorLocation);
+        if(err != GAMEBOARD_SUCCESS)
+        {
+          return err;
+        }
+        cursor.cursorState = CURSOR_OFF;
+        break;
+    }
+  }
+  
+  return GAMEBOARD_SUCCESS;
+}
+
+static GameboardErrorType moveCursor(void)
+{
+  u8 horizontalSliderPos = CaptouchCurrentHSlidePosition();
+  u8 verticalSliderPos = CaptouchCurrentVSlidePosition();
+  
+  switch(horizontalMoveState)
+  {
+    case MOVEMENT_NOT_STARTED:
+      if(horizontalSliderPos >= CAPTOUCH_HORIZONTAL_LEFT_THRESHOLD &&
+         horizontalSliderPos < CAPTOUCH_HORIZONTAL_RIGHT_THRESHOLD)
+      {
+        horizontalMoveState = MOVEMENT_STARTED;
+      }
+      break;
+    case MOVEMENT_STARTED:
+      if(horizontalSliderPos < CAPTOUCH_HORIZONTAL_LEFT_THRESHOLD)
+      {
+        /* Check if the cursor is already at the left border of the screen. */
+        if(cursor.cursorLocation.u8ColumnCoordinate == 0)
+        {
+          break;
+        }
+        /* If the cursor is currently off, turn it on before moving it. */
+        if(cursor.cursorState == CURSOR_OFF)
+        {
+          err = setDot(&cursor.cursorLocation);
+          if(err != GAMEBOARD_SUCCESS)
+          {
+            return err;
+          }
+          cursor.cursorState = CURSOR_ON;
+        }
+        
+        /* Update the cursor location and move the cursor state machine. */
+        cursor.cursorLocation.u8ColumnCoordinate--;
+        horizontalMoveState = MOVEMENT_NOT_STARTED;
+      }
+      else if(horizontalSliderPos >= CAPTOUCH_HORIZONTAL_RIGHT_THRESHOLD)
+      {
+        /* Check if the cursor is already at the right border of the screen. */
+        if(cursor.cursorLocation.u8ColumnCoordinate == GAMEBOARD_SIZE - 1)
+        {
+          break;
+        }
+        
+        /* If the cursor is currently off, turn it on before moving it. */
+        if(cursor.cursorState == CURSOR_OFF)
+        {
+          err = setDot(&cursor.cursorLocation);
+          if(err != GAMEBOARD_SUCCESS)
+          {
+            return err;
+          }
+          cursor.cursorState = CURSOR_ON;
+        }
+        
+        /* Update the cursor location and move the state machine. */
+        cursor.cursorLocation.u8ColumnCoordinate++;
+        horizontalMoveState = MOVEMENT_NOT_STARTED;
+      }
+      break;
+  }
+  
+  switch(verticalMoveState)
+  {
+    case MOVEMENT_NOT_STARTED:
+      if(verticalSliderPos >= CAPTOUCH_VERTICAL_DOWN_THRESHOLD &&
+         verticalSliderPos < CAPTOUCH_VERTICAL_UP_THRESHOLD)
+      {
+        verticalMoveState = MOVEMENT_STARTED;
+      }
+      break;
+    case MOVEMENT_STARTED:
+      if(verticalSliderPos < CAPTOUCH_VERTICAL_DOWN_THRESHOLD)
+      {
+        /* Check if the cursor is already at the bottom border of the screen. */
+        if(cursor.cursorLocation.u8RowCoordinate == 0)
+        {
+          break;
+        }
+        /* If the cursor is currently off, turn it on before moving it. */
+        if(cursor.cursorState == CURSOR_OFF)
+        {
+          err = setDot(&cursor.cursorLocation);
+          if(err != GAMEBOARD_SUCCESS)
+          {
+            return err;
+          }
+          cursor.cursorState = CURSOR_ON;
+        }
+        
+        /* Update the cursor location and move the cursor state machine. */
+        cursor.cursorLocation.u8RowCoordinate--;
+        verticalMoveState = MOVEMENT_NOT_STARTED;
+      }
+      else if(verticalSliderPos >= CAPTOUCH_VERTICAL_UP_THRESHOLD)
+      {
+        /* Check if the cursor is already at the upper border of the screen. */
+        if(cursor.cursorLocation.u8RowCoordinate == GAMEBOARD_SIZE - 1)
+        {
+          break;
+        }
+        
+        /* If the cursor is currently off, turn it on before moving it. */
+        if(cursor.cursorState == CURSOR_OFF)
+        {
+          err = setDot(&cursor.cursorLocation);
+          if(err != GAMEBOARD_SUCCESS)
+          {
+            return err;
+          }
+          cursor.cursorState = CURSOR_ON;
+        }
+        
+        /* Update the cursor location and move the state machine. */
+        cursor.cursorLocation.u8RowCoordinate++;
+        verticalMoveState = MOVEMENT_NOT_STARTED;
+      }
+      break;
+  }
+  
+  return GAMEBOARD_SUCCESS;
+}
 /**********************************************************************************************************************
 State Machine Function Definitions
 **********************************************************************************************************************/
@@ -494,13 +667,42 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-    static uint32_t timer = 0;
+  switch(userPlayState)
+  {
+    /* Here the user has not selected any dots to start their turn. Functionality should allow the user to move around
+     * the gameboard by blinking the cursor, and moving the cursor based on input from the captouch sensors. The next
+     * state (SELECTED_FIRST_DOT) is achieved after the user has selected a dot with BUTTON1 */
+    case SELECTED_NOTHING:
+      err = blinkCursor();
+      if(err != GAMEBOARD_SUCCESS)
+      {
+        //????
+      }
+      err = moveCursor();
+      if(err != GAMEBOARD_SUCCESS)
+      {
+        //????
+      }
+      break;
     
-    if(timer % 100 == 0)
-    {
-      testGameboardDrawingFunctions();
-    }
-    timer++;
+    /* Here the user has selected one dot and must now select a second. Functionality should allow the user to select
+     * between possible second dots by blinking a possible line that would connect two dots and switch between possible
+     * line options by taking input from the captouch sensors. From here, the user can go back to the previous state
+     * (SELECT_NOTHING) by pressing BUTTON0 or go forward to the next state (SELECTED_SECOND_DOT) by pressing BUTTON1
+     * when they've reached their desired second dot option. */
+    case SELECTED_FIRST_DOT:
+      break;
+    
+     /* Here the user has selected both dots and their turn is over. No more functionality must be provided to the user
+      * until the user play state machine is started again. The players move on the gameboard should be updated in the
+      * global gameboard variable */
+    case SELECTED_SECOND_DOT:
+      break;
+  }
+  
+  /* Don't ever remove this! Other functions are depending on it!! */
+  u32Timer++;
+  
 } /* end UserApp1SM_Idle() */
     
 

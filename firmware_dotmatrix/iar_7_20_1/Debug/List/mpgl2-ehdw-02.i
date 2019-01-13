@@ -18218,7 +18218,7 @@ typedef enum
   BOUNDARY_ERROR_VLINE_X,
   BOUNDARY_ERROR_VLINE_Y,
   BOUNDARY_ERROR_HLINE_X,
-  BOUNDARY_ERROR_HLINE_Y
+  BOUNDARY_ERROR_HLINE_Y,
 } GameboardErrorType;
 
 typedef enum
@@ -18244,6 +18244,37 @@ typedef struct
   u8 u8ColumnCoordinate;
 } GameboardCoordinateType;
 
+typedef enum
+{
+  MOVEMENT_NOT_STARTED,
+  MOVEMENT_STARTED,
+} CapTouchMovementState;
+
+typedef enum
+{
+  CURSOR_OFF,
+  CURSOR_ON
+} CursorStateType;
+
+typedef struct
+{
+  GameboardCoordinateType cursorLocation;
+  CursorStateType cursorState;
+} CursorType;
+
+typedef enum
+{
+  SELECTED_NOTHING,
+  SELECTED_FIRST_DOT,
+  SELECTED_SECOND_DOT
+} UserPlayState;
+
+typedef struct
+{
+  u8* pu8HorizontalLines;
+  u8* pu8VerticalLines;
+} Gameboard;
+
 /**********************************************************************************************************************
 Constants / Definitions
 **********************************************************************************************************************/
@@ -18257,7 +18288,12 @@ Constants / Definitions
 
 
 
-  
+
+
+
+
+
+
 /**********************************************************************************************************************
 Function Declarations
 **********************************************************************************************************************/
@@ -18287,7 +18323,8 @@ static GameboardErrorType drawVerticalLine(GameboardCoordinateType* coordinate_,
 static GameboardErrorType drawHorizontalLine(GameboardCoordinateType* coordinate_, DrawType drawType_);
 static GameboardErrorType drawEmptyGameboard(void);
 static GameboardErrorType testGameboardDrawingFunctions(void);
-
+static GameboardErrorType blinkCursor(void);
+static GameboardErrorType moveCursor(void);
 /***********************************************************************************************************************
 State Machine Declarations
 ***********************************************************************************************************************/

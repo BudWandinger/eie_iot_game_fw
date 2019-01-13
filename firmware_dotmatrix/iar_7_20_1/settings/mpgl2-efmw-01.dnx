@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>1151673987</Checksum>
+        <Checksum>2893072596</Checksum>
     </DebugChecksum>
     <JLinkDriver>
         <WatchCond>_ 0</WatchCond>
