@@ -1,51 +1,56 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         12/Jan/2019  23:24:01
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         30/Jan/2019  05:25:38
 # Copyright 1999-2018 IAR Systems AB.
 #
 #    Cpu mode     =  
 #    Endian       =  little
 #    Source file  =  
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\drivers\lcd_NHD-C12864LZ.c
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\drivers\lcd_NHD-C12864LZ.c
 #    Command line =  
-#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EW9F37.tmp
-#        (Z:\Code\eie_iot_game_fw\firmware_dotmatrix\drivers\lcd_NHD-C12864LZ.c
+#        -f C:\Users\Caleb\AppData\Local\Temp\EW9EE1.tmp
+#        (C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\drivers\lcd_NHD-C12864LZ.c
 #        -D MPGL2 -D MPG2 --preprocess=c
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List -lC
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List -o
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj
 #        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
 #        --no_clustering --no_scheduling --debug --endian=little
 #        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
 #        (x86)\IAR Systems\Embedded Workbench
 #        8.2\arm\inc\c\DLib_Config_Normal.h" -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\ -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\bsp\ -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\drivers\ -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\application\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\bsp\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\drivers\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\application\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
 #        -On --use_c++_inline --require_prototypes -I "C:\Program Files
 #        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
 #        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
 #        8.2\arm\CMSIS\DSP\Include\")
 #    Locale       =  C
 #    List file    =  
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List\lcd_NHD-C12864LZ.lst
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List\lcd_NHD-C12864LZ.lst
 #    Object file  =  
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj\lcd_NHD-C12864LZ.o
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj\lcd_NHD-C12864LZ.o
 #
 ###############################################################################
 
-Z:\Code\eie_iot_game_fw\firmware_dotmatrix\drivers\lcd_NHD-C12864LZ.c
+C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\drivers\lcd_NHD-C12864LZ.c
       1          /***********************************************************************************************************************
       2          File: lcd_NHD-C12864LZ.c      
       3          
@@ -453,18 +458,17 @@ Z:\Code\eie_iot_game_fw\firmware_dotmatrix\drivers\lcd_NHD-C12864LZ.c
    \              0x0A 0x00    
 
    \                                 In section .data, align 4
-    279          static u8 Lcd_au8MessageWelcome[] = "SAM3U2 DOT MATRIX";
+    279          static u8 Lcd_au8MessageWelcome[] = "Dots N Boxes";
    \                     Lcd_au8MessageWelcome:
-   \        0x0   0x53 0x41          DC8 "SAM3U2 DOT MATRIX"
-   \              0x4D 0x33    
-   \              0x55 0x32    
-   \              0x20 0x44    
-   \              0x4F 0x54    
-   \              0x20 0x4D    
-   \              0x41 0x54    
-   \              0x52 0x49    
-   \              0x58 0x00    
-   \       0x12   0x00 0x00          DC8 0, 0
+   \        0x0   0x44 0x6F          DC8 "Dots N Boxes"
+   \              0x74 0x73    
+   \              0x20 0x4E    
+   \              0x20 0x42    
+   \              0x6F 0x78    
+   \              0x65 0x73    
+   \              0x00         
+   \        0xD   0x00 0x00          DC8 0, 0, 0
+   \              0x00         
     280                                           
 
    \                                 In section .data, align 4
@@ -2589,7 +2593,7 @@ Z:\Code\eie_iot_game_fw\firmware_dotmatrix\drivers\lcd_NHD-C12864LZ.c
        4  Lcd_ReturnState
        4  Lcd_Ssp
       12  Lcd_au8MessageInit
-      20  Lcd_au8MessageWelcome
+      16  Lcd_au8MessageWelcome
        1  Lcd_au8RxDummyBuffer
       12  Lcd_au8SetupArray
      128  Lcd_au8TxBuffer
@@ -2607,11 +2611,11 @@ Z:\Code\eie_iot_game_fw\firmware_dotmatrix\drivers\lcd_NHD-C12864LZ.c
 
  
  1 239 bytes in section .bss
-   116 bytes in section .data
+   112 bytes in section .data
  2 244 bytes in section .text
  
  2 244 bytes of CODE memory
- 1 355 bytes of DATA memory
+ 1 351 bytes of DATA memory
 
 Errors: none
 Warnings: none

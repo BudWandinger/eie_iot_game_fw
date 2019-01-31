@@ -1,613 +1,188 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
     <fileVersion>4</fileVersion>
-    <fileChecksum>1927692940</fileChecksum>
+    <fileChecksum>1263368268</fileChecksum>
     <configuration>
         <name>Debug</name>
         <outputs>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\utilities.h</file>
-            <file>$PROJ_DIR$\..\drivers\lcd_NHD-C12864LZ.c</file>
-            <file>$PROJ_DIR$\..\drivers\captouch.h</file>
-            <file>$PROJ_DIR$\..\drivers\lcd_bitmaps.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\leds.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\leds.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_ssp.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\antmessage.h</file>
-            <file>$PROJ_DIR$\..\drivers\lcd_NHD-C12864LZ.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\ant_api.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\messaging.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_i2c.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\messaging.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\exceptions.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\exceptions.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\ant.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_uart.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\utilities.c</file>
-            <file>$PROJ_DIR$\..\libraries\captouch\bin\libsam3u-32qt-k-8rs-iar.a</file>
-            <file>$PROJ_DIR$\..\libraries\captouch\libqtouch.h</file>
-            <file>$PROJ_DIR$\..\libraries\captouch\include\touch_api.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\ant_api.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_i2c.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_ssp.h</file>
-            <file>$PROJ_DIR$\..\drivers\lcd_bitmaps.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\antdefines.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_uart.h</file>
-            <file>$PROJ_DIR$\..\drivers\captouch.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\AT91SAM3U4.h</file>
             <file>$PROJ_DIR$\..\..\firmware_common\board_cstartup_iar.c</file>
             <file>$PROJ_DIR$\..\bsp\mpgl2-ehdw-02.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\AT91SAM3U4.h</file>
             <file>$PROJ_DIR$\..\..\firmware_common\sam3u2-flash.icf</file>
             <file>$PROJ_DIR$\..\..\firmware_common\cmsis\core_cm3.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\ant.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\typedefs.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\cmsis\core_cm3.h</file>
             <file>$PROJ_DIR$\..\..\firmware_common\configuration.h</file>
             <file>$PROJ_DIR$\..\bsp\mpgl2-ehdw-02.h</file>
-            <file>$PROJ_DIR$\Debug\List\mpgl2-ehdw-02.i</file>
-            <file>$PROJ_DIR$\Debug\List\messaging.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\sam3u_ssp.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\exceptions.o</file>
-            <file>$PROJ_DIR$\Debug\List\messaging.i</file>
-            <file>$PROJ_DIR$\Debug\Obj\core_cm3.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\mpgl2-ehdw-02.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\ant.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\user_app2.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\buttons.o</file>
-            <file>$PROJ_DIR$\Debug\List\board_cstartup_iar.i</file>
-            <file>$TOOLKIT_DIR$\inc\c\iccarm_builtin.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\debug.o</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
-            <file>$PROJ_DIR$\Debug\List\sam3u_ssp.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\utilities.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\user_app1.o</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\exceptions.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\board_cstartup_iar.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\main.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\messaging.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\List\exceptions.i</file>
-            <file>$PROJ_DIR$\Debug\List\lcd_bitmaps.lst</file>
-            <file>$PROJ_DIR$\Debug\List\utilities.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\mpgl2-ehdw-02.o</file>
-            <file>$PROJ_DIR$\Debug\List\leds.lst</file>
-            <file>$TOOLKIT_DIR$\inc\c\iar_intrinsics_common.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\sam3u_ssp.pbi</file>
-            <file>$PROJ_DIR$\Debug\Exe\mpgl2.out</file>
-            <file>$PROJ_DIR$\Debug\List\debug.i</file>
-            <file>$PROJ_DIR$\Debug\Obj\debug.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\interrupts.o</file>
-            <file>$PROJ_DIR$\Debug\List\utilities.i</file>
-            <file>$PROJ_DIR$\Debug\Obj\leds.o</file>
-            <file>$PROJ_DIR$\Debug\List\sam3u_uart.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\user_app2.pbi</file>
-            <file>$PROJ_DIR$\Debug\List\sam3u_uart.i</file>
-            <file>$PROJ_DIR$\Debug\List\ant.lst</file>
-            <file>$PROJ_DIR$\Debug\Exe\mpgl2-efmw-01.hex</file>
-            <file>$PROJ_DIR$\Debug\List\debug.lst</file>
-            <file>$PROJ_DIR$\Debug\List\user_app3.i</file>
-            <file>$PROJ_DIR$\Debug\List\lcd_NHD-C12864LZ.i</file>
-            <file>$PROJ_DIR$\Debug\List\ant_api.i</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\typedefs.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\ant.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\utilities.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.c</file>
+            <file>$PROJ_DIR$\..\drivers\captouch.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\cmsis\core_cm3.h</file>
+            <file>$PROJ_DIR$\..\drivers\captouch.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_ssp.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.c</file>
+            <file>$PROJ_DIR$\..\drivers\lcd_NHD-C12864LZ.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\antdefines.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\ant_api.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_i2c.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.h</file>
+            <file>$PROJ_DIR$\..\drivers\lcd_NHD-C12864LZ.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\exceptions.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\messaging.h</file>
+            <file>$PROJ_DIR$\..\drivers\lcd_bitmaps.h</file>
+            <file>$PROJ_DIR$\..\drivers\lcd_bitmaps.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\leds.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\messaging.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_i2c.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_ssp.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_uart.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\utilities.c</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_uart.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\exceptions.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\ant_api.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\antmessage.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\ant.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\leds.h</file>
             <file>$PROJ_DIR$\Debug\Obj\sam3u_uart.o</file>
-            <file>$PROJ_DIR$\Debug\List\leds.i</file>
-            <file>$PROJ_DIR$\Debug\Obj\lcd_NHD-C12864LZ.pbi</file>
-            <file>$PROJ_DIR$\Debug\List\lcd_bitmaps.i</file>
-            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
-            <file>$PROJ_DIR$\Debug\List\mpgl2.log</file>
-            <file>$PROJ_DIR$\Debug\Obj\sam3u_i2c.o</file>
-            <file>$PROJ_DIR$\Debug\List\captouch.i</file>
-            <file>$PROJ_DIR$\Debug\List\sam3u_ssp.i</file>
-            <file>$PROJ_DIR$\Debug\Obj\buttons.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\lcd_NHD-C12864LZ.o</file>
-            <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
-            <file>$PROJ_DIR$\Debug\Obj\lcd_bitmaps.pbi</file>
-            <file>$TOOLKIT_DIR$\inc\c\cmsis_iar.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\leds.pbi</file>
-            <file>$PROJ_DIR$\Debug\List\board_cstartup_iar.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\board_cstartup_iar.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\mpgl2-efmw-01.pbd</file>
-            <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
-            <file>$TOOLKIT_DIR$\inc\c\intrinsics.h</file>
-            <file>$PROJ_DIR$\Debug\List\ant_api.lst</file>
-            <file>$PROJ_DIR$\Debug\List\main.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\interrupts.pbi</file>
-            <file>$PROJ_DIR$\Debug\List\interrupts.lst</file>
-            <file>$PROJ_DIR$\Debug\List\user_app2.lst</file>
-            <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
-            <file>$PROJ_DIR$\Debug\List\mpgl2-ehdw-02.lst</file>
-            <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
-            <file>$PROJ_DIR$\Debug\List\user_app1.lst</file>
-            <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\sam3u_uart.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\sam3u_i2c.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\core_cm3.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\utilities.pbi</file>
-            <file>$PROJ_DIR$\Debug\List\buttons.i</file>
-            <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\user_app1.pbi</file>
-            <file>$PROJ_DIR$\Debug\List\buttons.lst</file>
-            <file>$PROJ_DIR$\Debug\List\sam3u_i2c.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\user_app3.pbi</file>
-            <file>$PROJ_DIR$\Debug\List\ant.i</file>
-            <file>$PROJ_DIR$\Debug\Obj\messaging.pbi</file>
-            <file>$PROJ_DIR$\Debug\Obj\sam3u_i2c.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\List\main.i</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app3.c</file>
-            <file>$PROJ_DIR$\Debug\Obj\messaging.o</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app2.c</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app3.h</file>
-            <file>$PROJ_DIR$\..\application\main.c</file>
-            <file>$PROJ_DIR$\Debug\List\sam3u_i2c.i</file>
             <file>$PROJ_DIR$\Debug\Obj\interrupts.__cstat.et</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\drivers\adc12.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\utilities.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\interrupts.pbi</file>
             <file>$PROJ_DIR$\Debug\Obj\user_app3.__cstat.et</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app2.h</file>
-            <file>$PROJ_DIR$\..\application\main.h</file>
-            <file>$PROJ_DIR$\Debug\List\user_app1.i</file>
-            <file>$PROJ_DIR$\Debug\Obj\user_app3.o</file>
-            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\sam3u_uart.__cstat.et</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\application\debug.c</file>
-            <file>$PROJ_DIR$\Debug\Obj\ant_api.pbi</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app1.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\sam3u_ssp.__cstat.et</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\drivers\adc12.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\core_cm3.o</file>
             <file>$PROJ_DIR$\Debug\Obj\lcd_bitmaps.__cstat.et</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\application\music.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\sam3u_ssp.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\sam3u_i2c.__cstat.et</file>
             <file>$PROJ_DIR$\..\..\firmware_common\drivers\timer.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\captouch.o</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\application\debug.h</file>
-            <file>$PROJ_DIR$\..\libraries\captouch\include\touch_qt_config.h</file>
-            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app1.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\ant_api.pbi</file>
             <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
-            <file>$PROJ_DIR$\Debug\List\interrupts.i</file>
-            <file>$PROJ_DIR$\Debug\Obj\leds.__cstat.et</file>
-            <file>$TOOLKIT_DIR$\inc\c\string.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\captouch.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\Obj\exceptions.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\Obj\core_cm3.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\Obj\ant_api.o</file>
-            <file>$PROJ_DIR$\Debug\Obj\lcd_bitmaps.o</file>
-            <file>$PROJ_DIR$\Debug\List\exceptions.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\board_cstartup_iar.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\List\user_app3.lst</file>
-            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
-            <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
-            <file>$PROJ_DIR$\Debug\List\mpgl2.map</file>
-            <file>$PROJ_DIR$\Debug\Obj\lcd_NHD-C12864LZ.__cstat.et</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
-            <file>$PROJ_DIR$\Debug\Obj\buttons.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\List\captouch.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\user_app2.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\List\core_cm3.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\debug.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\Obj\mpgl2-ehdw-02.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\List\lcd_bitmaps.i</file>
+            <file>$PROJ_DIR$\Debug\Obj\sam3u_uart.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\user_app1.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\captouch.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+            <file>$PROJ_DIR$\Debug\List\lcd_NHD-C12864LZ.i</file>
+            <file>$PROJ_DIR$\Debug\Obj\messaging.pbi</file>
             <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\ant.o</file>
-            <file>$PROJ_DIR$\Debug\List\user_app2.i</file>
-            <file>$PROJ_DIR$\Debug\Obj\utilities.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\captouch.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\ant_api.__cstat.et</file>
-            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_stdlib.h</file>
-            <file>$PROJ_DIR$\Debug\List\lcd_NHD-C12864LZ.lst</file>
-            <file>$PROJ_DIR$\Debug\Obj\user_app1.__cstat.et</file>
-            <file>$PROJ_DIR$\Debug\Obj\captouch.pbi</file>
-            <file>$PROJ_DIR$\Debug\List\core_cm3.i</file>
             <file>$TOOLKIT_DIR$\lib\dl7M_tln.a</file>
+            <file>$PROJ_DIR$\Debug\Obj\user_app1.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\lcd_bitmaps.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\utilities.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\debug.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
+            <file>$PROJ_DIR$\Debug\List\user_app2.i</file>
+            <file>$PROJ_DIR$\Debug\List\core_cm3.lst</file>
+            <file>$PROJ_DIR$\Debug\Obj\exceptions.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\leds.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\mpgl2-ehdw-02.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\captouch.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\core_cm3.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_stdlib.h</file>
             <file>$PROJ_DIR$\Debug\Obj\ant.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\mpgl2-efmw-01.pbd</file>
+            <file>$PROJ_DIR$\Debug\Obj\buttons.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\sam3u_i2c.o</file>
+            <file>$PROJ_DIR$\Debug\List\core_cm3.i</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product_string.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\board_cstartup_iar.o</file>
+            <file>$PROJ_DIR$\Debug\List\lcd_NHD-C12864LZ.lst</file>
+            <file>$PROJ_DIR$\Debug\Obj\mpgl2-ehdw-02.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\intrinsics.h</file>
+            <file>$TOOLKIT_DIR$\lib\rt7M_tl.a</file>
+            <file>$PROJ_DIR$\Debug\List\mpgl2.log</file>
+            <file>$PROJ_DIR$\Debug\Obj\lcd_NHD-C12864LZ.pbi</file>
+            <file>$PROJ_DIR$\Debug\List\user_app2.lst</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\ant.pbi</file>
+            <file>$PROJ_DIR$\Debug\List\user_app1.lst</file>
+            <file>$PROJ_DIR$\Debug\Obj\leds.pbi</file>
+            <file>$TOOLKIT_DIR$\lib\m7M_tl.a</file>
+            <file>$PROJ_DIR$\Debug\Obj\buttons.pbi</file>
+            <file>$TOOLKIT_DIR$\lib\shb_l.a</file>
+            <file>$PROJ_DIR$\Debug\Obj\messaging.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\sam3u_ssp.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\user_app3.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\sam3u_i2c.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\buttons.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\cmsis_iar.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\lcd_NHD-C12864LZ.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\lcd_bitmaps.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+            <file>$PROJ_DIR$\Debug\Exe\mpgl2.out</file>
+            <file>$PROJ_DIR$\Debug\Obj\sam3u_ssp.pbi</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app3.c</file>
+            <file>$PROJ_DIR$\..\application\main.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\interrupts.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\utilities.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\user_app2.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\exceptions.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\iccarm_builtin.h</file>
+            <file>$PROJ_DIR$\..\libraries\captouch\include\touch_qt_config.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Product.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app1.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\application\debug.c</file>
+            <file>$PROJ_DIR$\..\libraries\captouch\include\touch_api.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app2.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app2.c</file>
+            <file>$PROJ_DIR$\..\libraries\captouch\bin\libsam3u-32qt-k-8rs-iar.a</file>
+            <file>$PROJ_DIR$\..\libraries\captouch\libqtouch.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\application\debug.h</file>
+            <file>$PROJ_DIR$\..\application\main.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\application\music.h</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app3.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\user_app1.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\messaging.__cstat.et</file>
+            <file>$PROJ_DIR$\..\..\firmware_common\application\user_app1.c</file>
+            <file>$TOOLKIT_DIR$\inc\c\string.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\user_app2.pbi</file>
+            <file>$PROJ_DIR$\Debug\List\lcd_bitmaps.lst</file>
+            <file>$PROJ_DIR$\Debug\Obj\mpgl2-ehdw-02.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdint.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\lcd_NHD-C12864LZ.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\leds.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\exceptions.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\user_app3.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\debug.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\ant_api.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\user_app2.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\List\mpgl2.map</file>
+            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\iar_intrinsics_common.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\core_cm3.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\board_cstartup_iar.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\sam3u_uart.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\board_cstartup_iar.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\List\user_app1.i</file>
+            <file>$PROJ_DIR$\Debug\Obj\debug.pbi</file>
+            <file>$PROJ_DIR$\Debug\Exe\mpgl2-efmw-01.hex</file>
         </outputs>
-        <file>
-            <name>[ROOT_NODE]</name>
-            <outputs>
-                <tool>
-                    <name>ILINK</name>
-                    <file> 71 170 91</file>
-                </tool>
-            </outputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 157 109 74</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 108</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 136</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 147 22 25 137 143 121 1 151 28 90 69 34 140 29 6 27 41 153 133 168 156 40 159 14 39 38 8 37 23 13 24 30 3 9 150 139 184 59 55 172 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\drivers\lcd_NHD-C12864LZ.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 84 185 96</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 88</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 171</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 6 99 143 133 140 41 34 29 27 153 168 156 169 90 121 25 1 22 151 137 28 147 40 9 159 14 39 38 8 37 23 13 24 30 3 150 139 184 59 55 172 105 53 69</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\drivers\lcd_bitmaps.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 89 65 164</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 98</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 149</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 147 22 25 137 143 121 1 151 28 90 69 34 140 29 6 27 41 153 133 168 156 40 159 14 39 38 8 37 23 13 24 30 3 9 150 139 184 59 55 172 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\leds.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 87 68 76</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 100</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 158</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 168 99 13 38 3 55 14 37 30 150 184 90 169 159 39 8 23 24 9 139 143 59 172 40 121 34 25 140 1 29 22 6 151 27 137 41 28 153 147 133 156 105 53 69</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_ssp.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 94 56 44</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 70</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 148</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 14 90 30 37 150 184 38 13 3 55 168 69 159 39 8 23 24 9 139 143 59 172 40 121 34 25 140 1 29 22 6 151 27 137 41 28 153 147 133 156 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\ant_api.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 85 106 163</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 146</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 183</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 147 99 22 25 137 143 121 1 151 28 90 169 34 140 29 6 27 41 153 133 168 156 40 9 159 14 39 38 8 37 23 13 24 30 3 150 139 184 59 55 172 105 53 69</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\messaging.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 46 43 131</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 127</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 63</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 9 8 159 24 143 172 39 23 139 59 90 69 14 38 37 13 30 3 150 184 55 168 40 121 34 25 140 1 29 22 6 151 27 137 41 28 153 147 133 156 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_i2c.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 135 124 92</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 117</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 128</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 140 41 6 133 143 34 29 27 153 168 156 69 121 25 1 22 151 137 28 147 90 40 159 14 39 38 8 37 23 13 24 30 3 9 150 139 184 59 55 172 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\exceptions.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 64 165 45</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 60</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 161</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 6 143 133 140 41 34 29 27 153 168 156 69 121 25 1 22 151 137 28 147 90 40 159 14 39 38 8 37 23 13 24 30 3 9 150 139 184 59 55 172 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\ant.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 126 80 180</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 49</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 190</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 140 41 6 133 143 34 29 27 153 168 156 69 121 25 1 22 151 137 28 147 90 40 159 14 39 38 8 37 23 13 24 30 3 9 150 139 184 59 55 172 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_uart.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 79 77 86</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 116</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 144</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 140 41 6 133 143 34 29 27 153 168 156 69 121 25 1 22 151 137 28 147 90 40 159 14 39 38 8 37 23 13 24 30 3 9 150 139 184 59 55 172 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\utilities.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 75 66 57</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 119</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 182</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 3 38 55 13 168 14 37 30 150 184 90 69 159 39 8 23 24 9 139 143 59 172 40 121 34 25 140 1 29 22 6 151 27 137 41 28 153 147 133 156 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 120 123 51</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 95</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 173</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 147 99 22 25 137 143 121 1 151 28 90 169 34 140 29 6 27 41 153 133 168 156 40 9 159 14 39 38 8 37 23 13 24 30 3 150 139 184 59 55 172 105 53 69</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\drivers\captouch.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 93 174 152</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 187</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 160</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133 20 21 115 154</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 8 9 159 24 143 172 39 23 139 59 90 14 38 37 13 30 3 150 184 55 168 53 40 121 20 34 25 140 1 29 22 6 151 27 137 41 28 153 147 133 156 69 169 154 105 99 21 115</file>
-                </tool>
-            </inputs>
-        </file>
         <file>
             <name>$PROJ_DIR$\..\..\firmware_common\board_cstartup_iar.c</name>
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 52 101 102</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 61</file>
+                    <file> 85</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 166</file>
+                    <file> 153</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 151</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
                     <name>BICOMP</name>
-                    <file> 1 99 28 121 151 90 25 22 137 147 143 169 34 140 29 6 27 41 153 133 168 156 40 9 159 14 39 38 8 37 23 13 24 30 3 150 139 184 59 55 172 105 53 69</file>
+                    <file> 9 47 25 69 50 57 20 35 44 123 0 128 17 38 14 6 127 130 148 52 117 5 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
                 </tool>
             </inputs>
         </file>
@@ -616,25 +191,21 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 42 112 67</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 48</file>
+                    <file> 137</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 178</file>
+                    <file> 74</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 87</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
                     <name>BICOMP</name>
-                    <file> 133 6 143 140 41 34 29 27 153 168 156 69 121 25 1 22 151 137 28 147 90 40 159 14 39 38 8 37 23 13 24 30 3 9 150 139 184 59 55 172 53 169 105 99</file>
+                    <file> 130 5 38 47 128 6 117 0 17 14 127 148 52 69 20 9 35 50 44 25 123 57 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
                 </tool>
             </inputs>
         </file>
@@ -643,44 +214,383 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 188 176 118</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 47</file>
+                    <file> 82 71 45</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 162</file>
+                    <file> 76</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 150</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 169 90 143 156 59 55</file>
+                    <file> 138 57 47 52 139 119</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 90 156 143 169 59 55</file>
+                    <file> 57 52 47 138 139 119</file>
                 </tool>
             </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\ant.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 61</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 78</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 94</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 128 5 6 38 130 47 117 0 17 14 127 148 52 69 20 9 35 50 44 25 123 57 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\buttons.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 104</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 80</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 98</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 123 47 35 20 44 69 9 50 25 57 0 128 17 38 14 6 127 130 148 52 117 5 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\drivers\captouch.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 56</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 62</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 75</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 36 21 5 134 19 47 84 88 12 23 120 139 57 34 7 37 24 33 13 129 77 119 148 117 69 126 0 20 128 9 17 35 38 50 14 44 6 25 127 123 130 52 138 105 118 149 122 83</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\interrupts.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 113</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 40</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 42</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 123 5 35 20 44 47 117 69 9 50 25 57 0 128 17 38 14 6 127 130 148 52 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\drivers\lcd_NHD-C12864LZ.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 58 86 106</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 140</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 91</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 5 69 57 47 52 139 119 148 77 134 84 0 34 20 12 138 88 117 149 105 128 7 9 36 17 37 35 23 38 24 50 19 14 33 44 6 13 25 21 127 129 123 120 130</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 38 47 130 128 6 0 17 14 127 148 52 69 20 9 35 50 44 25 123 57 117 5 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\ant_api.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 145</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 63</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 51</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 123 47 35 20 44 69 9 50 25 57 0 128 17 38 14 6 127 130 148 52 117 5 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\exceptions.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 116</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 72</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 142</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 38 47 5 130 128 6 117 0 17 14 127 148 52 69 20 9 35 50 44 25 123 57 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\drivers\lcd_bitmaps.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 53 136 66</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 46</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 107</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 5 69 57 47 52 139 119 148 77 134 84 0 34 20 12 138 88 117 149 105 128 7 9 36 17 37 35 23 38 24 50 19 14 33 44 6 13 25 21 127 129 123 120 130</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 123 5 35 20 44 47 117 69 9 50 25 57 0 128 17 38 14 6 127 130 148 52 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\leds.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 141</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 73</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 148 24 47 7 13 119 34 37 33 129 77 57 134 12 36 23 19 21 120 139 84 117 5 69 0 20 128 9 17 35 38 50 14 44 6 25 127 123 130 52 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\messaging.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 100</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 132</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 59</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 21 5 36 134 19 47 84 117 12 23 120 139 57 34 7 37 24 33 13 129 77 119 148 69 0 20 128 9 17 35 38 50 14 44 6 25 127 123 130 52 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_i2c.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 81</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 49</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 103</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 128 5 6 38 130 47 117 0 17 14 127 148 52 69 20 9 35 50 44 25 123 57 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_ssp.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 101</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 48</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 110</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 34 57 5 33 37 129 77 117 7 24 13 119 148 134 12 36 23 19 21 120 47 139 84 69 0 20 128 9 17 35 38 50 14 44 6 25 127 123 130 52 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\sam3u_uart.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 39</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 54</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 152</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 128 5 6 38 130 47 117 0 17 14 127 148 52 69 20 9 35 50 44 25 123 57 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\drivers\utilities.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 114</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 67</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 41</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 13 5 7 119 24 148 117 34 37 33 129 77 57 134 12 36 23 19 21 120 47 139 84 69 0 20 128 9 17 35 38 50 14 44 6 25 127 123 130 52 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 109 147 90</file>
+                </tool>
+            </outputs>
         </file>
         <file>
             <name>$PROJ_DIR$\Debug\Exe\mpgl2.out</name>
             <outputs>
                 <tool>
                     <name>OBJCOPY</name>
-                    <file> 81</file>
+                    <file> 156</file>
                 </tool>
                 <tool>
                     <name>ILINK</name>
-                    <file> 170 91</file>
+                    <file> 147 90</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 35 180 163 102 51 152 118 54 45 74 164 96 76 19 62 131 67 92 44 86 58 50 142 57 111 113 97 189</file>
+                    <file> 3 61 145 85 104 56 45 144 116 113 66 106 141 125 108 100 137 81 101 39 131 115 102 114 99 89 97 64</file>
                 </tool>
             </inputs>
         </file>
@@ -689,52 +599,21 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 83 167 142</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 125</file>
+                    <file> 102</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 138</file>
+                    <file> 43</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 143</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
                     <name>BICOMP</name>
-                    <file> 137 25 143 22 147 121 1 151 28 90 69 34 140 29 6 27 41 153 133 168 156 40 159 14 39 38 8 37 23 13 24 30 3 9 150 139 184 59 55 172 53 169 105 99</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\..\..\firmware_common\application\user_app2.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 181 110 50</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 78</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 175</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 137 25 143 22 147 121 1 151 28 90 69 34 140 29 6 27 41 153 133 168 156 40 159 14 39 38 8 37 23 13 24 30 3 9 150 139 184 59 55 172 53 169 105 99</file>
+                    <file> 44 5 20 47 35 123 117 69 9 50 25 57 0 128 17 38 14 6 127 130 148 52 134 34 12 7 36 37 23 24 19 33 13 21 129 120 77 139 119 84 149 138 88 105</file>
                 </tool>
             </inputs>
         </file>
@@ -743,48 +622,65 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 129 107 62</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 104</file>
+                    <file> 108</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 179</file>
+                    <file> 60</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 93</file>
                 </tool>
             </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
-                </tool>
-            </inputs>
         </file>
         <file>
             <name>$PROJ_DIR$\..\..\firmware_common\application\debug.c</name>
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 72 82 54</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 73</file>
+                    <file> 144</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 177</file>
+                    <file> 68</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 155</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 57 23 5 120 12 139 117 134 36 19 21 47 84 34 7 37 24 33 13 129 77 119 148 69 0 20 128 9 17 35 38 50 14 44 6 25 127 123 130 52 149 138 88 105</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\..\..\firmware_common\application\user_app2.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCARM</name>
+                    <file> 70 92 115</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 146</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 135</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
+                    <file> 5 69 57 47 52 139 119 148 77 134 84 0 34 20 12 138 88 117 149 105 128 7 9 36 17 37 35 23 38 24 50 19 14 33 44 6 13 25 21 127 129 123 120 130</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 90 23 139 39 59 159 8 24 9 143 172 69 14 38 37 13 30 3 150 184 55 168 40 121 34 25 140 1 29 22 6 151 27 137 41 28 153 147 133 156 53 169 105 99</file>
+                    <file> 47 24 148 7 13 119 34 37 33 129 77 57 134 12 36 23 19 21 120 139 84 117 5 69 0 20 128 9 17 35 38 50 14 44 6 25 127 123 130 52 149 138 88 105</file>
                 </tool>
             </inputs>
         </file>
@@ -793,25 +689,25 @@
             <outputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 141 114 58</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 122</file>
+                    <file> 154 95 131</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 186</file>
+                    <file> 65</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 55</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCARM</name>
-                    <file> 40 121 90 143 156 59 55 168 184 159 172 34 14 25 39 169 105 53 69 99 140 38 1 8 29 37 22 23 6 13 151 24 27 30 137 41 3 28 9 153 150 147 139 133</file>
+                    <file> 5 69 57 47 52 139 119 148 77 134 84 0 34 20 12 138 88 117 149 105 128 7 9 36 17 37 35 23 38 24 50 19 14 33 44 6 13 25 21 127 129 123 120 130</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 99 39 59 23 139 90 159 8 24 9 143 172 169 14 38 37 13 30 3 150 184 55 168 40 121 34 25 140 1 29 22 6 151 27 137 41 28 153 147 133 156 105 53 69</file>
+                    <file> 24 148 47 7 13 119 34 37 33 129 77 57 134 12 36 23 19 21 120 139 84 117 5 69 0 20 128 9 17 35 38 50 14 44 6 25 127 123 130 52 149 138 88 105</file>
                 </tool>
             </inputs>
         </file>

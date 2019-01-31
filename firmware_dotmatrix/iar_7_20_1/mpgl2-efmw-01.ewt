@@ -2547,9 +2547,6 @@
             <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\user_app2.h</name>
             </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\firmware_common\application\user_app3.h</name>
-            </file>
         </group>
         <group>
             <name>Source</name>
@@ -2567,6 +2564,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\user_app3.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\firmware_common\application\user_app3.h</name>
             </file>
         </group>
     </group>

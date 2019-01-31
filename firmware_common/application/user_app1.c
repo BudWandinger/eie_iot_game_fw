@@ -157,6 +157,11 @@ void UserApp1Initialize(void)
     
     /* Init app timer */
     u32Timer = 0;
+    
+    // Test Scoring
+    SetNumberOfPlayers(3);
+    SetScore(2, 43);
+    SetScore(3, 1);
   }
   else
   {

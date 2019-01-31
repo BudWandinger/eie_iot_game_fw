@@ -112,7 +112,7 @@
                 </option>
                 <option>
                     <name>RTConfigPath2</name>
-                    <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
+                    <state>$TOOLKIT_DIR$\inc\c\DLib_Config_Normal.h</state>
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
@@ -1018,7 +1018,7 @@
                 </option>
                 <option>
                     <name>IlinkTrustzoneImportLibraryOut</name>
-                    <state>###Unitialized###</state>
+                    <state>mpgl2-efmw-01_import_lib.o</state>
                 </option>
                 <option>
                     <name>OILinkExtraOption</name>
@@ -2266,9 +2266,6 @@
             <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\user_app2.h</name>
             </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\firmware_common\application\user_app3.h</name>
-            </file>
         </group>
         <group>
             <name>Source</name>
@@ -2286,6 +2283,9 @@
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\firmware_common\application\user_app3.c</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\..\..\firmware_common\application\user_app3.h</name>
             </file>
         </group>
     </group>

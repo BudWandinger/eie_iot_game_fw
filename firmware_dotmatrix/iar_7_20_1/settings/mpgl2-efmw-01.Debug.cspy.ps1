@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\settings\mpgl2-efmw-01.Debug.general.xcl" --backend -f "Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\settings\mpgl2-efmw-01.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\settings\mpgl2-efmw-01.Debug.general.xcl" --backend -f "C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\settings\mpgl2-efmw-01.Debug.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\settings\mpgl2-efmw-01.Debug.general.xcl" --debug_file=$debugfile --backend -f "Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\settings\mpgl2-efmw-01.Debug.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.2\common\bin\cspybat" -f "C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\settings\mpgl2-efmw-01.Debug.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\settings\mpgl2-efmw-01.Debug.driver.xcl" 
 }

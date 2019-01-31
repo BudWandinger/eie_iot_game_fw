@@ -1,51 +1,56 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         12/Jan/2019  23:25:19
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         30/Jan/2019  05:26:22
 # Copyright 1999-2018 IAR Systems AB.
 #
 #    Cpu mode     =  
 #    Endian       =  little
 #    Source file  =  
-#        Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\user_app1.c
 #    Command line =  
-#        -f C:\Users\BUDWAN~1\AppData\Local\Temp\EWCFD2.tmp
-#        (Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c -D
-#        MPGL2 -D MPG2 --preprocess=c
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List -lC
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List -o
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj
+#        -f C:\Users\Caleb\AppData\Local\Temp\EW4E81.tmp
+#        (C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\user_app1.c
+#        -D MPGL2 -D MPG2 --preprocess=c
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -lC
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List
+#        -o
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj
 #        --no_cse --no_unroll --no_inline --no_code_motion --no_tbaa
 #        --no_clustering --no_scheduling --debug --endian=little
 #        --cpu=Cortex-M3 -e --fpu=None --dlib_config "C:\Program Files
 #        (x86)\IAR Systems\Embedded Workbench
 #        8.2\arm\inc\c\DLib_Config_Normal.h" -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\ -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\bsp\ -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\drivers\ -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\application\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\bsp\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\drivers\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\application\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\libraries\captouch\
 #        -I
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\
+#        -I
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\application\
+#        -I
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\cmsis\
+#        -I
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\..\..\firmware_common\drivers\
 #        -On --use_c++_inline --require_prototypes -I "C:\Program Files
 #        (x86)\IAR Systems\Embedded Workbench 8.2\arm\CMSIS\Core\Include\" -I
 #        "C:\Program Files (x86)\IAR Systems\Embedded Workbench
 #        8.2\arm\CMSIS\DSP\Include\")
 #    Locale       =  C
 #    List file    =  
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List\user_app1.lst
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List\user_app1.lst
 #    Object file  =  
-#        Z:\Code\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj\user_app1.o
+#        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\Obj\user_app1.o
 #
 ###############################################################################
 
-Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
+C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\user_app1.c
       1          /**********************************************************************************************************************
       2          File: user_app1.c                                                                
       3          
@@ -350,79 +355,92 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x76   0x2000             MOVS     R0,#+0
    \       0x78   0x....'....        LDR.W    R1,??DataTable8_6
    \       0x7C   0x6008             STR      R0,[R1, #+0]
-    160            }
-    161            else
-    162            {
-    163              /* The task isn't properly initialized, so shut it down and don't run */
-    164              UserApp1_StateMachine = UserApp1SM_Error;
+    160              
+    161              // Test Scoring
+    162              SetNumberOfPlayers(3);
+   \       0x7E   0x2003             MOVS     R0,#+3
+   \       0x80   0x....'....        BL       SetNumberOfPlayers
+    163              SetScore(2, 43);
+   \       0x84   0x212B             MOVS     R1,#+43
+   \       0x86   0x2002             MOVS     R0,#+2
+   \       0x88   0x....'....        BL       SetScore
+    164              SetScore(3, 1);
+   \       0x8C   0x2101             MOVS     R1,#+1
+   \       0x8E   0x2003             MOVS     R0,#+3
+   \       0x90   0x....'....        BL       SetScore
     165            }
-    166          
-    167          } /* end UserApp1Initialize() */
-   \       0x7E   0xBD10             POP      {R4,PC}          ;; return
-    168          
-    169            
-    170          /*----------------------------------------------------------------------------------------------------------------------
-    171          Function UserApp1RunActiveState()
-    172          
-    173          Description:
-    174          Selects and runs one iteration of the current state in the state machine.
-    175          All state machines have a TOTAL of 1ms to execute, so on average n state machines
-    176          may take 1ms / n to execute.
+    166            else
+    167            {
+    168              /* The task isn't properly initialized, so shut it down and don't run */
+    169              UserApp1_StateMachine = UserApp1SM_Error;
+    170            }
+    171          
+    172          } /* end UserApp1Initialize() */
+   \       0x94   0xBD10             POP      {R4,PC}          ;; return
+    173          
+    174            
+    175          /*----------------------------------------------------------------------------------------------------------------------
+    176          Function UserApp1RunActiveState()
     177          
-    178          Requires:
-    179            - State machine function pointer points at current state
-    180          
-    181          Promises:
-    182            - Calls the function to pointed by the state machine function pointer
-    183          */
+    178          Description:
+    179          Selects and runs one iteration of the current state in the state machine.
+    180          All state machines have a TOTAL of 1ms to execute, so on average n state machines
+    181          may take 1ms / n to execute.
+    182          
+    183          Requires:
+    184            - State machine function pointer points at current state
+    185          
+    186          Promises:
+    187            - Calls the function to pointed by the state machine function pointer
+    188          */
 
    \                                 In section .text, align 2, keep-with-next
-    184          void UserApp1RunActiveState(void)
-    185          {
+    189          void UserApp1RunActiveState(void)
+    190          {
    \                     UserApp1RunActiveState: (+1)
    \        0x0   0xB580             PUSH     {R7,LR}
-    186            UserApp1_StateMachine();
+    191            UserApp1_StateMachine();
    \        0x2   0x....'....        LDR.W    R0,??DataTable8
    \        0x6   0x6800             LDR      R0,[R0, #+0]
    \        0x8   0x4780             BLX      R0
-    187          
-    188          } /* end UserApp1RunActiveState */
+    192          
+    193          } /* end UserApp1RunActiveState */
    \        0xA   0xBD01             POP      {R0,PC}          ;; return
-    189          
-    190          
-    191          /*--------------------------------------------------------------------------------------------------------------------*/
-    192          /* Private functions                                                                                                  */
-    193          /*--------------------------------------------------------------------------------------------------------------------*/
+    194          
+    195          
+    196          /*--------------------------------------------------------------------------------------------------------------------*/
+    197          /* Private functions                                                                                                  */
+    198          /*--------------------------------------------------------------------------------------------------------------------*/
 
    \                                 In section .text, align 2, keep-with-next
-    194          static GameboardErrorType drawDot(GameboardCoordinateType* coordinate_, DrawType drawType_)
-    195          {
+    199          static GameboardErrorType drawDot(GameboardCoordinateType* coordinate_, DrawType drawType_)
+    200          {
    \                     drawDot: (+1)
    \        0x0   0xB5FE             PUSH     {R1-R7,LR}
    \        0x2   0x0004             MOVS     R4,R0
    \        0x4   0x000D             MOVS     R5,R1
-    196            if(coordinate_->u8ColumnCoordinate >= GAMEBOARD_SIZE)
+    201            if(coordinate_->u8ColumnCoordinate >= GAMEBOARD_SIZE)
    \        0x6   0x7860             LDRB     R0,[R4, #+1]
    \        0x8   0x2808             CMP      R0,#+8
    \        0xA   0xDB01             BLT.N    ??drawDot_0
-    197            {
-    198              return BOUNDARY_ERROR_DOT_X;
+    202            {
+    203              return BOUNDARY_ERROR_DOT_X;
    \        0xC   0x2001             MOVS     R0,#+1
    \        0xE   0xE048             B.N      ??drawDot_1
-    199            }
-    200            else if(coordinate_->u8RowCoordinate >= GAMEBOARD_SIZE)
+    204            }
+    205            else if(coordinate_->u8RowCoordinate >= GAMEBOARD_SIZE)
    \                     ??drawDot_0: (+1)
    \       0x10   0x7820             LDRB     R0,[R4, #+0]
    \       0x12   0x2808             CMP      R0,#+8
    \       0x14   0xDB01             BLT.N    ??drawDot_2
-    201            {
-    202              return BOUNDARY_ERROR_DOT_Y;
+    206            {
+    207              return BOUNDARY_ERROR_DOT_Y;
    \       0x16   0x2002             MOVS     R0,#+2
    \       0x18   0xE043             B.N      ??drawDot_1
-    203            }
-    204            
-    205            u8 i, j;
-    206            for(i = 0; i < GAMEBOARD_DOT_WIDTH; i++)
+    208            }
+    209            
+    210            u8 i, j;
+    211            for(i = 0; i < GAMEBOARD_DOT_WIDTH; i++)
    \                     ??drawDot_2: (+1)
    \       0x1A   0x2700             MOVS     R7,#+0
    \                     ??drawDot_3: (+1)
@@ -430,8 +448,8 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x1E   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x20   0x2803             CMP      R0,#+3
    \       0x22   0xDA2A             BGE.N    ??drawDot_4
-    207            {
-    208              for(j = 0; j < GAMEBOARD_DOT_WIDTH; j++)
+    212            {
+    213              for(j = 0; j < GAMEBOARD_DOT_WIDTH; j++)
    \       0x24   0x2000             MOVS     R0,#+0
    \       0x26   0x0006             MOVS     R6,R0
    \                     ??drawDot_5: (+1)
@@ -439,12 +457,12 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x2A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x2C   0x2803             CMP      R0,#+3
    \       0x2E   0xDA22             BGE.N    ??drawDot_6
-    209              {
-    210                PixelAddressType pixel =
-    211                {
-    212                  .u16PixelRowAddress = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET) + i,
-    213                  .u16PixelColumnAddress = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET) + j
-    214                };
+    214              {
+    215                PixelAddressType pixel =
+    216                {
+    217                  .u16PixelRowAddress = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET) + i,
+    218                  .u16PixelColumnAddress = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET) + j
+    219                };
    \       0x30   0x7820             LDRB     R0,[R4, #+0]
    \       0x32   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
    \       0x34   0x0039             MOVS     R1,R7
@@ -459,45 +477,45 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x4A   0xEB11 0x01C0      ADDS     R1,R1,R0, LSL #+3
    \       0x4E   0x1C89             ADDS     R1,R1,#+2
    \       0x50   0xF8AD 0x1002      STRH     R1,[SP, #+2]
-    215                
-    216                if(drawType_ == DRAW_SET)
+    220                
+    221                if(drawType_ == DRAW_SET)
    \       0x54   0x0028             MOVS     R0,R5
    \       0x56   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x58   0x2800             CMP      R0,#+0
    \       0x5A   0xD103             BNE.N    ??drawDot_7
-    217                {
-    218                  LcdSetPixel(&pixel);
+    222                {
+    223                  LcdSetPixel(&pixel);
    \       0x5C   0x4668             MOV      R0,SP
    \       0x5E   0x....'....        BL       LcdSetPixel
    \       0x62   0xE006             B.N      ??drawDot_8
-    219                }
-    220                else if(drawType_ == DRAW_CLEAR)
+    224                }
+    225                else if(drawType_ == DRAW_CLEAR)
    \                     ??drawDot_7: (+1)
    \       0x64   0x0028             MOVS     R0,R5
    \       0x66   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x68   0x2801             CMP      R0,#+1
    \       0x6A   0xD102             BNE.N    ??drawDot_8
-    221                {
-    222                  LcdClearPixel(&pixel);
+    226                {
+    227                  LcdClearPixel(&pixel);
    \       0x6C   0x4668             MOV      R0,SP
    \       0x6E   0x....'....        BL       LcdClearPixel
-    223                }
-    224              }
+    228                }
+    229              }
    \                     ??drawDot_8: (+1)
    \       0x72   0x1C76             ADDS     R6,R6,#+1
    \       0x74   0xE7D8             B.N      ??drawDot_5
-    225            }
+    230            }
    \                     ??drawDot_6: (+1)
    \       0x76   0x1C7F             ADDS     R7,R7,#+1
    \       0x78   0xE7D0             B.N      ??drawDot_3
-    226            
-    227            PixelBlockType updateArea =
-    228            {
-    229              .u16RowStart = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET),
-    230              .u16ColumnStart = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET),
-    231              .u16RowSize = GAMEBOARD_DOT_WIDTH,
-    232              .u16ColumnSize = GAMEBOARD_DOT_WIDTH
-    233            };
+    231            
+    232            PixelBlockType updateArea =
+    233            {
+    234              .u16RowStart = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_DOT_OFFSET),
+    235              .u16ColumnStart = GAMEBOARD_BORDER_DOT_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_DOT_OFFSET),
+    236              .u16RowSize = GAMEBOARD_DOT_WIDTH,
+    237              .u16ColumnSize = GAMEBOARD_DOT_WIDTH
+    238            };
    \                     ??drawDot_4: (+1)
    \       0x7A   0x....'....        LDR.W    R2,??DataTable8_7
    \       0x7E   0xE9D2 0x0100      LDRD     R0,R1,[R2, #+0]
@@ -510,53 +528,53 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x92   0x00C0             LSLS     R0,R0,#+3
    \       0x94   0x1C80             ADDS     R0,R0,#+2
    \       0x96   0xF8AD 0x0006      STRH     R0,[SP, #+6]
-    234            
-    235            LcdUpdateScreenRefreshArea(&updateArea);
+    239            
+    240            LcdUpdateScreenRefreshArea(&updateArea);
    \       0x9A   0xA801             ADD      R0,SP,#+4
    \       0x9C   0x....'....        BL       LcdUpdateScreenRefreshArea
-    236            
-    237            return GAMEBOARD_SUCCESS;
+    241            
+    242            return GAMEBOARD_SUCCESS;
    \       0xA0   0x2000             MOVS     R0,#+0
    \                     ??drawDot_1: (+1)
    \       0xA2   0xBDFE             POP      {R1-R7,PC}       ;; return
-    238          }
+    243          }
 
    \                                 In section .rodata, align 4
    \                     ?_0:
    \        0x0   0x0000 0x0000      DC16 0, 0, 3, 3
    \               0x0003 0x000
    \              3            
-    239          
+    244          
 
    \                                 In section .text, align 2, keep-with-next
-    240          static GameboardErrorType drawVerticalLine(GameboardCoordinateType* coordinate_, DrawType drawType_)
-    241          {
+    245          static GameboardErrorType drawVerticalLine(GameboardCoordinateType* coordinate_, DrawType drawType_)
+    246          {
    \                     drawVerticalLine: (+1)
    \        0x0   0xB5FE             PUSH     {R1-R7,LR}
    \        0x2   0x0004             MOVS     R4,R0
    \        0x4   0x000D             MOVS     R5,R1
-    242            if(coordinate_->u8ColumnCoordinate >= GAMEBOARD_SIZE)
+    247            if(coordinate_->u8ColumnCoordinate >= GAMEBOARD_SIZE)
    \        0x6   0x7860             LDRB     R0,[R4, #+1]
    \        0x8   0x2808             CMP      R0,#+8
    \        0xA   0xDB01             BLT.N    ??drawVerticalLine_0
-    243            {
-    244              return BOUNDARY_ERROR_VLINE_X;
+    248            {
+    249              return BOUNDARY_ERROR_VLINE_X;
    \        0xC   0x2003             MOVS     R0,#+3
    \        0xE   0xE048             B.N      ??drawVerticalLine_1
-    245            }
-    246            else if(coordinate_->u8RowCoordinate >= GAMEBOARD_SIZE - 1)
+    250            }
+    251            else if(coordinate_->u8RowCoordinate >= GAMEBOARD_SIZE - 1)
    \                     ??drawVerticalLine_0: (+1)
    \       0x10   0x7820             LDRB     R0,[R4, #+0]
    \       0x12   0x2807             CMP      R0,#+7
    \       0x14   0xDB01             BLT.N    ??drawVerticalLine_2
-    247            {
-    248              return BOUNDARY_ERROR_VLINE_Y;
+    252            {
+    253              return BOUNDARY_ERROR_VLINE_Y;
    \       0x16   0x2004             MOVS     R0,#+4
    \       0x18   0xE043             B.N      ??drawVerticalLine_1
-    249            }
-    250            
-    251            u8 i, j;
-    252            for(i = 0; i < GAMEBOARD_LINE_LENGTH; i++)
+    254            }
+    255            
+    256            u8 i, j;
+    257            for(i = 0; i < GAMEBOARD_LINE_LENGTH; i++)
    \                     ??drawVerticalLine_2: (+1)
    \       0x1A   0x2700             MOVS     R7,#+0
    \                     ??drawVerticalLine_3: (+1)
@@ -564,8 +582,8 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x1E   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x20   0x2805             CMP      R0,#+5
    \       0x22   0xDA2A             BGE.N    ??drawVerticalLine_4
-    253            {
-    254              for(j = 0; j < GAMEBOARD_LINE_WIDTH; j++)
+    258            {
+    259              for(j = 0; j < GAMEBOARD_LINE_WIDTH; j++)
    \       0x24   0x2000             MOVS     R0,#+0
    \       0x26   0x0006             MOVS     R6,R0
    \                     ??drawVerticalLine_5: (+1)
@@ -573,12 +591,12 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x2A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x2C   0x2800             CMP      R0,#+0
    \       0x2E   0xD122             BNE.N    ??drawVerticalLine_6
-    255              {
-    256                PixelAddressType pixel =
-    257                {
-    258                  .u16PixelRowAddress = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET) + i,
-    259                  .u16PixelColumnAddress = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET) + j
-    260                };
+    260              {
+    261                PixelAddressType pixel =
+    262                {
+    263                  .u16PixelRowAddress = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET) + i,
+    264                  .u16PixelColumnAddress = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET) + j
+    265                };
    \       0x30   0x7820             LDRB     R0,[R4, #+0]
    \       0x32   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
    \       0x34   0x0039             MOVS     R1,R7
@@ -593,45 +611,45 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x4A   0xEB11 0x01C0      ADDS     R1,R1,R0, LSL #+3
    \       0x4E   0x1CC9             ADDS     R1,R1,#+3
    \       0x50   0xF8AD 0x1002      STRH     R1,[SP, #+2]
-    261                
-    262                if(drawType_ == DRAW_SET)
+    266                
+    267                if(drawType_ == DRAW_SET)
    \       0x54   0x0028             MOVS     R0,R5
    \       0x56   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x58   0x2800             CMP      R0,#+0
    \       0x5A   0xD103             BNE.N    ??drawVerticalLine_7
-    263                {
-    264                  LcdSetPixel(&pixel);
+    268                {
+    269                  LcdSetPixel(&pixel);
    \       0x5C   0x4668             MOV      R0,SP
    \       0x5E   0x....'....        BL       LcdSetPixel
    \       0x62   0xE006             B.N      ??drawVerticalLine_8
-    265                }
-    266                else if(drawType_ == DRAW_CLEAR)
+    270                }
+    271                else if(drawType_ == DRAW_CLEAR)
    \                     ??drawVerticalLine_7: (+1)
    \       0x64   0x0028             MOVS     R0,R5
    \       0x66   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x68   0x2801             CMP      R0,#+1
    \       0x6A   0xD102             BNE.N    ??drawVerticalLine_8
-    267                {
-    268                  LcdClearPixel(&pixel);
+    272                {
+    273                  LcdClearPixel(&pixel);
    \       0x6C   0x4668             MOV      R0,SP
    \       0x6E   0x....'....        BL       LcdClearPixel
-    269                }
-    270              }
+    274                }
+    275              }
    \                     ??drawVerticalLine_8: (+1)
    \       0x72   0x1C76             ADDS     R6,R6,#+1
    \       0x74   0xE7D8             B.N      ??drawVerticalLine_5
-    271            }
+    276            }
    \                     ??drawVerticalLine_6: (+1)
    \       0x76   0x1C7F             ADDS     R7,R7,#+1
    \       0x78   0xE7D0             B.N      ??drawVerticalLine_3
-    272            
-    273            PixelBlockType updateArea =
-    274            {
-    275              .u16RowStart = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET),
-    276              .u16ColumnStart = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET),
-    277              .u16RowSize = GAMEBOARD_LINE_LENGTH,
-    278              .u16ColumnSize = GAMEBOARD_LINE_WIDTH
-    279            };
+    277            
+    278            PixelBlockType updateArea =
+    279            {
+    280              .u16RowStart = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET),
+    281              .u16ColumnStart = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET),
+    282              .u16RowSize = GAMEBOARD_LINE_LENGTH,
+    283              .u16ColumnSize = GAMEBOARD_LINE_WIDTH
+    284            };
    \                     ??drawVerticalLine_4: (+1)
    \       0x7A   0x....'....        LDR.W    R2,??DataTable8_8
    \       0x7E   0xE9D2 0x0100      LDRD     R0,R1,[R2, #+0]
@@ -644,53 +662,53 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x92   0x00C0             LSLS     R0,R0,#+3
    \       0x94   0x1CC0             ADDS     R0,R0,#+3
    \       0x96   0xF8AD 0x0006      STRH     R0,[SP, #+6]
-    280            
-    281            LcdUpdateScreenRefreshArea(&updateArea);
+    285            
+    286            LcdUpdateScreenRefreshArea(&updateArea);
    \       0x9A   0xA801             ADD      R0,SP,#+4
    \       0x9C   0x....'....        BL       LcdUpdateScreenRefreshArea
-    282            
-    283            return GAMEBOARD_SUCCESS;
+    287            
+    288            return GAMEBOARD_SUCCESS;
    \       0xA0   0x2000             MOVS     R0,#+0
    \                     ??drawVerticalLine_1: (+1)
    \       0xA2   0xBDFE             POP      {R1-R7,PC}       ;; return
-    284          }
+    289          }
 
    \                                 In section .rodata, align 4
    \                     ?_1:
    \        0x0   0x0000 0x0000      DC16 0, 0, 5, 1
    \               0x0005 0x000
    \              1            
-    285          
+    290          
 
    \                                 In section .text, align 2, keep-with-next
-    286          static GameboardErrorType drawHorizontalLine(GameboardCoordinateType* coordinate_, DrawType drawType_)
-    287          {
+    291          static GameboardErrorType drawHorizontalLine(GameboardCoordinateType* coordinate_, DrawType drawType_)
+    292          {
    \                     drawHorizontalLine: (+1)
    \        0x0   0xB5FE             PUSH     {R1-R7,LR}
    \        0x2   0x0004             MOVS     R4,R0
    \        0x4   0x000D             MOVS     R5,R1
-    288            if(coordinate_->u8ColumnCoordinate >= GAMEBOARD_SIZE - 1)
+    293            if(coordinate_->u8ColumnCoordinate >= GAMEBOARD_SIZE - 1)
    \        0x6   0x7860             LDRB     R0,[R4, #+1]
    \        0x8   0x2807             CMP      R0,#+7
    \        0xA   0xDB01             BLT.N    ??drawHorizontalLine_0
-    289            {
-    290              return BOUNDARY_ERROR_HLINE_X;
+    294            {
+    295              return BOUNDARY_ERROR_HLINE_X;
    \        0xC   0x2005             MOVS     R0,#+5
    \        0xE   0xE047             B.N      ??drawHorizontalLine_1
-    291            }
-    292            else if(coordinate_->u8RowCoordinate >= GAMEBOARD_SIZE)
+    296            }
+    297            else if(coordinate_->u8RowCoordinate >= GAMEBOARD_SIZE)
    \                     ??drawHorizontalLine_0: (+1)
    \       0x10   0x7820             LDRB     R0,[R4, #+0]
    \       0x12   0x2808             CMP      R0,#+8
    \       0x14   0xDB01             BLT.N    ??drawHorizontalLine_2
-    293            {
-    294              return BOUNDARY_ERROR_HLINE_Y;
+    298            {
+    299              return BOUNDARY_ERROR_HLINE_Y;
    \       0x16   0x2006             MOVS     R0,#+6
    \       0x18   0xE042             B.N      ??drawHorizontalLine_1
-    295            }
-    296            
-    297            u8 i, j;
-    298            for(i = 0; i < GAMEBOARD_LINE_WIDTH; i++)
+    300            }
+    301            
+    302            u8 i, j;
+    303            for(i = 0; i < GAMEBOARD_LINE_WIDTH; i++)
    \                     ??drawHorizontalLine_2: (+1)
    \       0x1A   0x2700             MOVS     R7,#+0
    \                     ??drawHorizontalLine_3: (+1)
@@ -698,8 +716,8 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x1E   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x20   0x2800             CMP      R0,#+0
    \       0x22   0xD12A             BNE.N    ??drawHorizontalLine_4
-    299            {
-    300              for(j = 0; j < GAMEBOARD_LINE_LENGTH; j++)
+    304            {
+    305              for(j = 0; j < GAMEBOARD_LINE_LENGTH; j++)
    \       0x24   0x2000             MOVS     R0,#+0
    \       0x26   0x0006             MOVS     R6,R0
    \                     ??drawHorizontalLine_5: (+1)
@@ -707,12 +725,12 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x2A   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x2C   0x2805             CMP      R0,#+5
    \       0x2E   0xDA22             BGE.N    ??drawHorizontalLine_6
-    301              {
-    302                PixelAddressType pixel =
-    303                {
-    304                  .u16PixelRowAddress = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET) + i,
-    305                  .u16PixelColumnAddress = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET) + j
-    306                };
+    306              {
+    307                PixelAddressType pixel =
+    308                {
+    309                  .u16PixelRowAddress = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET) + i,
+    310                  .u16PixelColumnAddress = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET) + j
+    311                };
    \       0x30   0x7820             LDRB     R0,[R4, #+0]
    \       0x32   0xB280             UXTH     R0,R0            ;; ZeroExt  R0,R0,#+16,#+16
    \       0x34   0x0039             MOVS     R1,R7
@@ -727,45 +745,45 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x4A   0xEB11 0x01C0      ADDS     R1,R1,R0, LSL #+3
    \       0x4E   0x1D49             ADDS     R1,R1,#+5
    \       0x50   0xF8AD 0x1002      STRH     R1,[SP, #+2]
-    307                
-    308                if(drawType_ == DRAW_SET)
+    312                
+    313                if(drawType_ == DRAW_SET)
    \       0x54   0x0028             MOVS     R0,R5
    \       0x56   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x58   0x2800             CMP      R0,#+0
    \       0x5A   0xD103             BNE.N    ??drawHorizontalLine_7
-    309                {
-    310                  LcdSetPixel(&pixel);
+    314                {
+    315                  LcdSetPixel(&pixel);
    \       0x5C   0x4668             MOV      R0,SP
    \       0x5E   0x....'....        BL       LcdSetPixel
    \       0x62   0xE006             B.N      ??drawHorizontalLine_8
-    311                }
-    312                else if(drawType_ == DRAW_CLEAR)
+    316                }
+    317                else if(drawType_ == DRAW_CLEAR)
    \                     ??drawHorizontalLine_7: (+1)
    \       0x64   0x0028             MOVS     R0,R5
    \       0x66   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x68   0x2801             CMP      R0,#+1
    \       0x6A   0xD102             BNE.N    ??drawHorizontalLine_8
-    313                {
-    314                  LcdClearPixel(&pixel);
+    318                {
+    319                  LcdClearPixel(&pixel);
    \       0x6C   0x4668             MOV      R0,SP
    \       0x6E   0x....'....        BL       LcdClearPixel
-    315                }
-    316              }
+    320                }
+    321              }
    \                     ??drawHorizontalLine_8: (+1)
    \       0x72   0x1C76             ADDS     R6,R6,#+1
    \       0x74   0xE7D8             B.N      ??drawHorizontalLine_5
-    317            }
+    322            }
    \                     ??drawHorizontalLine_6: (+1)
    \       0x76   0x1C7F             ADDS     R7,R7,#+1
    \       0x78   0xE7D0             B.N      ??drawHorizontalLine_3
-    318            
-    319            PixelBlockType updateArea =
-    320            {
-    321              .u16RowStart = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET),
-    322              .u16ColumnStart = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET),
-    323              .u16RowSize = GAMEBOARD_LINE_WIDTH,
-    324              .u16ColumnSize = GAMEBOARD_LINE_LENGTH
-    325            };
+    323            
+    324            PixelBlockType updateArea =
+    325            {
+    326              .u16RowStart = GAMEBOARD_BORDER_LINE_WIDTH_OFFSET + (coordinate_->u8RowCoordinate * GAMEBOARD_LINE_OFFSET),
+    327              .u16ColumnStart = GAMEBOARD_BORDER_LINE_LENGTH_OFFSET + (coordinate_->u8ColumnCoordinate * GAMEBOARD_LINE_OFFSET),
+    328              .u16RowSize = GAMEBOARD_LINE_WIDTH,
+    329              .u16ColumnSize = GAMEBOARD_LINE_LENGTH
+    330            };
    \                     ??drawHorizontalLine_4: (+1)
    \       0x7A   0x....             LDR.N    R2,??DataTable8_9
    \       0x7C   0xE9D2 0x0100      LDRD     R0,R1,[R2, #+0]
@@ -778,39 +796,39 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x90   0x00C0             LSLS     R0,R0,#+3
    \       0x92   0x1D40             ADDS     R0,R0,#+5
    \       0x94   0xF8AD 0x0006      STRH     R0,[SP, #+6]
-    326            
-    327            LcdUpdateScreenRefreshArea(&updateArea);
+    331            
+    332            LcdUpdateScreenRefreshArea(&updateArea);
    \       0x98   0xA801             ADD      R0,SP,#+4
    \       0x9A   0x....'....        BL       LcdUpdateScreenRefreshArea
-    328            
-    329            return GAMEBOARD_SUCCESS;
+    333            
+    334            return GAMEBOARD_SUCCESS;
    \       0x9E   0x2000             MOVS     R0,#+0
    \                     ??drawHorizontalLine_1: (+1)
    \       0xA0   0xBDFE             POP      {R1-R7,PC}       ;; return
-    330          }
+    335          }
 
    \                                 In section .rodata, align 4
    \                     ?_2:
    \        0x0   0x0000 0x0000      DC16 0, 0, 1, 5
    \               0x0001 0x000
    \              5            
-    331          
+    336          
 
    \                                 In section .text, align 2, keep-with-next
-    332          static GameboardErrorType drawEmptyGameboard(void)
-    333          {
+    337          static GameboardErrorType drawEmptyGameboard(void)
+    338          {
    \                     drawEmptyGameboard: (+1)
    \        0x0   0xB538             PUSH     {R3-R5,LR}
-    334            u8 i, j;
-    335            for(i = 0; i < GAMEBOARD_SIZE; i++)
+    339            u8 i, j;
+    340            for(i = 0; i < GAMEBOARD_SIZE; i++)
    \        0x2   0x2400             MOVS     R4,#+0
    \                     ??drawEmptyGameboard_0: (+1)
    \        0x4   0x0020             MOVS     R0,R4
    \        0x6   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \        0x8   0x2808             CMP      R0,#+8
    \        0xA   0xDA10             BGE.N    ??drawEmptyGameboard_1
-    336            {
-    337              for(j = 0; j < GAMEBOARD_SIZE; j++)
+    341            {
+    342              for(j = 0; j < GAMEBOARD_SIZE; j++)
    \        0xC   0x2000             MOVS     R0,#+0
    \        0xE   0x0005             MOVS     R5,R0
    \                     ??drawEmptyGameboard_2: (+1)
@@ -818,200 +836,200 @@ Z:\Code\eie_iot_game_fw\firmware_common\application\user_app1.c
    \       0x12   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x14   0x2808             CMP      R0,#+8
    \       0x16   0xDA08             BGE.N    ??drawEmptyGameboard_3
-    338              {
-    339                GameboardCoordinateType coordinate =
-    340                {
-    341                  .u8RowCoordinate = i,
-    342                  .u8ColumnCoordinate = j
-    343                };
+    343              {
+    344                GameboardCoordinateType coordinate =
+    345                {
+    346                  .u8RowCoordinate = i,
+    347                  .u8ColumnCoordinate = j
+    348                };
    \       0x18   0xF88D 0x4000      STRB     R4,[SP, #+0]
    \       0x1C   0xF88D 0x5001      STRB     R5,[SP, #+1]
-    344                setDot(&coordinate);
+    349                setDot(&coordinate);
    \       0x20   0x4668             MOV      R0,SP
    \       0x22   0x....'....        BL       setDot
-    345              }
+    350              }
    \       0x26   0x1C6D             ADDS     R5,R5,#+1
    \       0x28   0xE7F2             B.N      ??drawEmptyGameboard_2
-    346            }
+    351            }
    \                     ??drawEmptyGameboard_3: (+1)
    \       0x2A   0x1C64             ADDS     R4,R4,#+1
    \       0x2C   0xE7EA             B.N      ??drawEmptyGameboard_0
-    347            
-    348            return GAMEBOARD_SUCCESS;
+    352            
+    353            return GAMEBOARD_SUCCESS;
    \                     ??drawEmptyGameboard_1: (+1)
    \       0x2E   0x2000             MOVS     R0,#+0
    \       0x30   0xBD32             POP      {R1,R4,R5,PC}    ;; return
-    349          }
-    350          
-    351          static GameboardErrorType testGameboardDrawingFunctions(void)
+    354          }
+    355          
+    356          static GameboardErrorType testGameboardDrawingFunctions(void)
                                            ^
 Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
           referenced
-    352          {
-    353              static u8 i = 0;
-    354              static u8 j = 0;
-    355              static DrawingTestState state = SETTING_DOTS;
-    356              GameboardErrorType err;
-    357              GameboardCoordinateType coord;
-    358              
-    359              switch(state)
-    360              {
-    361                case SETTING_DOTS:
-    362                  coord.u8RowCoordinate = i;
-    363                  coord.u8ColumnCoordinate = j;
-    364                  err = setDot(&coord);
-    365                  if(err != GAMEBOARD_SUCCESS)
-    366                  {
-    367                    return err;
-    368                  }
-    369                  if(j < 7)
-    370                  {
-    371                    j++;
-    372                  }
-    373                  else if(i < 7)
-    374                  {
-    375                    i++;
-    376                    j = 0;
+    357          {
+    358              static u8 i = 0;
+    359              static u8 j = 0;
+    360              static DrawingTestState state = SETTING_DOTS;
+    361              GameboardErrorType err;
+    362              GameboardCoordinateType coord;
+    363              
+    364              switch(state)
+    365              {
+    366                case SETTING_DOTS:
+    367                  coord.u8RowCoordinate = i;
+    368                  coord.u8ColumnCoordinate = j;
+    369                  err = setDot(&coord);
+    370                  if(err != GAMEBOARD_SUCCESS)
+    371                  {
+    372                    return err;
+    373                  }
+    374                  if(j < 7)
+    375                  {
+    376                    j++;
     377                  }
-    378                  else
+    378                  else if(i < 7)
     379                  {
-    380                    i = 0;
+    380                    i++;
     381                    j = 0;
-    382                    state = SETTING_VLINES;
-    383                  }
-    384                  break;
-    385                  
-    386                case SETTING_VLINES:
-    387                  coord.u8RowCoordinate = i;
-    388                  coord.u8ColumnCoordinate = j;
-    389                  err = setVerticalLine(&coord);
-    390                  if(err != GAMEBOARD_SUCCESS)
-    391                  {
-    392                    return err;
-    393                  }
-    394                  if(j < 7)
-    395                  {
-    396                    j++;
-    397                  }
-    398                  else if(i < 6)
-    399                  {
-    400                    i++;
-    401                    j = 0;
+    382                  }
+    383                  else
+    384                  {
+    385                    i = 0;
+    386                    j = 0;
+    387                    state = SETTING_VLINES;
+    388                  }
+    389                  break;
+    390                  
+    391                case SETTING_VLINES:
+    392                  coord.u8RowCoordinate = i;
+    393                  coord.u8ColumnCoordinate = j;
+    394                  err = setVerticalLine(&coord);
+    395                  if(err != GAMEBOARD_SUCCESS)
+    396                  {
+    397                    return err;
+    398                  }
+    399                  if(j < 7)
+    400                  {
+    401                    j++;
     402                  }
-    403                  else
+    403                  else if(i < 6)
     404                  {
-    405                    i = 0; 
-    406                    j = 0; 
-    407                    state = SETTING_HLINES;
-    408                  }
-    409                  break;
-    410                  
-    411                case SETTING_HLINES:
-    412                  coord.u8RowCoordinate = i;
-    413                  coord.u8ColumnCoordinate = j;
-    414                  err = setHorizontalLine(&coord);
-    415                  if(err != GAMEBOARD_SUCCESS)
-    416                  {
-    417                    return err;
-    418                  }
-    419                  if(j < 6)
-    420                  {
-    421                    j++;
-    422                  }
-    423                  else if( i < 7)
-    424                  {
-    425                    i++;
-    426                    j = 0;
+    405                    i++;
+    406                    j = 0;
+    407                  }
+    408                  else
+    409                  {
+    410                    i = 0; 
+    411                    j = 0; 
+    412                    state = SETTING_HLINES;
+    413                  }
+    414                  break;
+    415                  
+    416                case SETTING_HLINES:
+    417                  coord.u8RowCoordinate = i;
+    418                  coord.u8ColumnCoordinate = j;
+    419                  err = setHorizontalLine(&coord);
+    420                  if(err != GAMEBOARD_SUCCESS)
+    421                  {
+    422                    return err;
+    423                  }
+    424                  if(j < 6)
+    425                  {
+    426                    j++;
     427                  }
-    428                  else
+    428                  else if( i < 7)
     429                  {
-    430                    state = CLEARING_HLINES;
-    431                  }
-    432                  break;
-    433                  
-    434              case CLEARING_HLINES:
-    435                coord.u8RowCoordinate = i;
-    436                coord.u8ColumnCoordinate = j;
-    437                err = clearHorizontalLine(&coord);
-    438                if(err != GAMEBOARD_SUCCESS)
-    439                {
-    440                  return err;
-    441                }
-    442                if(j != 0)
-    443                {
-    444                  j--;
-    445                }
-    446                else if(i != 0)
-    447                {
-    448                  i--;
-    449                  j = 6;
+    430                    i++;
+    431                    j = 0;
+    432                  }
+    433                  else
+    434                  {
+    435                    state = CLEARING_HLINES;
+    436                  }
+    437                  break;
+    438                  
+    439              case CLEARING_HLINES:
+    440                coord.u8RowCoordinate = i;
+    441                coord.u8ColumnCoordinate = j;
+    442                err = clearHorizontalLine(&coord);
+    443                if(err != GAMEBOARD_SUCCESS)
+    444                {
+    445                  return err;
+    446                }
+    447                if(j != 0)
+    448                {
+    449                  j--;
     450                }
-    451                else
+    451                else if(i != 0)
     452                {
-    453                  i = 6;
-    454                  j = 7;
-    455                  state = CLEARING_VLINES;
-    456                }
-    457                break;
-    458                
-    459              case CLEARING_VLINES:
-    460                coord.u8RowCoordinate = i;
-    461                coord.u8ColumnCoordinate = j;
-    462                err = clearVerticalLine(&coord);
-    463                if(err != GAMEBOARD_SUCCESS)
-    464                {
-    465                  return err;
-    466                }
-    467                if(j != 0)
-    468                {
-    469                  j--;
-    470                }
-    471                else if(i != 0)
-    472                {
-    473                  i--;
-    474                  j = 7;
+    453                  i--;
+    454                  j = 6;
+    455                }
+    456                else
+    457                {
+    458                  i = 6;
+    459                  j = 7;
+    460                  state = CLEARING_VLINES;
+    461                }
+    462                break;
+    463                
+    464              case CLEARING_VLINES:
+    465                coord.u8RowCoordinate = i;
+    466                coord.u8ColumnCoordinate = j;
+    467                err = clearVerticalLine(&coord);
+    468                if(err != GAMEBOARD_SUCCESS)
+    469                {
+    470                  return err;
+    471                }
+    472                if(j != 0)
+    473                {
+    474                  j--;
     475                }
-    476                else
+    476                else if(i != 0)
     477                {
-    478                  i = 7;
+    478                  i--;
     479                  j = 7;
-    480                  state = CLEARING_DOTS;
-    481                }
-    482                break;
-    483                
-    484              case CLEARING_DOTS:
-    485                coord.u8RowCoordinate = i;
-    486                coord.u8ColumnCoordinate = j;
-    487                err = clearDot(&coord);
-    488                if(err != GAMEBOARD_SUCCESS)
-    489                {
-    490                  return err;
-    491                }
-    492                if(j != 0)
-    493                {
-    494                  j--;
-    495                }
-    496                else if(i != 0)
-    497                {
-    498                  i--;
-    499                  j = 7;
+    480                }
+    481                else
+    482                {
+    483                  i = 7;
+    484                  j = 7;
+    485                  state = CLEARING_DOTS;
+    486                }
+    487                break;
+    488                
+    489              case CLEARING_DOTS:
+    490                coord.u8RowCoordinate = i;
+    491                coord.u8ColumnCoordinate = j;
+    492                err = clearDot(&coord);
+    493                if(err != GAMEBOARD_SUCCESS)
+    494                {
+    495                  return err;
+    496                }
+    497                if(j != 0)
+    498                {
+    499                  j--;
     500                }
-    501                else
+    501                else if(i != 0)
     502                {
-    503                  state = DRAWING_COMPLETE;
-    504                }
-    505              }
-    506          
-    507              return GAMEBOARD_SUCCESS;
-    508          }
-    509          
+    503                  i--;
+    504                  j = 7;
+    505                }
+    506                else
+    507                {
+    508                  state = DRAWING_COMPLETE;
+    509                }
+    510              }
+    511          
+    512              return GAMEBOARD_SUCCESS;
+    513          }
+    514          
 
    \                                 In section .text, align 2, keep-with-next
-    510          static GameboardErrorType blinkCursor(void)
-    511          {
+    515          static GameboardErrorType blinkCursor(void)
+    516          {
    \                     blinkCursor: (+1)
    \        0x0   0xB538             PUSH     {R3-R5,LR}
-    512            if(u32Timer % 250 == 0)
+    517            if(u32Timer % 250 == 0)
    \        0x2   0x20FA             MOVS     R0,#+250
    \        0x4   0x....             LDR.N    R1,??DataTable8_6
    \        0x6   0x680A             LDR      R2,[R1, #+0]
@@ -1020,8 +1038,8 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
    \        0xE   0xFB00 0x2011      MLS      R0,R0,R1,R2
    \       0x12   0x2800             CMP      R0,#+0
    \       0x14   0xD11F             BNE.N    ??blinkCursor_0
-    513            {
-    514              switch(cursor.cursorState)
+    518            {
+    519              switch(cursor.cursorState)
    \       0x16   0x....             LDR.N    R4,??DataTable8_1
    \       0x18   0x78A0             LDRB     R0,[R4, #+2]
    \       0x1A   0x2800             CMP      R0,#+0
@@ -1029,75 +1047,75 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
    \       0x1E   0x2801             CMP      R0,#+1
    \       0x20   0xD00D             BEQ.N    ??blinkCursor_2
    \       0x22   0xE018             B.N      ??blinkCursor_0
-    515              {
-    516                case CURSOR_OFF:
-    517                  err = setDot(&cursor.cursorLocation);
+    520              {
+    521                case CURSOR_OFF:
+    522                  err = setDot(&cursor.cursorLocation);
    \                     ??blinkCursor_1: (+1)
    \       0x24   0x....             LDR.N    R5,??DataTable8_10
    \       0x26   0x0020             MOVS     R0,R4
    \       0x28   0x....'....        BL       setDot
    \       0x2C   0x7028             STRB     R0,[R5, #+0]
-    518                  if(err != GAMEBOARD_SUCCESS)
+    523                  if(err != GAMEBOARD_SUCCESS)
    \       0x2E   0x7828             LDRB     R0,[R5, #+0]
    \       0x30   0x2800             CMP      R0,#+0
    \       0x32   0xD001             BEQ.N    ??blinkCursor_3
-    519                  {
-    520                    return err;
+    524                  {
+    525                    return err;
    \       0x34   0x7828             LDRB     R0,[R5, #+0]
    \       0x36   0xE00F             B.N      ??blinkCursor_4
-    521                  }
-    522                  cursor.cursorState = CURSOR_ON;
+    526                  }
+    527                  cursor.cursorState = CURSOR_ON;
    \                     ??blinkCursor_3: (+1)
    \       0x38   0x2001             MOVS     R0,#+1
    \       0x3A   0x70A0             STRB     R0,[R4, #+2]
-    523                  break;
+    528                  break;
    \       0x3C   0xE00B             B.N      ??blinkCursor_0
-    524                  
-    525                case CURSOR_ON:
-    526                  err = clearDot(&cursor.cursorLocation);
+    529                  
+    530                case CURSOR_ON:
+    531                  err = clearDot(&cursor.cursorLocation);
    \                     ??blinkCursor_2: (+1)
    \       0x3E   0x....             LDR.N    R5,??DataTable8_10
    \       0x40   0x0020             MOVS     R0,R4
    \       0x42   0x....'....        BL       clearDot
    \       0x46   0x7028             STRB     R0,[R5, #+0]
-    527                  if(err != GAMEBOARD_SUCCESS)
+    532                  if(err != GAMEBOARD_SUCCESS)
    \       0x48   0x7828             LDRB     R0,[R5, #+0]
    \       0x4A   0x2800             CMP      R0,#+0
    \       0x4C   0xD001             BEQ.N    ??blinkCursor_5
-    528                  {
-    529                    return err;
+    533                  {
+    534                    return err;
    \       0x4E   0x7828             LDRB     R0,[R5, #+0]
    \       0x50   0xE002             B.N      ??blinkCursor_4
-    530                  }
-    531                  cursor.cursorState = CURSOR_OFF;
+    535                  }
+    536                  cursor.cursorState = CURSOR_OFF;
    \                     ??blinkCursor_5: (+1)
    \       0x52   0x2000             MOVS     R0,#+0
    \       0x54   0x70A0             STRB     R0,[R4, #+2]
-    532                  break;
-    533              }
-    534            }
-    535            
-    536            return GAMEBOARD_SUCCESS;
+    537                  break;
+    538              }
+    539            }
+    540            
+    541            return GAMEBOARD_SUCCESS;
    \                     ??blinkCursor_0: (+1)
    \       0x56   0x2000             MOVS     R0,#+0
    \                     ??blinkCursor_4: (+1)
    \       0x58   0xBD32             POP      {R1,R4,R5,PC}    ;; return
-    537          }
-    538          
+    542          }
+    543          
 
    \                                 In section .text, align 2, keep-with-next
-    539          static GameboardErrorType moveCursor(void)
-    540          {
+    544          static GameboardErrorType moveCursor(void)
+    545          {
    \                     moveCursor: (+1)
    \        0x0   0xE92D 0x41F0      PUSH     {R4-R8,LR}
-    541            u8 horizontalSliderPos = CaptouchCurrentHSlidePosition();
+    546            u8 horizontalSliderPos = CaptouchCurrentHSlidePosition();
    \        0x4   0x....'....        BL       CaptouchCurrentHSlidePosition
    \        0x8   0x0004             MOVS     R4,R0
-    542            u8 verticalSliderPos = CaptouchCurrentVSlidePosition();
+    547            u8 verticalSliderPos = CaptouchCurrentVSlidePosition();
    \        0xA   0x....'....        BL       CaptouchCurrentVSlidePosition
    \        0xE   0x0005             MOVS     R5,R0
-    543            
-    544            switch(horizontalMoveState)
+    548            
+    549            switch(horizontalMoveState)
    \       0x10   0x....             LDR.N    R6,??DataTable8_2
    \       0x12   0x7830             LDRB     R0,[R6, #+0]
    \       0x14   0x2800             CMP      R0,#+0
@@ -1105,10 +1123,10 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
    \       0x18   0x2801             CMP      R0,#+1
    \       0x1A   0xD00B             BEQ.N    ??moveCursor_1
    \       0x1C   0xE04B             B.N      ??moveCursor_2
-    545            {
-    546              case MOVEMENT_NOT_STARTED:
-    547                if(horizontalSliderPos >= CAPTOUCH_HORIZONTAL_LEFT_THRESHOLD &&
-    548                   horizontalSliderPos < CAPTOUCH_HORIZONTAL_RIGHT_THRESHOLD)
+    550            {
+    551              case MOVEMENT_NOT_STARTED:
+    552                if(horizontalSliderPos >= CAPTOUCH_HORIZONTAL_LEFT_THRESHOLD &&
+    553                   horizontalSliderPos < CAPTOUCH_HORIZONTAL_RIGHT_THRESHOLD)
    \                     ??moveCursor_0: (+1)
    \       0x1E   0x0020             MOVS     R0,R4
    \       0x20   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
@@ -1118,127 +1136,127 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
    \       0x28   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x2A   0x28C0             CMP      R0,#+192
    \       0x2C   0xDA01             BGE.N    ??moveCursor_3
-    549                {
-    550                  horizontalMoveState = MOVEMENT_STARTED;
+    554                {
+    555                  horizontalMoveState = MOVEMENT_STARTED;
    \       0x2E   0x2001             MOVS     R0,#+1
    \       0x30   0x7030             STRB     R0,[R6, #+0]
-    551                }
-    552                break;
+    556                }
+    557                break;
    \                     ??moveCursor_3: (+1)
    \       0x32   0xE040             B.N      ??moveCursor_2
-    553              case MOVEMENT_STARTED:
-    554                if(horizontalSliderPos < CAPTOUCH_HORIZONTAL_LEFT_THRESHOLD)
+    558              case MOVEMENT_STARTED:
+    559                if(horizontalSliderPos < CAPTOUCH_HORIZONTAL_LEFT_THRESHOLD)
    \                     ??moveCursor_1: (+1)
    \       0x34   0x0020             MOVS     R0,R4
    \       0x36   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x38   0x2840             CMP      R0,#+64
    \       0x3A   0xDA1C             BGE.N    ??moveCursor_4
-    555                {
-    556                  /* Check if the cursor is already at the left border of the screen. */
-    557                  if(cursor.cursorLocation.u8ColumnCoordinate == 0)
+    560                {
+    561                  /* Check if the cursor is already at the left border of the screen. */
+    562                  if(cursor.cursorLocation.u8ColumnCoordinate == 0)
    \       0x3C   0x....             LDR.N    R7,??DataTable8_1
    \       0x3E   0x7878             LDRB     R0,[R7, #+1]
    \       0x40   0x2800             CMP      R0,#+0
    \       0x42   0xD038             BEQ.N    ??moveCursor_2
-    558                  {
-    559                    break;
-    560                  }
-    561                  /* If the cursor is currently off, turn it on before moving it. */
-    562                  if(cursor.cursorState == CURSOR_OFF)
+    563                  {
+    564                    break;
+    565                  }
+    566                  /* If the cursor is currently off, turn it on before moving it. */
+    567                  if(cursor.cursorState == CURSOR_OFF)
    \                     ??moveCursor_5: (+1)
    \       0x44   0x78B8             LDRB     R0,[R7, #+2]
    \       0x46   0x2800             CMP      R0,#+0
    \       0x48   0xD10F             BNE.N    ??moveCursor_6
-    563                  {
-    564                    err = setDot(&cursor.cursorLocation);
+    568                  {
+    569                    err = setDot(&cursor.cursorLocation);
    \       0x4A   0x....'....        LDR.W    R8,??DataTable8_10
    \       0x4E   0x0038             MOVS     R0,R7
    \       0x50   0x....'....        BL       setDot
    \       0x54   0xF888 0x0000      STRB     R0,[R8, #+0]
-    565                    if(err != GAMEBOARD_SUCCESS)
+    570                    if(err != GAMEBOARD_SUCCESS)
    \       0x58   0xF898 0x0000      LDRB     R0,[R8, #+0]
    \       0x5C   0x2800             CMP      R0,#+0
    \       0x5E   0xD002             BEQ.N    ??moveCursor_7
-    566                    {
-    567                      return err;
+    571                    {
+    572                      return err;
    \       0x60   0xF898 0x0000      LDRB     R0,[R8, #+0]
    \       0x64   0xE07B             B.N      ??moveCursor_8
-    568                    }
-    569                    cursor.cursorState = CURSOR_ON;
+    573                    }
+    574                    cursor.cursorState = CURSOR_ON;
    \                     ??moveCursor_7: (+1)
    \       0x66   0x2001             MOVS     R0,#+1
    \       0x68   0x70B8             STRB     R0,[R7, #+2]
-    570                  }
-    571                  
-    572                  /* Update the cursor location and move the cursor state machine. */
-    573                  cursor.cursorLocation.u8ColumnCoordinate--;
+    575                  }
+    576                  
+    577                  /* Update the cursor location and move the cursor state machine. */
+    578                  cursor.cursorLocation.u8ColumnCoordinate--;
    \                     ??moveCursor_6: (+1)
    \       0x6A   0x7878             LDRB     R0,[R7, #+1]
    \       0x6C   0x1E40             SUBS     R0,R0,#+1
    \       0x6E   0x7078             STRB     R0,[R7, #+1]
-    574                  horizontalMoveState = MOVEMENT_NOT_STARTED;
+    579                  horizontalMoveState = MOVEMENT_NOT_STARTED;
    \       0x70   0x2000             MOVS     R0,#+0
    \       0x72   0x7030             STRB     R0,[R6, #+0]
    \       0x74   0xE01F             B.N      ??moveCursor_9
-    575                }
-    576                else if(horizontalSliderPos >= CAPTOUCH_HORIZONTAL_RIGHT_THRESHOLD)
+    580                }
+    581                else if(horizontalSliderPos >= CAPTOUCH_HORIZONTAL_RIGHT_THRESHOLD)
    \                     ??moveCursor_4: (+1)
    \       0x76   0x0020             MOVS     R0,R4
    \       0x78   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0x7A   0x28C0             CMP      R0,#+192
    \       0x7C   0xDB1B             BLT.N    ??moveCursor_9
-    577                {
-    578                  /* Check if the cursor is already at the right border of the screen. */
-    579                  if(cursor.cursorLocation.u8ColumnCoordinate == GAMEBOARD_SIZE - 1)
+    582                {
+    583                  /* Check if the cursor is already at the right border of the screen. */
+    584                  if(cursor.cursorLocation.u8ColumnCoordinate == GAMEBOARD_SIZE - 1)
    \       0x7E   0x....             LDR.N    R7,??DataTable8_1
    \       0x80   0x7878             LDRB     R0,[R7, #+1]
    \       0x82   0x2807             CMP      R0,#+7
    \       0x84   0xD017             BEQ.N    ??moveCursor_2
-    580                  {
-    581                    break;
-    582                  }
-    583                  
-    584                  /* If the cursor is currently off, turn it on before moving it. */
-    585                  if(cursor.cursorState == CURSOR_OFF)
+    585                  {
+    586                    break;
+    587                  }
+    588                  
+    589                  /* If the cursor is currently off, turn it on before moving it. */
+    590                  if(cursor.cursorState == CURSOR_OFF)
    \                     ??moveCursor_10: (+1)
    \       0x86   0x78B8             LDRB     R0,[R7, #+2]
    \       0x88   0x2800             CMP      R0,#+0
    \       0x8A   0xD10F             BNE.N    ??moveCursor_11
-    586                  {
-    587                    err = setDot(&cursor.cursorLocation);
+    591                  {
+    592                    err = setDot(&cursor.cursorLocation);
    \       0x8C   0x....'....        LDR.W    R8,??DataTable8_10
    \       0x90   0x0038             MOVS     R0,R7
    \       0x92   0x....'....        BL       setDot
    \       0x96   0xF888 0x0000      STRB     R0,[R8, #+0]
-    588                    if(err != GAMEBOARD_SUCCESS)
+    593                    if(err != GAMEBOARD_SUCCESS)
    \       0x9A   0xF898 0x0000      LDRB     R0,[R8, #+0]
    \       0x9E   0x2800             CMP      R0,#+0
    \       0xA0   0xD002             BEQ.N    ??moveCursor_12
-    589                    {
-    590                      return err;
+    594                    {
+    595                      return err;
    \       0xA2   0xF898 0x0000      LDRB     R0,[R8, #+0]
    \       0xA6   0xE05A             B.N      ??moveCursor_8
-    591                    }
-    592                    cursor.cursorState = CURSOR_ON;
+    596                    }
+    597                    cursor.cursorState = CURSOR_ON;
    \                     ??moveCursor_12: (+1)
    \       0xA8   0x2001             MOVS     R0,#+1
    \       0xAA   0x70B8             STRB     R0,[R7, #+2]
-    593                  }
-    594                  
-    595                  /* Update the cursor location and move the state machine. */
-    596                  cursor.cursorLocation.u8ColumnCoordinate++;
+    598                  }
+    599                  
+    600                  /* Update the cursor location and move the state machine. */
+    601                  cursor.cursorLocation.u8ColumnCoordinate++;
    \                     ??moveCursor_11: (+1)
    \       0xAC   0x7878             LDRB     R0,[R7, #+1]
    \       0xAE   0x1C40             ADDS     R0,R0,#+1
    \       0xB0   0x7078             STRB     R0,[R7, #+1]
-    597                  horizontalMoveState = MOVEMENT_NOT_STARTED;
+    602                  horizontalMoveState = MOVEMENT_NOT_STARTED;
    \       0xB2   0x2000             MOVS     R0,#+0
    \       0xB4   0x7030             STRB     R0,[R6, #+0]
-    598                }
-    599                break;
-    600            }
-    601            
-    602            switch(verticalMoveState)
+    603                }
+    604                break;
+    605            }
+    606            
+    607            switch(verticalMoveState)
    \                     ??moveCursor_9: (+1)
    \                     ??moveCursor_2: (+1)
    \       0xB6   0x....             LDR.N    R6,??DataTable8_3
@@ -1248,10 +1266,10 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
    \       0xBE   0x2801             CMP      R0,#+1
    \       0xC0   0xD00B             BEQ.N    ??moveCursor_14
    \       0xC2   0xE04B             B.N      ??moveCursor_15
-    603            {
-    604              case MOVEMENT_NOT_STARTED:
-    605                if(verticalSliderPos >= CAPTOUCH_VERTICAL_DOWN_THRESHOLD &&
-    606                   verticalSliderPos < CAPTOUCH_VERTICAL_UP_THRESHOLD)
+    608            {
+    609              case MOVEMENT_NOT_STARTED:
+    610                if(verticalSliderPos >= CAPTOUCH_VERTICAL_DOWN_THRESHOLD &&
+    611                   verticalSliderPos < CAPTOUCH_VERTICAL_UP_THRESHOLD)
    \                     ??moveCursor_13: (+1)
    \       0xC4   0x0028             MOVS     R0,R5
    \       0xC6   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
@@ -1261,146 +1279,146 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
    \       0xCE   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0xD0   0x28C0             CMP      R0,#+192
    \       0xD2   0xDA01             BGE.N    ??moveCursor_16
-    607                {
-    608                  verticalMoveState = MOVEMENT_STARTED;
+    612                {
+    613                  verticalMoveState = MOVEMENT_STARTED;
    \       0xD4   0x2001             MOVS     R0,#+1
    \       0xD6   0x7030             STRB     R0,[R6, #+0]
-    609                }
-    610                break;
+    614                }
+    615                break;
    \                     ??moveCursor_16: (+1)
    \       0xD8   0xE040             B.N      ??moveCursor_15
-    611              case MOVEMENT_STARTED:
-    612                if(verticalSliderPos < CAPTOUCH_VERTICAL_DOWN_THRESHOLD)
+    616              case MOVEMENT_STARTED:
+    617                if(verticalSliderPos < CAPTOUCH_VERTICAL_DOWN_THRESHOLD)
    \                     ??moveCursor_14: (+1)
    \       0xDA   0x0028             MOVS     R0,R5
    \       0xDC   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \       0xDE   0x2840             CMP      R0,#+64
    \       0xE0   0xDA1C             BGE.N    ??moveCursor_17
-    613                {
-    614                  /* Check if the cursor is already at the bottom border of the screen. */
-    615                  if(cursor.cursorLocation.u8RowCoordinate == 0)
+    618                {
+    619                  /* Check if the cursor is already at the bottom border of the screen. */
+    620                  if(cursor.cursorLocation.u8RowCoordinate == 0)
    \       0xE2   0x....             LDR.N    R7,??DataTable8_1
    \       0xE4   0x7838             LDRB     R0,[R7, #+0]
    \       0xE6   0x2800             CMP      R0,#+0
    \       0xE8   0xD038             BEQ.N    ??moveCursor_15
-    616                  {
-    617                    break;
-    618                  }
-    619                  /* If the cursor is currently off, turn it on before moving it. */
-    620                  if(cursor.cursorState == CURSOR_OFF)
+    621                  {
+    622                    break;
+    623                  }
+    624                  /* If the cursor is currently off, turn it on before moving it. */
+    625                  if(cursor.cursorState == CURSOR_OFF)
    \                     ??moveCursor_18: (+1)
    \       0xEA   0x78B8             LDRB     R0,[R7, #+2]
    \       0xEC   0x2800             CMP      R0,#+0
    \       0xEE   0xD10F             BNE.N    ??moveCursor_19
-    621                  {
-    622                    err = setDot(&cursor.cursorLocation);
+    626                  {
+    627                    err = setDot(&cursor.cursorLocation);
    \       0xF0   0x....'....        LDR.W    R8,??DataTable8_10
    \       0xF4   0x0038             MOVS     R0,R7
    \       0xF6   0x....'....        BL       setDot
    \       0xFA   0xF888 0x0000      STRB     R0,[R8, #+0]
-    623                    if(err != GAMEBOARD_SUCCESS)
+    628                    if(err != GAMEBOARD_SUCCESS)
    \       0xFE   0xF898 0x0000      LDRB     R0,[R8, #+0]
    \      0x102   0x2800             CMP      R0,#+0
    \      0x104   0xD002             BEQ.N    ??moveCursor_20
-    624                    {
-    625                      return err;
+    629                    {
+    630                      return err;
    \      0x106   0xF898 0x0000      LDRB     R0,[R8, #+0]
    \      0x10A   0xE028             B.N      ??moveCursor_8
-    626                    }
-    627                    cursor.cursorState = CURSOR_ON;
+    631                    }
+    632                    cursor.cursorState = CURSOR_ON;
    \                     ??moveCursor_20: (+1)
    \      0x10C   0x2001             MOVS     R0,#+1
    \      0x10E   0x70B8             STRB     R0,[R7, #+2]
-    628                  }
-    629                  
-    630                  /* Update the cursor location and move the cursor state machine. */
-    631                  cursor.cursorLocation.u8RowCoordinate--;
+    633                  }
+    634                  
+    635                  /* Update the cursor location and move the cursor state machine. */
+    636                  cursor.cursorLocation.u8RowCoordinate--;
    \                     ??moveCursor_19: (+1)
    \      0x110   0x7838             LDRB     R0,[R7, #+0]
    \      0x112   0x1E40             SUBS     R0,R0,#+1
    \      0x114   0x7038             STRB     R0,[R7, #+0]
-    632                  verticalMoveState = MOVEMENT_NOT_STARTED;
+    637                  verticalMoveState = MOVEMENT_NOT_STARTED;
    \      0x116   0x2000             MOVS     R0,#+0
    \      0x118   0x7030             STRB     R0,[R6, #+0]
    \      0x11A   0xE01F             B.N      ??moveCursor_21
-    633                }
-    634                else if(verticalSliderPos >= CAPTOUCH_VERTICAL_UP_THRESHOLD)
+    638                }
+    639                else if(verticalSliderPos >= CAPTOUCH_VERTICAL_UP_THRESHOLD)
    \                     ??moveCursor_17: (+1)
    \      0x11C   0x0028             MOVS     R0,R5
    \      0x11E   0xB2C0             UXTB     R0,R0            ;; ZeroExt  R0,R0,#+24,#+24
    \      0x120   0x28C0             CMP      R0,#+192
    \      0x122   0xDB1B             BLT.N    ??moveCursor_21
-    635                {
-    636                  /* Check if the cursor is already at the upper border of the screen. */
-    637                  if(cursor.cursorLocation.u8RowCoordinate == GAMEBOARD_SIZE - 1)
+    640                {
+    641                  /* Check if the cursor is already at the upper border of the screen. */
+    642                  if(cursor.cursorLocation.u8RowCoordinate == GAMEBOARD_SIZE - 1)
    \      0x124   0x....             LDR.N    R7,??DataTable8_1
    \      0x126   0x7838             LDRB     R0,[R7, #+0]
    \      0x128   0x2807             CMP      R0,#+7
    \      0x12A   0xD017             BEQ.N    ??moveCursor_15
-    638                  {
-    639                    break;
-    640                  }
-    641                  
-    642                  /* If the cursor is currently off, turn it on before moving it. */
-    643                  if(cursor.cursorState == CURSOR_OFF)
+    643                  {
+    644                    break;
+    645                  }
+    646                  
+    647                  /* If the cursor is currently off, turn it on before moving it. */
+    648                  if(cursor.cursorState == CURSOR_OFF)
    \                     ??moveCursor_22: (+1)
    \      0x12C   0x78B8             LDRB     R0,[R7, #+2]
    \      0x12E   0x2800             CMP      R0,#+0
    \      0x130   0xD10F             BNE.N    ??moveCursor_23
-    644                  {
-    645                    err = setDot(&cursor.cursorLocation);
+    649                  {
+    650                    err = setDot(&cursor.cursorLocation);
    \      0x132   0x....'....        LDR.W    R8,??DataTable8_10
    \      0x136   0x0038             MOVS     R0,R7
    \      0x138   0x....'....        BL       setDot
    \      0x13C   0xF888 0x0000      STRB     R0,[R8, #+0]
-    646                    if(err != GAMEBOARD_SUCCESS)
+    651                    if(err != GAMEBOARD_SUCCESS)
    \      0x140   0xF898 0x0000      LDRB     R0,[R8, #+0]
    \      0x144   0x2800             CMP      R0,#+0
    \      0x146   0xD002             BEQ.N    ??moveCursor_24
-    647                    {
-    648                      return err;
+    652                    {
+    653                      return err;
    \      0x148   0xF898 0x0000      LDRB     R0,[R8, #+0]
    \      0x14C   0xE007             B.N      ??moveCursor_8
-    649                    }
-    650                    cursor.cursorState = CURSOR_ON;
+    654                    }
+    655                    cursor.cursorState = CURSOR_ON;
    \                     ??moveCursor_24: (+1)
    \      0x14E   0x2001             MOVS     R0,#+1
    \      0x150   0x70B8             STRB     R0,[R7, #+2]
-    651                  }
-    652                  
-    653                  /* Update the cursor location and move the state machine. */
-    654                  cursor.cursorLocation.u8RowCoordinate++;
+    656                  }
+    657                  
+    658                  /* Update the cursor location and move the state machine. */
+    659                  cursor.cursorLocation.u8RowCoordinate++;
    \                     ??moveCursor_23: (+1)
    \      0x152   0x7838             LDRB     R0,[R7, #+0]
    \      0x154   0x1C40             ADDS     R0,R0,#+1
    \      0x156   0x7038             STRB     R0,[R7, #+0]
-    655                  verticalMoveState = MOVEMENT_NOT_STARTED;
+    660                  verticalMoveState = MOVEMENT_NOT_STARTED;
    \      0x158   0x2000             MOVS     R0,#+0
    \      0x15A   0x7030             STRB     R0,[R6, #+0]
-    656                }
-    657                break;
-    658            }
-    659            
-    660            return GAMEBOARD_SUCCESS;
+    661                }
+    662                break;
+    663            }
+    664            
+    665            return GAMEBOARD_SUCCESS;
    \                     ??moveCursor_21: (+1)
    \                     ??moveCursor_15: (+1)
    \      0x15C   0x2000             MOVS     R0,#+0
    \                     ??moveCursor_8: (+1)
    \      0x15E   0xE8BD 0x81F0      POP      {R4-R8,PC}       ;; return
-    661          }
-    662          /**********************************************************************************************************************
-    663          State Machine Function Definitions
-    664          **********************************************************************************************************************/
-    665          
-    666          /*-------------------------------------------------------------------------------------------------------------------*/
-    667          /* Wait for ??? */
+    666          }
+    667          /**********************************************************************************************************************
+    668          State Machine Function Definitions
+    669          **********************************************************************************************************************/
+    670          
+    671          /*-------------------------------------------------------------------------------------------------------------------*/
+    672          /* Wait for ??? */
 
    \                                 In section .text, align 4, keep-with-next
-    668          static void UserApp1SM_Idle(void)
-    669          {
+    673          static void UserApp1SM_Idle(void)
+    674          {
    \                     UserApp1SM_Idle: (+1)
    \        0x0   0xB510             PUSH     {R4,LR}
-    670            switch(userPlayState)
+    675            switch(userPlayState)
    \        0x2   0x....             LDR.N    R0,??DataTable8_4
    \        0x4   0x7800             LDRB     R0,[R0, #+0]
    \        0x6   0x2800             CMP      R0,#+0
@@ -1409,57 +1427,57 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
    \        0xC   0xD00A             BEQ.N    ??UserApp1SM_Idle_1
    \        0xE   0xD308             BCC.N    ??UserApp1SM_Idle_2
    \       0x10   0xE008             B.N      ??UserApp1SM_Idle_3
-    671            {
-    672              /* Here the user has not selected any dots to start their turn. Functionality should allow the user to move around
-    673               * the gameboard by blinking the cursor, and moving the cursor based on input from the captouch sensors. The next
-    674               * state (SELECTED_FIRST_DOT) is achieved after the user has selected a dot with BUTTON1 */
-    675              case SELECTED_NOTHING:
-    676                err = blinkCursor();
+    676            {
+    677              /* Here the user has not selected any dots to start their turn. Functionality should allow the user to move around
+    678               * the gameboard by blinking the cursor, and moving the cursor based on input from the captouch sensors. The next
+    679               * state (SELECTED_FIRST_DOT) is achieved after the user has selected a dot with BUTTON1 */
+    680              case SELECTED_NOTHING:
+    681                err = blinkCursor();
    \                     ??UserApp1SM_Idle_0: (+1)
    \       0x12   0x....             LDR.N    R4,??DataTable8_10
    \       0x14   0x....'....        BL       blinkCursor
    \       0x18   0x7020             STRB     R0,[R4, #+0]
-    677                if(err != GAMEBOARD_SUCCESS)
-    678                {
-    679                  //????
-    680                }
-    681                err = moveCursor();
-   \       0x1A   0x....'....        BL       moveCursor
-   \       0x1E   0x7020             STRB     R0,[R4, #+0]
     682                if(err != GAMEBOARD_SUCCESS)
     683                {
     684                  //????
     685                }
-    686                break;
+    686                err = moveCursor();
+   \       0x1A   0x....'....        BL       moveCursor
+   \       0x1E   0x7020             STRB     R0,[R4, #+0]
+    687                if(err != GAMEBOARD_SUCCESS)
+    688                {
+    689                  //????
+    690                }
+    691                break;
    \       0x20   0xE000             B.N      ??UserApp1SM_Idle_3
-    687              
-    688              /* Here the user has selected one dot and must now select a second. Functionality should allow the user to select
-    689               * between possible second dots by blinking a possible line that would connect two dots and switch between possible
-    690               * line options by taking input from the captouch sensors. From here, the user can go back to the previous state
-    691               * (SELECT_NOTHING) by pressing BUTTON0 or go forward to the next state (SELECTED_SECOND_DOT) by pressing BUTTON1
-    692               * when they've reached their desired second dot option. */
-    693              case SELECTED_FIRST_DOT:
-    694                break;
+    692              
+    693              /* Here the user has selected one dot and must now select a second. Functionality should allow the user to select
+    694               * between possible second dots by blinking a possible line that would connect two dots and switch between possible
+    695               * line options by taking input from the captouch sensors. From here, the user can go back to the previous state
+    696               * (SELECT_NOTHING) by pressing BUTTON0 or go forward to the next state (SELECTED_SECOND_DOT) by pressing BUTTON1
+    697               * when they've reached their desired second dot option. */
+    698              case SELECTED_FIRST_DOT:
+    699                break;
    \                     ??UserApp1SM_Idle_2: (+1)
    \       0x22   0xE7FF             B.N      ??UserApp1SM_Idle_3
-    695              
-    696               /* Here the user has selected both dots and their turn is over. No more functionality must be provided to the user
-    697                * until the user play state machine is started again. The players move on the gameboard should be updated in the
-    698                * global gameboard variable */
-    699              case SELECTED_SECOND_DOT:
-    700                break;
-    701            }
-    702            
-    703            /* Don't ever remove this! Other functions are depending on it!! */
-    704            u32Timer++;
+    700              
+    701               /* Here the user has selected both dots and their turn is over. No more functionality must be provided to the user
+    702                * until the user play state machine is started again. The players move on the gameboard should be updated in the
+    703                * global gameboard variable */
+    704              case SELECTED_SECOND_DOT:
+    705                break;
+    706            }
+    707            
+    708            /* Don't ever remove this! Other functions are depending on it!! */
+    709            u32Timer++;
    \                     ??UserApp1SM_Idle_1: (+1)
    \                     ??UserApp1SM_Idle_3: (+1)
    \       0x24   0x....             LDR.N    R0,??DataTable8_6
    \       0x26   0x6801             LDR      R1,[R0, #+0]
    \       0x28   0x1C49             ADDS     R1,R1,#+1
    \       0x2A   0x6001             STR      R1,[R0, #+0]
-    705            
-    706          } /* end UserApp1SM_Idle() */
+    710            
+    711          } /* end UserApp1SM_Idle() */
    \       0x2C   0xBD10             POP      {R4,PC}          ;; return
 
    \                                 In section .text, align 4, keep-with-next
@@ -1505,20 +1523,20 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
    \                                 In section .text, align 4, keep-with-next
    \                     ??DataTable8_10:
    \        0x0   0x....'....        DC32     err
-    707              
-    708          
-    709          /*-------------------------------------------------------------------------------------------------------------------*/
-    710          /* Handle an error */
-    711          static void UserApp1SM_Error(void)          
-    712          {
-    713            
-    714          } /* end UserApp1SM_Error() */
-    715          
-    716          
-    717          
-    718          /*--------------------------------------------------------------------------------------------------------------------*/
-    719          /* End of File                                                                                                        */
-    720          /*--------------------------------------------------------------------------------------------------------------------*/
+    712              
+    713          
+    714          /*-------------------------------------------------------------------------------------------------------------------*/
+    715          /* Handle an error */
+    716          static void UserApp1SM_Error(void)          
+    717          {
+    718            
+    719          } /* end UserApp1SM_Error() */
+    720          
+    721          
+    722          
+    723          /*--------------------------------------------------------------------------------------------------------------------*/
+    724          /* End of File                                                                                                        */
+    725          /*--------------------------------------------------------------------------------------------------------------------*/
 
    Maximum stack usage in bytes:
 
@@ -1527,6 +1545,8 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
        8   UserApp1Initialize
          8   -> CapTouchOn
          8   -> LcdClearScreen
+         8   -> SetNumberOfPlayers
+         8   -> SetScore
          8   -> drawEmptyGameboard
          8   -> malloc
        8   UserApp1RunActiveState
@@ -1588,7 +1608,7 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
        8  ?_1
        8  ?_2
        4  G_u32UserApp1Flags
-     128  UserApp1Initialize
+     150  UserApp1Initialize
       12  UserApp1RunActiveState
       46  UserApp1SM_Idle
        4  UserApp1_StateMachine
@@ -1615,9 +1635,9 @@ Warning[Pe177]: function "testGameboardDrawingFunctions" was declared but never
  
     28 bytes in section .bss
     24 bytes in section .rodata
- 1 298 bytes in section .text
+ 1 320 bytes in section .text
  
- 1 298 bytes of CODE  memory
+ 1 320 bytes of CODE  memory
     24 bytes of CONST memory
     28 bytes of DATA  memory
 
