@@ -18244,19 +18244,21 @@ Function Declarations
 /*--------------------------------------------------------------------------------------------------------------------*/
 void SetScore(int player, int score);
 void SetNumberOfPlayers(u8 players);
+void SetCurrentPlayer(u8 player);
+void SetMessage(u8 message);
+void ClearMessage(void);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 void UserApp2Initialize(void);
 void UserApp2RunActiveState(void);
-void SetScoreString(u8 player);
-
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+void SetScoreString(u8 player);
+void MarkCurrentPlayer(void);
 
 /***********************************************************************************************************************
 State Machine Declarations
@@ -19756,6 +19758,8 @@ void UserApp1Initialize(void)
     SetNumberOfPlayers(3);
     SetScore(2, 43);
     SetScore(3, 1);
+    SetCurrentPlayer(3);
+    SetMessage(1);
   }
   else
   {

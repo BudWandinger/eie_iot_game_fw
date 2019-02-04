@@ -48,18 +48,22 @@ static fnCode_type UserApp2_StateMachine;            /* The state machine functi
 
 u8 UserApp2_NumPlayers = 1;
 u8 UserApp2_Scores[4] = {0, 0, 0, 0};
+u8 UserApp2_CurrentPlayer = 1;
+u8 UserApp2_CurrentMessage = 0;
 
 PixelAddressType UserApp2_HeaderLocation;
 PixelAddressType UserApp2_P1Location;
 PixelAddressType UserApp2_P2Location;
 PixelAddressType UserApp2_P3Location;
 PixelAddressType UserApp2_P4Location;
+PixelAddressType UserApp2_MesLocation;
 
 u8 UserApp2_Score_string[] = "Scores";
-u8 UserApp2_P1Score_string[] = "P1 0 ";
-u8 UserApp2_P2Score_string[] = "P2 0 ";
-u8 UserApp2_P3Score_string[] = "P3 0 ";
-u8 UserApp2_P4Score_string[] = "P4 0 ";
+u8 UserApp2_P1Score_string[] = "*P1 0 ";
+u8 UserApp2_P2Score_string[] = " P2 0 ";
+u8 UserApp2_P3Score_string[] = " P3 0 ";
+u8 UserApp2_P4Score_string[] = " P4 0 ";
+u8 *UserApp2_Messages[] = {"", "Waiting...", "Error"};
 
 
 /**********************************************************************************************************************
@@ -78,6 +82,19 @@ void SetScore(int player, int score) {
 
 void SetNumberOfPlayers(u8 players) {
   UserApp2_NumPlayers = players;
+}
+
+void SetCurrentPlayer(u8 player) {
+  UserApp2_CurrentPlayer = player;
+}
+
+// Make sure to only pass static strings into the message box
+void SetMessage(u8 message) {
+  UserApp2_CurrentMessage = message;
+}
+
+void ClearMessage(void) {
+  SetMessage(0);
 }
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -103,20 +120,22 @@ void UserApp2Initialize(void)
   if( 1 )
   {
     // Place the Score text on the right hand side of the screen
-    left_column = LCD_CENTER_COLUMN + (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE);
-    right_column = left_column + (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE) * 4;
+    left_column = LCD_CENTER_COLUMN + (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE) / 2;
+    right_column = left_column + (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE) * 3;
     
-    UserApp2_HeaderLocation.u16PixelColumnAddress = left_column;
+    UserApp2_HeaderLocation.u16PixelColumnAddress = left_column+ (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE);
     UserApp2_P1Location.u16PixelColumnAddress = left_column;
     UserApp2_P2Location.u16PixelColumnAddress = right_column;
     UserApp2_P3Location.u16PixelColumnAddress = left_column;
     UserApp2_P4Location.u16PixelColumnAddress = right_column;
+    UserApp2_MesLocation.u16PixelColumnAddress = left_column;
     
-    UserApp2_HeaderLocation.u16PixelRowAddress = LCD_SMALL_FONT_LINE1;
-    UserApp2_P1Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE3;
-    UserApp2_P2Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE4;
-    UserApp2_P3Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE5;
-    UserApp2_P4Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE6;
+    UserApp2_HeaderLocation.u16PixelRowAddress = LCD_SMALL_FONT_LINE0;
+    UserApp2_P1Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE2;
+    UserApp2_P2Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE3;
+    UserApp2_P3Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE4;
+    UserApp2_P4Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE5;
+    UserApp2_MesLocation.u16PixelRowAddress = LCD_SMALL_FONT_LINE7;
     
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
@@ -173,11 +192,35 @@ void SetScoreString(u8 player) {
   
   score = UserApp2_Scores[player - 1];
   if (score > 9) {
-    scoreString[4] = (score / 10) + 48;
-    scoreString[3] = (score % 10) + 48;
+    scoreString[5] = (score / 10) + 48;
+    scoreString[4] = (score % 10) + 48;
   }
   else {
-    scoreString[3] = score + 48;
+    scoreString[4] = score + 48;
+  }
+}
+
+void MarkCurrentPlayer(void) {
+  // Reset all turn indicators
+  UserApp2_P1Score_string[0] = ' ';
+  UserApp2_P2Score_string[0] = ' ';
+  UserApp2_P3Score_string[0] = ' ';
+  UserApp2_P4Score_string[0] = ' ';
+  
+  // Switch the current players turn
+  switch (UserApp2_CurrentPlayer) {
+    case 1:
+      UserApp2_P1Score_string[0] = '*';
+      break;
+    case 2:
+      UserApp2_P2Score_string[0] = '*';
+      break;
+    case 3:
+      UserApp2_P3Score_string[0] = '*';
+      break;
+    case 4:
+      UserApp2_P4Score_string[0] = '*';
+      break;
   }
 }
 
@@ -194,6 +237,8 @@ static void UserApp2SM_Idle(void)
   SetScoreString(3);
   SetScoreString(4);
   
+  MarkCurrentPlayer();
+  
   LcdLoadString(UserApp2_Score_string, LCD_FONT_SMALL, &UserApp2_HeaderLocation);
   
   // One player, I imagine this will be like a waiting screen
@@ -205,6 +250,9 @@ static void UserApp2SM_Idle(void)
     LcdLoadString(UserApp2_P3Score_string, LCD_FONT_SMALL, &UserApp2_P3Location);
   if (UserApp2_NumPlayers > 3)
     LcdLoadString(UserApp2_P4Score_string, LCD_FONT_SMALL, &UserApp2_P4Location);
+  
+  // Render the message
+  LcdLoadString(UserApp2_Messages[UserApp2_CurrentMessage], LCD_FONT_SMALL, &UserApp2_MesLocation);
 } /* end UserApp2SM_Idle() */
      
 #if 0

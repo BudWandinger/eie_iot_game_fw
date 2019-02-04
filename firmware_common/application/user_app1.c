@@ -162,6 +162,8 @@ void UserApp1Initialize(void)
     SetNumberOfPlayers(3);
     SetScore(2, 43);
     SetScore(3, 1);
+    SetCurrentPlayer(3);
+    SetMessage(1);
   }
   else
   {

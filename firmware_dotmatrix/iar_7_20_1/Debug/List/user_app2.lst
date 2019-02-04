@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         30/Jan/2019  05:28:10
+# IAR ANSI C/C++ Compiler V8.32.2.178/W32 for ARM         03/Feb/2019  22:55:02
 # Copyright 1999-2018 IAR Systems AB.
 #
 #    Cpu mode     =  
@@ -8,7 +8,7 @@
 #    Source file  =  
 #        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\user_app2.c
 #    Command line =  
-#        -f C:\Users\Caleb\AppData\Local\Temp\EWF552.tmp
+#        -f C:\Users\Caleb\AppData\Local\Temp\EWFEA8.tmp
 #        (C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\user_app2.c
 #        -D MPGL2 -D MPG2 --preprocess=c
 #        C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_dotmatrix\iar_7_20_1\Debug\List
@@ -117,36 +117,51 @@ C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\us
      50          u8 UserApp2_Scores[4] = {0, 0, 0, 0};
    \                     UserApp2_Scores:
    \        0x0                      DS8 4
-     51          
+
+   \                                 In section .data, align 1
+     51          u8 UserApp2_CurrentPlayer = 1;
+   \                     UserApp2_CurrentPlayer:
+   \        0x0   0x01               DC8 1
+
+   \                                 In section .bss, align 1
+     52          u8 UserApp2_CurrentMessage = 0;
+   \                     UserApp2_CurrentMessage:
+   \        0x0                      DS8 1
+     53          
 
    \                                 In section .bss, align 4
-     52          PixelAddressType UserApp2_HeaderLocation;
+     54          PixelAddressType UserApp2_HeaderLocation;
    \                     UserApp2_HeaderLocation:
    \        0x0                      DS8 4
 
    \                                 In section .bss, align 4
-     53          PixelAddressType UserApp2_P1Location;
+     55          PixelAddressType UserApp2_P1Location;
    \                     UserApp2_P1Location:
    \        0x0                      DS8 4
 
    \                                 In section .bss, align 4
-     54          PixelAddressType UserApp2_P2Location;
+     56          PixelAddressType UserApp2_P2Location;
    \                     UserApp2_P2Location:
    \        0x0                      DS8 4
 
    \                                 In section .bss, align 4
-     55          PixelAddressType UserApp2_P3Location;
+     57          PixelAddressType UserApp2_P3Location;
    \                     UserApp2_P3Location:
    \        0x0                      DS8 4
 
    \                                 In section .bss, align 4
-     56          PixelAddressType UserApp2_P4Location;
+     58          PixelAddressType UserApp2_P4Location;
    \                     UserApp2_P4Location:
    \        0x0                      DS8 4
-     57          
+
+   \                                 In section .bss, align 4
+     59          PixelAddressType UserApp2_MesLocation;
+   \                     UserApp2_MesLocation:
+   \        0x0                      DS8 4
+     60          
 
    \                                 In section .data, align 4
-     58          u8 UserApp2_Score_string[] = "Scores";
+     61          u8 UserApp2_Score_string[] = "Scores";
    \                     UserApp2_Score_string:
    \        0x0   0x53 0x63          DC8 "Scores"
    \              0x6F 0x72    
@@ -155,189 +170,239 @@ C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\us
    \        0x7   0x00               DC8 0
 
    \                                 In section .data, align 4
-     59          u8 UserApp2_P1Score_string[] = "P1 0 ";
+     62          u8 UserApp2_P1Score_string[] = "*P1 0 ";
    \                     UserApp2_P1Score_string:
-   \        0x0   0x50 0x31          DC8 "P1 0 "
-   \              0x20 0x30    
-   \              0x20 0x00    
-   \        0x6   0x00 0x00          DC8 0, 0
+   \        0x0   0x2A 0x50          DC8 "*P1 0 "
+   \              0x31 0x20    
+   \              0x30 0x20    
+   \              0x00         
+   \        0x7   0x00               DC8 0
 
    \                                 In section .data, align 4
-     60          u8 UserApp2_P2Score_string[] = "P2 0 ";
+     63          u8 UserApp2_P2Score_string[] = " P2 0 ";
    \                     UserApp2_P2Score_string:
-   \        0x0   0x50 0x32          DC8 "P2 0 "
-   \              0x20 0x30    
-   \              0x20 0x00    
-   \        0x6   0x00 0x00          DC8 0, 0
+   \        0x0   0x20 0x50          DC8 " P2 0 "
+   \              0x32 0x20    
+   \              0x30 0x20    
+   \              0x00         
+   \        0x7   0x00               DC8 0
 
    \                                 In section .data, align 4
-     61          u8 UserApp2_P3Score_string[] = "P3 0 ";
+     64          u8 UserApp2_P3Score_string[] = " P3 0 ";
    \                     UserApp2_P3Score_string:
-   \        0x0   0x50 0x33          DC8 "P3 0 "
-   \              0x20 0x30    
-   \              0x20 0x00    
-   \        0x6   0x00 0x00          DC8 0, 0
+   \        0x0   0x20 0x50          DC8 " P3 0 "
+   \              0x33 0x20    
+   \              0x30 0x20    
+   \              0x00         
+   \        0x7   0x00               DC8 0
 
    \                                 In section .data, align 4
-     62          u8 UserApp2_P4Score_string[] = "P4 0 ";
+     65          u8 UserApp2_P4Score_string[] = " P4 0 ";
    \                     UserApp2_P4Score_string:
-   \        0x0   0x50 0x34          DC8 "P4 0 "
-   \              0x20 0x30    
-   \              0x20 0x00    
-   \        0x6   0x00 0x00          DC8 0, 0
-     63          
-     64          
-     65          /**********************************************************************************************************************
-     66          Function Definitions
-     67          **********************************************************************************************************************/
+   \        0x0   0x20 0x50          DC8 " P4 0 "
+   \              0x34 0x20    
+   \              0x30 0x20    
+   \              0x00         
+   \        0x7   0x00               DC8 0
+
+   \                                 In section .data, align 4
+     66          u8 *UserApp2_Messages[] = {"", "Waiting...", "Error"};
+   \                     UserApp2_Messages:
+   \        0x0   0x....'....        DC32 ?_0, ?_1, ?_2
+   \              0x....'....  
+   \              0x....'....  
+     67          
      68          
-     69          /*--------------------------------------------------------------------------------------------------------------------*/
-     70          /* Public functions                                                                                                   */
-     71          /*--------------------------------------------------------------------------------------------------------------------*/
+     69          /**********************************************************************************************************************
+     70          Function Definitions
+     71          **********************************************************************************************************************/
      72          
-     73          // Takes in a player number as 1, 2, 3, 4 (this can be changed to fit the rest
-     74          // of the codebase
+     73          /*--------------------------------------------------------------------------------------------------------------------*/
+     74          /* Public functions                                                                                                   */
+     75          /*--------------------------------------------------------------------------------------------------------------------*/
+     76          
+     77          // Takes in a player number as 1, 2, 3, 4 (this can be changed to fit the rest
+     78          // of the codebase
 
    \                                 In section .text, align 2, keep-with-next
-     75          void SetScore(int player, int score) {
-     76            UserApp2_Scores[player - 1] = score;
+     79          void SetScore(int player, int score) {
+     80            UserApp2_Scores[player - 1] = score;
    \                     SetScore: (+1)
-   \        0x0   0x....             LDR.N    R2,??DataTable5
+   \        0x0   0x....             LDR.N    R2,??DataTable8
    \        0x2   0x4402             ADD      R2,R2,R0
    \        0x4   0xF802 0x1C01      STRB     R1,[R2, #-1]
-     77          }
-   \        0x8   0x4770             BX       LR               ;; return
-     78          
-
-   \                                 In section .text, align 2, keep-with-next
-     79          void SetNumberOfPlayers(u8 players) {
-     80            UserApp2_NumPlayers = players;
-   \                     SetNumberOfPlayers: (+1)
-   \        0x0   0x....             LDR.N    R1,??DataTable5_1
-   \        0x2   0x7008             STRB     R0,[R1, #+0]
      81          }
-   \        0x4   0x4770             BX       LR               ;; return
+   \        0x8   0x4770             BX       LR               ;; return
      82          
-     83          /*--------------------------------------------------------------------------------------------------------------------*/
-     84          /* Protected functions                                                                                                */
-     85          /*--------------------------------------------------------------------------------------------------------------------*/
-     86          
-     87          /*--------------------------------------------------------------------------------------------------------------------
-     88          Function: UserApp2Initialize
-     89          
-     90          Description:
-     91          Initializes the State Machine and its variables.
-     92          
-     93          Requires:
-     94            -
-     95          
-     96          Promises:
-     97            - 
-     98          */
 
    \                                 In section .text, align 2, keep-with-next
-     99          void UserApp2Initialize(void)
-    100          {
+     83          void SetNumberOfPlayers(u8 players) {
+     84            UserApp2_NumPlayers = players;
+   \                     SetNumberOfPlayers: (+1)
+   \        0x0   0x....             LDR.N    R1,??DataTable8_1
+   \        0x2   0x7008             STRB     R0,[R1, #+0]
+     85          }
+   \        0x4   0x4770             BX       LR               ;; return
+     86          
+
+   \                                 In section .text, align 2, keep-with-next
+     87          void SetCurrentPlayer(u8 player) {
+     88            UserApp2_CurrentPlayer = player;
+   \                     SetCurrentPlayer: (+1)
+   \        0x0   0x....             LDR.N    R1,??DataTable8_2
+   \        0x2   0x7008             STRB     R0,[R1, #+0]
+     89          }
+   \        0x4   0x4770             BX       LR               ;; return
+     90          
+     91          // Make sure to only pass static strings into the message box
+
+   \                                 In section .text, align 2, keep-with-next
+     92          void SetMessage(u8 message) {
+     93            UserApp2_CurrentMessage = message;
+   \                     SetMessage: (+1)
+   \        0x0   0x....             LDR.N    R1,??DataTable8_3
+   \        0x2   0x7008             STRB     R0,[R1, #+0]
+     94          }
+   \        0x4   0x4770             BX       LR               ;; return
+     95          
+
+   \                                 In section .text, align 2, keep-with-next
+     96          void ClearMessage(void) {
+   \                     ClearMessage: (+1)
+   \        0x0   0xB580             PUSH     {R7,LR}
+     97            SetMessage(0);
+   \        0x2   0x2000             MOVS     R0,#+0
+   \        0x4   0x....'....        BL       SetMessage
+     98          }
+   \        0x8   0xBD01             POP      {R0,PC}          ;; return
+     99          
+    100          /*--------------------------------------------------------------------------------------------------------------------*/
+    101          /* Protected functions                                                                                                */
+    102          /*--------------------------------------------------------------------------------------------------------------------*/
+    103          
+    104          /*--------------------------------------------------------------------------------------------------------------------
+    105          Function: UserApp2Initialize
+    106          
+    107          Description:
+    108          Initializes the State Machine and its variables.
+    109          
+    110          Requires:
+    111            -
+    112          
+    113          Promises:
+    114            - 
+    115          */
+
+   \                                 In section .text, align 2, keep-with-next
+    116          void UserApp2Initialize(void)
+    117          {
    \                     UserApp2Initialize: (+1)
    \        0x0   0xB4F0             PUSH     {R4-R7}
-    101            u16 left_column, right_column;
-    102            /* If good initialization, set state to Idle */
-    103            if( 1 )
-    104            {
-    105              // Place the Score text on the right hand side of the screen
-    106              left_column = LCD_CENTER_COLUMN + (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE);
-   \        0x2   0x2046             MOVS     R0,#+70
-    107              right_column = left_column + (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE) * 4;
-   \        0x4   0xF110 0x0118      ADDS     R1,R0,#+24
-    108              
-    109              UserApp2_HeaderLocation.u16PixelColumnAddress = left_column;
-   \        0x8   0x....             LDR.N    R2,??DataTable5_2
-   \        0xA   0x8050             STRH     R0,[R2, #+2]
-    110              UserApp2_P1Location.u16PixelColumnAddress = left_column;
-   \        0xC   0x....             LDR.N    R3,??DataTable5_3
-   \        0xE   0x8058             STRH     R0,[R3, #+2]
-    111              UserApp2_P2Location.u16PixelColumnAddress = right_column;
-   \       0x10   0x....             LDR.N    R4,??DataTable5_4
-   \       0x12   0x8061             STRH     R1,[R4, #+2]
-    112              UserApp2_P3Location.u16PixelColumnAddress = left_column;
-   \       0x14   0x....             LDR.N    R5,??DataTable5_5
-   \       0x16   0x8068             STRH     R0,[R5, #+2]
-    113              UserApp2_P4Location.u16PixelColumnAddress = right_column;
-   \       0x18   0x....             LDR.N    R6,??DataTable5_6
-   \       0x1A   0x8071             STRH     R1,[R6, #+2]
-    114              
-    115              UserApp2_HeaderLocation.u16PixelRowAddress = LCD_SMALL_FONT_LINE1;
-   \       0x1C   0x2708             MOVS     R7,#+8
-   \       0x1E   0x8017             STRH     R7,[R2, #+0]
-    116              UserApp2_P1Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE3;
-   \       0x20   0x2218             MOVS     R2,#+24
-   \       0x22   0x801A             STRH     R2,[R3, #+0]
-    117              UserApp2_P2Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE4;
-   \       0x24   0x2220             MOVS     R2,#+32
-   \       0x26   0x8022             STRH     R2,[R4, #+0]
-    118              UserApp2_P3Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE5;
-   \       0x28   0x2228             MOVS     R2,#+40
-   \       0x2A   0x802A             STRH     R2,[R5, #+0]
-    119              UserApp2_P4Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE6;
-   \       0x2C   0x2230             MOVS     R2,#+48
-   \       0x2E   0x8032             STRH     R2,[R6, #+0]
-    120              
-    121              UserApp2_StateMachine = UserApp2SM_Idle;
-   \       0x30   0x....'....        ADR.W    R2,UserApp2SM_Idle
-   \       0x34   0x....             LDR.N    R3,??DataTable5_7
-   \       0x36   0x601A             STR      R2,[R3, #+0]
-    122            }
-    123            else
-    124            {
-    125              /* The task isn't properly initialized, so shut it down and don't run */
-    126              UserApp2_StateMachine = UserApp2SM_FailedInit;
-    127            }
-    128          
-    129          } /* end UserApp2Initialize() */
-   \       0x38   0xBCF0             POP      {R4-R7}
-   \       0x3A   0x4770             BX       LR               ;; return
-    130          
-    131            
-    132          /*----------------------------------------------------------------------------------------------------------------------
-    133          Function UserApp2RunActiveState()
-    134          
-    135          Description:
-    136          Selects and runs one iteration of the current state in the state machine.
-    137          All state machines have a TOTAL of 1ms to execute, so on average n state machines
-    138          may take 1ms / n to execute.
-    139          
-    140          Requires:
-    141            - State machine function pointer points at current state
-    142          
-    143          Promises:
-    144            - Calls the function to pointed by the state machine function pointer
-    145          */
+    118            u16 left_column, right_column;
+    119            /* If good initialization, set state to Idle */
+    120            if( 1 )
+    121            {
+    122              // Place the Score text on the right hand side of the screen
+    123              left_column = LCD_CENTER_COLUMN + (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE) / 2;
+   \        0x2   0x2043             MOVS     R0,#+67
+    124              right_column = left_column + (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE) * 3;
+   \        0x4   0xF110 0x0112      ADDS     R1,R0,#+18
+    125              
+    126              UserApp2_HeaderLocation.u16PixelColumnAddress = left_column+ (LCD_SMALL_FONT_COLUMNS + LCD_SMALL_FONT_SPACE);
+   \        0x8   0x....             LDR.N    R2,??DataTable8_4
+   \        0xA   0x1D83             ADDS     R3,R0,#+6
+   \        0xC   0x8053             STRH     R3,[R2, #+2]
+    127              UserApp2_P1Location.u16PixelColumnAddress = left_column;
+   \        0xE   0x....             LDR.N    R3,??DataTable8_5
+   \       0x10   0x8058             STRH     R0,[R3, #+2]
+    128              UserApp2_P2Location.u16PixelColumnAddress = right_column;
+   \       0x12   0x....             LDR.N    R4,??DataTable8_6
+   \       0x14   0x8061             STRH     R1,[R4, #+2]
+    129              UserApp2_P3Location.u16PixelColumnAddress = left_column;
+   \       0x16   0x....             LDR.N    R5,??DataTable8_7
+   \       0x18   0x8068             STRH     R0,[R5, #+2]
+    130              UserApp2_P4Location.u16PixelColumnAddress = right_column;
+   \       0x1A   0x....             LDR.N    R6,??DataTable8_8
+   \       0x1C   0x8071             STRH     R1,[R6, #+2]
+    131              UserApp2_MesLocation.u16PixelColumnAddress = left_column;
+   \       0x1E   0x....             LDR.N    R7,??DataTable8_9
+   \       0x20   0x8078             STRH     R0,[R7, #+2]
+    132              
+    133              UserApp2_HeaderLocation.u16PixelRowAddress = LCD_SMALL_FONT_LINE0;
+   \       0x22   0xF05F 0x0C00      MOVS     R12,#+0
+   \       0x26   0xF8A2 0xC000      STRH     R12,[R2, #+0]
+    134              UserApp2_P1Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE2;
+   \       0x2A   0x2210             MOVS     R2,#+16
+   \       0x2C   0x801A             STRH     R2,[R3, #+0]
+    135              UserApp2_P2Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE3;
+   \       0x2E   0x2218             MOVS     R2,#+24
+   \       0x30   0x8022             STRH     R2,[R4, #+0]
+    136              UserApp2_P3Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE4;
+   \       0x32   0x2220             MOVS     R2,#+32
+   \       0x34   0x802A             STRH     R2,[R5, #+0]
+    137              UserApp2_P4Location.u16PixelRowAddress = LCD_SMALL_FONT_LINE5;
+   \       0x36   0x2228             MOVS     R2,#+40
+   \       0x38   0x8032             STRH     R2,[R6, #+0]
+    138              UserApp2_MesLocation.u16PixelRowAddress = LCD_SMALL_FONT_LINE7;
+   \       0x3A   0x2238             MOVS     R2,#+56
+   \       0x3C   0x803A             STRH     R2,[R7, #+0]
+    139              
+    140              UserApp2_StateMachine = UserApp2SM_Idle;
+   \       0x3E   0x....'....        ADR.W    R2,UserApp2SM_Idle
+   \       0x42   0x....             LDR.N    R3,??DataTable8_10
+   \       0x44   0x601A             STR      R2,[R3, #+0]
+    141            }
+    142            else
+    143            {
+    144              /* The task isn't properly initialized, so shut it down and don't run */
+    145              UserApp2_StateMachine = UserApp2SM_FailedInit;
+    146            }
+    147          
+    148          } /* end UserApp2Initialize() */
+   \       0x46   0xBCF0             POP      {R4-R7}
+   \       0x48   0x4770             BX       LR               ;; return
+    149          
+    150            
+    151          /*----------------------------------------------------------------------------------------------------------------------
+    152          Function UserApp2RunActiveState()
+    153          
+    154          Description:
+    155          Selects and runs one iteration of the current state in the state machine.
+    156          All state machines have a TOTAL of 1ms to execute, so on average n state machines
+    157          may take 1ms / n to execute.
+    158          
+    159          Requires:
+    160            - State machine function pointer points at current state
+    161          
+    162          Promises:
+    163            - Calls the function to pointed by the state machine function pointer
+    164          */
 
    \                                 In section .text, align 2, keep-with-next
-    146          void UserApp2RunActiveState(void)
-    147          {
+    165          void UserApp2RunActiveState(void)
+    166          {
    \                     UserApp2RunActiveState: (+1)
    \        0x0   0xB580             PUSH     {R7,LR}
-    148            UserApp2_StateMachine();
-   \        0x2   0x....             LDR.N    R0,??DataTable5_7
+    167            UserApp2_StateMachine();
+   \        0x2   0x....             LDR.N    R0,??DataTable8_10
    \        0x4   0x6800             LDR      R0,[R0, #+0]
    \        0x6   0x4780             BLX      R0
-    149          
-    150          } /* end UserApp2RunActiveState */
+    168          
+    169          } /* end UserApp2RunActiveState */
    \        0x8   0xBD01             POP      {R0,PC}          ;; return
-    151          
-    152          
-    153          /*--------------------------------------------------------------------------------------------------------------------*/
-    154          /* Private functions                                                                                                  */
-    155          /*--------------------------------------------------------------------------------------------------------------------*/
+    170          
+    171          
+    172          /*--------------------------------------------------------------------------------------------------------------------*/
+    173          /* Private functions                                                                                                  */
+    174          /*--------------------------------------------------------------------------------------------------------------------*/
 
    \                                 In section .text, align 2, keep-with-next
-    156          void SetScoreString(u8 player) {
+    175          void SetScoreString(u8 player) {
    \                     SetScoreString: (+1)
    \        0x0   0xB430             PUSH     {R4,R5}
-    157            u8 *scoreString;
-    158            u8 score;
-    159            switch (player) {
+    176            u8 *scoreString;
+    177            u8 score;
+    178            switch (player) {
    \        0x2   0x0002             MOVS     R2,R0
    \        0x4   0xB2D2             UXTB     R2,R2            ;; ZeroExt  R2,R2,#+24,#+24
    \        0x6   0x2A01             CMP      R2,#+1
@@ -349,229 +414,353 @@ C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\us
    \       0x12   0x2A04             CMP      R2,#+4
    \       0x14   0xD009             BEQ.N    ??SetScoreString_4
    \       0x16   0xE00A             B.N      ??SetScoreString_1
-    160              case 1:
-    161                scoreString = UserApp2_P1Score_string;
+    179              case 1:
+    180                scoreString = UserApp2_P1Score_string;
    \                     ??SetScoreString_0: (+1)
-   \       0x18   0x....             LDR.N    R2,??DataTable5_8
+   \       0x18   0x....             LDR.N    R2,??DataTable8_11
    \       0x1A   0x0011             MOVS     R1,R2
-    162                break;
+    181                break;
    \       0x1C   0xE007             B.N      ??SetScoreString_1
-    163              case 2:
-    164                scoreString = UserApp2_P2Score_string;
+    182              case 2:
+    183                scoreString = UserApp2_P2Score_string;
    \                     ??SetScoreString_3: (+1)
-   \       0x1E   0x....             LDR.N    R2,??DataTable5_9
+   \       0x1E   0x....             LDR.N    R2,??DataTable8_12
    \       0x20   0x0011             MOVS     R1,R2
-    165                break;
+    184                break;
    \       0x22   0xE004             B.N      ??SetScoreString_1
-    166              case 3:
-    167                scoreString = UserApp2_P3Score_string;
+    185              case 3:
+    186                scoreString = UserApp2_P3Score_string;
    \                     ??SetScoreString_2: (+1)
-   \       0x24   0x....             LDR.N    R2,??DataTable5_10
+   \       0x24   0x....             LDR.N    R2,??DataTable8_13
    \       0x26   0x0011             MOVS     R1,R2
-    168                break;
+    187                break;
    \       0x28   0xE001             B.N      ??SetScoreString_1
-    169              case 4:
-    170                scoreString = UserApp2_P4Score_string;
+    188              case 4:
+    189                scoreString = UserApp2_P4Score_string;
    \                     ??SetScoreString_4: (+1)
-   \       0x2A   0x....             LDR.N    R2,??DataTable5_11
+   \       0x2A   0x....             LDR.N    R2,??DataTable8_14
    \       0x2C   0x0011             MOVS     R1,R2
-    171                break;
-    172            }
-    173            
-    174            score = UserApp2_Scores[player - 1];
+    190                break;
+    191            }
+    192            
+    193            score = UserApp2_Scores[player - 1];
    \                     ??SetScoreString_1: (+1)
-   \       0x2E   0x....             LDR.N    R2,??DataTable5
+   \       0x2E   0x....             LDR.N    R2,??DataTable8
    \       0x30   0x0003             MOVS     R3,R0
    \       0x32   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
    \       0x34   0x441A             ADD      R2,R2,R3
    \       0x36   0xF812 0x2C01      LDRB     R2,[R2, #-1]
-    175            if (score > 9) {
+    194            if (score > 9) {
    \       0x3A   0x0013             MOVS     R3,R2
    \       0x3C   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
    \       0x3E   0x2B0A             CMP      R3,#+10
    \       0x40   0xDB10             BLT.N    ??SetScoreString_5
-    176              scoreString[4] = (score / 10) + 48;
+    195              scoreString[5] = (score / 10) + 48;
    \       0x42   0x0013             MOVS     R3,R2
    \       0x44   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
    \       0x46   0x240A             MOVS     R4,#+10
    \       0x48   0xFB93 0xF3F4      SDIV     R3,R3,R4
    \       0x4C   0x3330             ADDS     R3,R3,#+48
-   \       0x4E   0x710B             STRB     R3,[R1, #+4]
-    177              scoreString[3] = (score % 10) + 48;
+   \       0x4E   0x714B             STRB     R3,[R1, #+5]
+    196              scoreString[4] = (score % 10) + 48;
    \       0x50   0x0013             MOVS     R3,R2
    \       0x52   0xB2DB             UXTB     R3,R3            ;; ZeroExt  R3,R3,#+24,#+24
    \       0x54   0x240A             MOVS     R4,#+10
    \       0x56   0xFB93 0xF5F4      SDIV     R5,R3,R4
    \       0x5A   0xFB04 0x3315      MLS      R3,R4,R5,R3
    \       0x5E   0x3330             ADDS     R3,R3,#+48
-   \       0x60   0x70CB             STRB     R3,[R1, #+3]
+   \       0x60   0x710B             STRB     R3,[R1, #+4]
    \       0x62   0xE002             B.N      ??SetScoreString_6
-    178            }
-    179            else {
-    180              scoreString[3] = score + 48;
+    197            }
+    198            else {
+    199              scoreString[4] = score + 48;
    \                     ??SetScoreString_5: (+1)
    \       0x64   0xF112 0x0330      ADDS     R3,R2,#+48
-   \       0x68   0x70CB             STRB     R3,[R1, #+3]
-    181            }
-    182          }
+   \       0x68   0x710B             STRB     R3,[R1, #+4]
+    200            }
+    201          }
    \                     ??SetScoreString_6: (+1)
    \       0x6A   0xBC30             POP      {R4,R5}
    \       0x6C   0x4770             BX       LR               ;; return
-    183          
-    184          /**********************************************************************************************************************
-    185          State Machine Function Definitions
-    186          **********************************************************************************************************************/
-    187          
-    188          /*-------------------------------------------------------------------------------------------------------------------*/
-    189          /* Wait for ??? */
+    202          
+
+   \                                 In section .text, align 2, keep-with-next
+    203          void MarkCurrentPlayer(void) {
+   \                     MarkCurrentPlayer: (+1)
+   \        0x0   0xB410             PUSH     {R4}
+    204            // Reset all turn indicators
+    205            UserApp2_P1Score_string[0] = ' ';
+   \        0x2   0x....             LDR.N    R0,??DataTable8_11
+   \        0x4   0x2120             MOVS     R1,#+32
+   \        0x6   0x7001             STRB     R1,[R0, #+0]
+    206            UserApp2_P2Score_string[0] = ' ';
+   \        0x8   0x....             LDR.N    R1,??DataTable8_12
+   \        0xA   0x2220             MOVS     R2,#+32
+   \        0xC   0x700A             STRB     R2,[R1, #+0]
+    207            UserApp2_P3Score_string[0] = ' ';
+   \        0xE   0x....             LDR.N    R2,??DataTable8_13
+   \       0x10   0x2320             MOVS     R3,#+32
+   \       0x12   0x7013             STRB     R3,[R2, #+0]
+    208            UserApp2_P4Score_string[0] = ' ';
+   \       0x14   0x....             LDR.N    R3,??DataTable8_14
+   \       0x16   0x2420             MOVS     R4,#+32
+   \       0x18   0x701C             STRB     R4,[R3, #+0]
+    209            
+    210            // Switch the current players turn
+    211            switch (UserApp2_CurrentPlayer) {
+   \       0x1A   0x....             LDR.N    R4,??DataTable8_2
+   \       0x1C   0x7824             LDRB     R4,[R4, #+0]
+   \       0x1E   0x2C01             CMP      R4,#+1
+   \       0x20   0xD006             BEQ.N    ??MarkCurrentPlayer_0
+   \       0x22   0xD310             BCC.N    ??MarkCurrentPlayer_1
+   \       0x24   0x2C03             CMP      R4,#+3
+   \       0x26   0xD009             BEQ.N    ??MarkCurrentPlayer_2
+   \       0x28   0xD305             BCC.N    ??MarkCurrentPlayer_3
+   \       0x2A   0x2C04             CMP      R4,#+4
+   \       0x2C   0xD009             BEQ.N    ??MarkCurrentPlayer_4
+   \       0x2E   0xE00A             B.N      ??MarkCurrentPlayer_1
+    212              case 1:
+    213                UserApp2_P1Score_string[0] = '*';
+   \                     ??MarkCurrentPlayer_0: (+1)
+   \       0x30   0x212A             MOVS     R1,#+42
+   \       0x32   0x7001             STRB     R1,[R0, #+0]
+    214                break;
+   \       0x34   0xE007             B.N      ??MarkCurrentPlayer_1
+    215              case 2:
+    216                UserApp2_P2Score_string[0] = '*';
+   \                     ??MarkCurrentPlayer_3: (+1)
+   \       0x36   0x202A             MOVS     R0,#+42
+   \       0x38   0x7008             STRB     R0,[R1, #+0]
+    217                break;
+   \       0x3A   0xE004             B.N      ??MarkCurrentPlayer_1
+    218              case 3:
+    219                UserApp2_P3Score_string[0] = '*';
+   \                     ??MarkCurrentPlayer_2: (+1)
+   \       0x3C   0x202A             MOVS     R0,#+42
+   \       0x3E   0x7010             STRB     R0,[R2, #+0]
+    220                break;
+   \       0x40   0xE001             B.N      ??MarkCurrentPlayer_1
+    221              case 4:
+    222                UserApp2_P4Score_string[0] = '*';
+   \                     ??MarkCurrentPlayer_4: (+1)
+   \       0x42   0x202A             MOVS     R0,#+42
+   \       0x44   0x7018             STRB     R0,[R3, #+0]
+    223                break;
+    224            }
+    225          }
+   \                     ??MarkCurrentPlayer_1: (+1)
+   \       0x46   0xBC10             POP      {R4}
+   \       0x48   0x4770             BX       LR               ;; return
+    226          
+    227          /**********************************************************************************************************************
+    228          State Machine Function Definitions
+    229          **********************************************************************************************************************/
+    230          
+    231          /*-------------------------------------------------------------------------------------------------------------------*/
+    232          /* Wait for ??? */
 
    \                                 In section .text, align 4, keep-with-next
-    190          static void UserApp2SM_Idle(void)
-    191          {
+    233          static void UserApp2SM_Idle(void)
+    234          {
    \                     UserApp2SM_Idle: (+1)
    \        0x0   0xB510             PUSH     {R4,LR}
-    192            SetScoreString(1);
+    235            SetScoreString(1);
    \        0x2   0x2001             MOVS     R0,#+1
    \        0x4   0x....'....        BL       SetScoreString
-    193            SetScoreString(2);
+    236            SetScoreString(2);
    \        0x8   0x2002             MOVS     R0,#+2
    \        0xA   0x....'....        BL       SetScoreString
-    194            SetScoreString(3);
+    237            SetScoreString(3);
    \        0xE   0x2003             MOVS     R0,#+3
    \       0x10   0x....'....        BL       SetScoreString
-    195            SetScoreString(4);
+    238            SetScoreString(4);
    \       0x14   0x2004             MOVS     R0,#+4
    \       0x16   0x....'....        BL       SetScoreString
-    196            
-    197            LcdLoadString(UserApp2_Score_string, LCD_FONT_SMALL, &UserApp2_HeaderLocation);
-   \       0x1A   0x....             LDR.N    R2,??DataTable5_2
-   \       0x1C   0x2100             MOVS     R1,#+0
-   \       0x1E   0x....             LDR.N    R0,??DataTable5_12
-   \       0x20   0x....'....        BL       LcdLoadString
-    198            
-    199            // One player, I imagine this will be like a waiting screen
-    200            if (UserApp2_NumPlayers > 0)
-   \       0x24   0x....             LDR.N    R4,??DataTable5_1
-   \       0x26   0x7820             LDRB     R0,[R4, #+0]
-   \       0x28   0x2800             CMP      R0,#+0
-   \       0x2A   0xD004             BEQ.N    ??UserApp2SM_Idle_0
-    201              LcdLoadString(UserApp2_P1Score_string, LCD_FONT_SMALL, &UserApp2_P1Location);
-   \       0x2C   0x....             LDR.N    R2,??DataTable5_3
-   \       0x2E   0x2100             MOVS     R1,#+0
-   \       0x30   0x....             LDR.N    R0,??DataTable5_8
-   \       0x32   0x....'....        BL       LcdLoadString
-    202            if (UserApp2_NumPlayers > 1)
+    239            
+    240            MarkCurrentPlayer();
+   \       0x1A   0x....'....        BL       MarkCurrentPlayer
+    241            
+    242            LcdLoadString(UserApp2_Score_string, LCD_FONT_SMALL, &UserApp2_HeaderLocation);
+   \       0x1E   0x....             LDR.N    R2,??DataTable8_4
+   \       0x20   0x2100             MOVS     R1,#+0
+   \       0x22   0x....             LDR.N    R0,??DataTable8_15
+   \       0x24   0x....'....        BL       LcdLoadString
+    243            
+    244            // One player, I imagine this will be like a waiting screen
+    245            if (UserApp2_NumPlayers > 0)
+   \       0x28   0x....             LDR.N    R4,??DataTable8_1
+   \       0x2A   0x7820             LDRB     R0,[R4, #+0]
+   \       0x2C   0x2800             CMP      R0,#+0
+   \       0x2E   0xD004             BEQ.N    ??UserApp2SM_Idle_0
+    246              LcdLoadString(UserApp2_P1Score_string, LCD_FONT_SMALL, &UserApp2_P1Location);
+   \       0x30   0x....             LDR.N    R2,??DataTable8_5
+   \       0x32   0x2100             MOVS     R1,#+0
+   \       0x34   0x....             LDR.N    R0,??DataTable8_11
+   \       0x36   0x....'....        BL       LcdLoadString
+    247            if (UserApp2_NumPlayers > 1)
    \                     ??UserApp2SM_Idle_0: (+1)
-   \       0x36   0x7820             LDRB     R0,[R4, #+0]
-   \       0x38   0x2802             CMP      R0,#+2
-   \       0x3A   0xDB04             BLT.N    ??UserApp2SM_Idle_1
-    203              LcdLoadString(UserApp2_P2Score_string, LCD_FONT_SMALL, &UserApp2_P2Location);
-   \       0x3C   0x....             LDR.N    R2,??DataTable5_4
-   \       0x3E   0x2100             MOVS     R1,#+0
-   \       0x40   0x....             LDR.N    R0,??DataTable5_9
-   \       0x42   0x....'....        BL       LcdLoadString
-    204            if (UserApp2_NumPlayers > 2)
+   \       0x3A   0x7820             LDRB     R0,[R4, #+0]
+   \       0x3C   0x2802             CMP      R0,#+2
+   \       0x3E   0xDB04             BLT.N    ??UserApp2SM_Idle_1
+    248              LcdLoadString(UserApp2_P2Score_string, LCD_FONT_SMALL, &UserApp2_P2Location);
+   \       0x40   0x....             LDR.N    R2,??DataTable8_6
+   \       0x42   0x2100             MOVS     R1,#+0
+   \       0x44   0x....             LDR.N    R0,??DataTable8_12
+   \       0x46   0x....'....        BL       LcdLoadString
+    249            if (UserApp2_NumPlayers > 2)
    \                     ??UserApp2SM_Idle_1: (+1)
-   \       0x46   0x7820             LDRB     R0,[R4, #+0]
-   \       0x48   0x2803             CMP      R0,#+3
-   \       0x4A   0xDB04             BLT.N    ??UserApp2SM_Idle_2
-    205              LcdLoadString(UserApp2_P3Score_string, LCD_FONT_SMALL, &UserApp2_P3Location);
-   \       0x4C   0x....             LDR.N    R2,??DataTable5_5
-   \       0x4E   0x2100             MOVS     R1,#+0
-   \       0x50   0x....             LDR.N    R0,??DataTable5_10
-   \       0x52   0x....'....        BL       LcdLoadString
-    206            if (UserApp2_NumPlayers > 3)
+   \       0x4A   0x7820             LDRB     R0,[R4, #+0]
+   \       0x4C   0x2803             CMP      R0,#+3
+   \       0x4E   0xDB04             BLT.N    ??UserApp2SM_Idle_2
+    250              LcdLoadString(UserApp2_P3Score_string, LCD_FONT_SMALL, &UserApp2_P3Location);
+   \       0x50   0x....             LDR.N    R2,??DataTable8_7
+   \       0x52   0x2100             MOVS     R1,#+0
+   \       0x54   0x....             LDR.N    R0,??DataTable8_13
+   \       0x56   0x....'....        BL       LcdLoadString
+    251            if (UserApp2_NumPlayers > 3)
    \                     ??UserApp2SM_Idle_2: (+1)
-   \       0x56   0x7820             LDRB     R0,[R4, #+0]
-   \       0x58   0x2804             CMP      R0,#+4
-   \       0x5A   0xDB04             BLT.N    ??UserApp2SM_Idle_3
-    207              LcdLoadString(UserApp2_P4Score_string, LCD_FONT_SMALL, &UserApp2_P4Location);
-   \       0x5C   0x....             LDR.N    R2,??DataTable5_6
-   \       0x5E   0x2100             MOVS     R1,#+0
-   \       0x60   0x....             LDR.N    R0,??DataTable5_11
-   \       0x62   0x....'....        BL       LcdLoadString
-    208          } /* end UserApp2SM_Idle() */
+   \       0x5A   0x7820             LDRB     R0,[R4, #+0]
+   \       0x5C   0x2804             CMP      R0,#+4
+   \       0x5E   0xDB04             BLT.N    ??UserApp2SM_Idle_3
+    252              LcdLoadString(UserApp2_P4Score_string, LCD_FONT_SMALL, &UserApp2_P4Location);
+   \       0x60   0x....             LDR.N    R2,??DataTable8_8
+   \       0x62   0x2100             MOVS     R1,#+0
+   \       0x64   0x....             LDR.N    R0,??DataTable8_14
+   \       0x66   0x....'....        BL       LcdLoadString
+    253            
+    254            // Render the message
+    255            LcdLoadString(UserApp2_Messages[UserApp2_CurrentMessage], LCD_FONT_SMALL, &UserApp2_MesLocation);
    \                     ??UserApp2SM_Idle_3: (+1)
-   \       0x66   0xBD10             POP      {R4,PC}          ;; return
+   \       0x6A   0x....             LDR.N    R2,??DataTable8_9
+   \       0x6C   0x2100             MOVS     R1,#+0
+   \       0x6E   0x....             LDR.N    R0,??DataTable8_16
+   \       0x70   0x....             LDR.N    R3,??DataTable8_3
+   \       0x72   0x781B             LDRB     R3,[R3, #+0]
+   \       0x74   0xF850 0x0023      LDR      R0,[R0, R3, LSL #+2]
+   \       0x78   0x....'....        BL       LcdLoadString
+    256          } /* end UserApp2SM_Idle() */
+   \       0x7C   0xBD10             POP      {R4,PC}          ;; return
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5:
+   \                     ??DataTable8:
    \        0x0   0x....'....        DC32     UserApp2_Scores
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_1:
+   \                     ??DataTable8_1:
    \        0x0   0x....'....        DC32     UserApp2_NumPlayers
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_2:
+   \                     ??DataTable8_2:
+   \        0x0   0x....'....        DC32     UserApp2_CurrentPlayer
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_3:
+   \        0x0   0x....'....        DC32     UserApp2_CurrentMessage
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_4:
    \        0x0   0x....'....        DC32     UserApp2_HeaderLocation
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_3:
+   \                     ??DataTable8_5:
    \        0x0   0x....'....        DC32     UserApp2_P1Location
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_4:
+   \                     ??DataTable8_6:
    \        0x0   0x....'....        DC32     UserApp2_P2Location
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_5:
+   \                     ??DataTable8_7:
    \        0x0   0x....'....        DC32     UserApp2_P3Location
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_6:
+   \                     ??DataTable8_8:
    \        0x0   0x....'....        DC32     UserApp2_P4Location
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_7:
+   \                     ??DataTable8_9:
+   \        0x0   0x....'....        DC32     UserApp2_MesLocation
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_10:
    \        0x0   0x....'....        DC32     UserApp2_StateMachine
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_8:
+   \                     ??DataTable8_11:
    \        0x0   0x....'....        DC32     UserApp2_P1Score_string
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_9:
+   \                     ??DataTable8_12:
    \        0x0   0x....'....        DC32     UserApp2_P2Score_string
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_10:
+   \                     ??DataTable8_13:
    \        0x0   0x....'....        DC32     UserApp2_P3Score_string
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_11:
+   \                     ??DataTable8_14:
    \        0x0   0x....'....        DC32     UserApp2_P4Score_string
 
    \                                 In section .text, align 4, keep-with-next
-   \                     ??DataTable5_12:
+   \                     ??DataTable8_15:
    \        0x0   0x....'....        DC32     UserApp2_Score_string
-    209               
-    210          #if 0
-    211          /*-------------------------------------------------------------------------------------------------------------------*/
-    212          /* Handle an error */
-    213          static void UserApp2SM_Error(void)          
-    214          {
-    215            
-    216          } /* end UserApp2SM_Error() */
-    217          #endif
-    218          
-    219          
-    220          /*-------------------------------------------------------------------------------------------------------------------*/
-    221          /* State to sit in if init failed */
-    222          static void UserApp2SM_FailedInit(void)          
-    223          {
-    224              
-    225          } /* end UserApp2SM_FailedInit() */
-    226          
-    227          
-    228          /*--------------------------------------------------------------------------------------------------------------------*/
-    229          /* End of File                                                                                                        */
-    230          /*--------------------------------------------------------------------------------------------------------------------*/
+
+   \                                 In section .text, align 4, keep-with-next
+   \                     ??DataTable8_16:
+   \        0x0   0x....'....        DC32     UserApp2_Messages
+
+   \                                 In section .rodata, align 1
+   \                     ?_0:
+   \        0x0   0x00               DC8 ""
+
+   \                                 In section .rodata, align 4
+   \                     ?_1:
+   \        0x0   0x57 0x61          DC8 "Waiting..."
+   \              0x69 0x74    
+   \              0x69 0x6E    
+   \              0x67 0x2E    
+   \              0x2E 0x2E    
+   \              0x00         
+   \        0xB   0x00               DC8 0
+
+   \                                 In section .rodata, align 4
+   \                     ?_2:
+   \        0x0   0x45 0x72          DC8 "Error"
+   \              0x72 0x6F    
+   \              0x72 0x00    
+   \        0x6   0x00 0x00          DC8 0, 0
+    257               
+    258          #if 0
+    259          /*-------------------------------------------------------------------------------------------------------------------*/
+    260          /* Handle an error */
+    261          static void UserApp2SM_Error(void)          
+    262          {
+    263            
+    264          } /* end UserApp2SM_Error() */
+    265          #endif
+    266          
+    267          
+    268          /*-------------------------------------------------------------------------------------------------------------------*/
+    269          /* State to sit in if init failed */
+    270          static void UserApp2SM_FailedInit(void)          
+    271          {
+    272              
+    273          } /* end UserApp2SM_FailedInit() */
+    274          
+    275          
+    276          /*--------------------------------------------------------------------------------------------------------------------*/
+    277          /* End of File                                                                                                        */
+    278          /*--------------------------------------------------------------------------------------------------------------------*/
 
    Maximum stack usage in bytes:
 
    .cstack Function
    ------- --------
+       8   ClearMessage
+         8   -> SetMessage
+       4   MarkCurrentPlayer
+       0   SetCurrentPlayer
+       0   SetMessage
        0   SetNumberOfPlayers
        0   SetScore
        8   SetScoreString
@@ -580,6 +769,7 @@ C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\us
          8   -- Indirect call
        8   UserApp2SM_Idle
          8   -> LcdLoadString
+         8   -> MarkCurrentPlayer
          8   -> SetScoreString
 
 
@@ -587,27 +777,42 @@ C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\us
 
    Bytes  Function/Label
    -----  --------------
-       4  ??DataTable5
-       4  ??DataTable5_1
-       4  ??DataTable5_10
-       4  ??DataTable5_11
-       4  ??DataTable5_12
-       4  ??DataTable5_2
-       4  ??DataTable5_3
-       4  ??DataTable5_4
-       4  ??DataTable5_5
-       4  ??DataTable5_6
-       4  ??DataTable5_7
-       4  ??DataTable5_8
-       4  ??DataTable5_9
+       4  ??DataTable8
+       4  ??DataTable8_1
+       4  ??DataTable8_10
+       4  ??DataTable8_11
+       4  ??DataTable8_12
+       4  ??DataTable8_13
+       4  ??DataTable8_14
+       4  ??DataTable8_15
+       4  ??DataTable8_16
+       4  ??DataTable8_2
+       4  ??DataTable8_3
+       4  ??DataTable8_4
+       4  ??DataTable8_5
+       4  ??DataTable8_6
+       4  ??DataTable8_7
+       4  ??DataTable8_8
+       4  ??DataTable8_9
+       1  ?_0
+      12  ?_1
+       8  ?_2
+      10  ClearMessage
        4  G_u32UserApp2Flags
+      74  MarkCurrentPlayer
+       6  SetCurrentPlayer
+       6  SetMessage
        6  SetNumberOfPlayers
       10  SetScore
      110  SetScoreString
-      60  UserApp2Initialize
+      74  UserApp2Initialize
       10  UserApp2RunActiveState
-     104  UserApp2SM_Idle
+     126  UserApp2SM_Idle
+       1  UserApp2_CurrentMessage
+       1  UserApp2_CurrentPlayer
        4  UserApp2_HeaderLocation
+       4  UserApp2_MesLocation
+      12  UserApp2_Messages
        1  UserApp2_NumPlayers
        4  UserApp2_P1Location
        8  UserApp2_P1Score_string
@@ -622,12 +827,14 @@ C:\Users\Caleb\Documents\firmware\eie_iot_game_fw\firmware_common\application\us
        4  UserApp2_StateMachine
 
  
-  32 bytes in section .bss
-  41 bytes in section .data
- 352 bytes in section .text
+  37 bytes in section .bss
+  54 bytes in section .data
+  21 bytes in section .rodata
+ 500 bytes in section .text
  
- 352 bytes of CODE memory
-  73 bytes of DATA memory
+ 500 bytes of CODE  memory
+  21 bytes of CONST memory
+  91 bytes of DATA  memory
 
 Errors: none
 Warnings: none
